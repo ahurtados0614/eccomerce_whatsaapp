@@ -881,5 +881,3 @@ $settings['trusted_host_patterns'] = [
 ];
 
 $settings['mymobile_api_key'] = 'gwRd2UyD0K8BUZh2CoLt';
-//el telefeno debe contener el prefix
-$settings['mymobile_phone'] = '573005096308';
