@@ -1,0 +1,132 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main content
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ *
+ * @ingroup themeable
+ */
+#}
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ */
+#}
+{%
+  set classes = [
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+  ]
+%}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+
+  {% if label %}
+    <h2{{ title_attributes }}>{{ label }}</h2>
+  {% endif %}
+
+  {{ title_suffix }}
+
+  {% block content %}
+
+  <div class="content-top">
+    <div class="main-slider">
+      <div id="spinner"></div>
+
+      <div class="swiper-viewport">
+
+        <div id="slideshow0" class="swiper-container">
+          <div class="swiper-wrapper" id="items_contenido">
+            <!-- items contenido -->
+            {# {{ content }} #}
+          </div>
+        </div>
+
+        <div class="swiper-pagination slideshow0"></div>
+
+        <div class="swiper-pager">
+          <ul class="swiper-pager-button">
+
+            <li class="swiper-button-prev">
+              <a class="swiper-prev" id="swiper_prev"></a>
+            </li>
+
+            <li class="swiper-button-next">
+              <a class="swiper-next" id="swiper_next"></a>
+            </li>
+
+          </ul>
+        </div>
+
+      </div> {# swiper-viewport #}
+
+    </div> {# main-slider #}
+  </div> {# content-top #}
+
+  <style>
+    .swiper-button-prev,
+    .swiper-button-next {
+      position: absolute;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    section.row.region.region-top-header-form {
+    margin-top: -1em;
+    background: red !important;
+    }
+  </style>
+
+  <script type="text/javascript">
+    window.addEventListener('load', function () {
+      var spinner = document.getElementById('spinner');
+      if (spinner) {
+        spinner.style.transition = "opacity 0.5s";
+        spinner.style.opacity = "0";
+        setTimeout(function () {
+          spinner.style.display = "none";
+        }, 500);
+      }
+    });
+  </script>
+
+  {% endblock %}
+
+</div>
+
+<script>
+const boton_prev = document.getElementById("swiper_prev");
+boton_prev.addEventListener("click", function() {
+  document.querySelector('#slideshow0').swiper.slidePrev()
+});
+
+const boton_next = document.getElementById("swiper_next");
+boton_next.addEventListener("click", function() {
+  document.querySelector('#slideshow0').swiper.slideNext()
+});
+</script>

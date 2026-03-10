@@ -1,0 +1,280 @@
+
+
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  <div id="product-product" class="container">
+    <div class="row">
+      <div id="content" class="col-sm-12 productpage">
+        <div class="row">
+          <div class="col-sm-5 product-left">
+            <div class="product-info">
+              <div class="left product-image thumbnails">
+                <div class="image">
+                  <a class="thumbnail" href="{{ file_url(node.field_image.entity.uri.value) }}" title="{{ node.label }}">
+                    <img id="tmzoom" src="{{ small_image }}"
+                      data-zoom-image="{{ large_image }}" title="{{ node.label }}"
+                      alt="{{ node.label }}" />
+                  </a>
+                </div>
+
+                <div class="additional-carousel">
+                  <div class="customNavigation">
+                    <a class="fa prev fa-arrow-left">&nbsp;</a>
+                    <a class="fa next fa-arrow-right">&nbsp;</a>
+                  </div>
+
+                  <div id="additional-carousel" class="image-additional product-carousel">
+                    <div class="slider-item">
+                      <div class="product-block">
+                        <a href="{{ file_url(node.field_image.entity.uri.value) }}" title="{{ node.label }}"
+                          class="elevatezoom-gallery" data-image="{{ file_url(node.field_image.entity.uri.value) }}"
+                          data-zoom-image="{{ file_url(node.field_image.entity.uri.value) }}">
+                          <img src="{{ file_url(node.field_image.entity.uri.value) }}" width="95" height="116"
+                            title="{{ node.label }}" alt="{{ node.label }}" />
+                        </a>
+                      </div>
+                    </div>
+                    
+                   {% for image in gallery_images %}
+                      <div class="slider-item">
+                        <div class="product-block">
+                          <a href="{{ image.large }}"
+                            class="elevatezoom-gallery"
+                            data-image="{{ image.large }}"
+                            data-zoom-image="{{ image.large }}"
+                            title="{{ image.alt }}">
+
+                            <img src="{{ image.thumb }}"
+                                width="95"
+                                height="116"
+                                alt="{{ image.alt }}">
+                          </a>
+                        </div>
+                      </div>
+                    {% endfor %}
+                    <!---nomore image---->
+                     <div class="slider-item">
+                      <div class="product-block">
+                        <a href="/sites/default/files/imgcustom/nomoreimage.png" title="De momento no hay más imágenes"
+                          class="elevatezoom-gallery" data-image="/sites/default/files/imgcustom/nomoreimage.png"
+                          data-zoom-image="/sites/default/files/imgcustom/nomoreimage.png">
+                          <img src="/sites/default/files/imgcustom/nomoreimage.png" width="95" height="116"
+                            title="De momento no hay más imágenes" alt="De momento no hay más imágenes" />
+                        </a>
+                      </div>
+                    </div>
+                    <!----fin nomre image---->
+                  </div>
+                  <span class="additional_default_width" style="display:none; visibility:hidden"></span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-7 product-right">
+            <h3 class="product-title" style="text-transform: capitalize;">{{ label }}</h3>
+
+            <ul class="list-unstyled attr">
+             {% if node.field_marca.entity %}
+                <li>
+                  <span class="desc">Marca: </span>
+                  <a href="{{ node.field_marca.entity.url }}"
+                    style="text-transform: capitalize;">
+                    {{ node.field_marca.entity.name.value }}
+                  </a>
+                </li>
+                {% endif %}
+              <li><span class="desc">Código de producto: </span> Producto {{ node.id }}</li>
+              <li><span class="desc">Disponibilidad: </span> En stock</li>
+            </ul>
+
+            <ul class="list-unstyled price">
+              <li>
+                <h3 class="product-price">${{ node.field_precio_del_articulo.value|replace({'$':''})|number_format(0, ',', '.') }} COP.</h3>
+              </li>
+              
+              {% if node.field_precio_anterior.value %}
+              <li class="price-tax">Antes: <span style="text-decoration: line-through;">${{ node.field_precio_anterior.value|replace({'$':''})|number_format(0, ',', '.') }} COP.</span></li>
+              {% endif %}
+            </ul>
+
+            <div id="product">
+              <div class="form-group qty">
+                <label class="control-label" for="input-quantity">Cantidad</label>
+                <input type="number" name="quantity" value="1" size="2"  style="width:20%;" id="input-quantity" class="form-control" />
+                <input type="hidden" name="product_id" value="43" />
+                <button type="button" id="button-cart" class="btn btn-primary btn-lg btn-block">Agregar al Carrito</button>
+                <div class="share-product">
+                    <span class="share-title">Compartir:</span>
+
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ url('<current>') }}"
+                      target="_blank"
+                      class="share-btn facebook">
+                      <i class="fa fa-facebook"></i>
+                    </a>
+
+                    <a href="https://twitter.com/intent/tweet?url={{ url('<current>') }}&text={{ label|url_encode }}"
+                      target="_blank"
+                      class="share-btn twitter">
+                      <i class="fa fa-twitter"></i>
+                    </a>
+
+                    <a href="https://www.instagram.com/"
+                      target="_blank"
+                      class="share-btn instagram">
+                      <i class="fa fa-instagram"></i>
+                    </a>
+
+                  </div>
+              </div>
+
+              <hr>
+              <div class="form-group">
+                <label>Descripción</label>
+                {{ content.body }}
+              </div>
+            </div>
+          </div>
+
+          {% if node.field_tipo_de_producto|length %}
+          <p>Etiquetas:
+            {% for tipo in node.field_tipo_de_producto %}
+              <a href="index.html?route=product/search&amp;tag={{ tipo.entity.name.value|url_encode }}">
+                {{ tipo.entity.name.value }}
+              </a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+<style>
+/* Wrapper visible */
+.additional-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%; /* Ajusta según tu diseño */
+  margin: 0 auto;
+}
+
+/* Contenedor interno que se mueve */
+#additional-carousel {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+/* Cada thumbnail */
+#additional-carousel .slider-item {
+  flex: 0 0 auto;
+  width: 95px;
+  margin-right: 2px;
+}
+@media (max-width: 768px) {
+  #input-quantity{
+    width: 45% !important;
+  }
+
+  #additional-carousel .slider-wrapper {
+    display: flex !important;
+    width: auto !important;
+  }
+
+  #additional-carousel .slider-item {
+    flex: 0 0 auto !important;
+    width: 80px !important;
+  }
+
+}
+/*
+@media (max-width: 768px) {
+
+  #additional-carousel .slider-item {
+    width: 80px !important;
+    margin-right: 8px;
+  }
+
+}
+*/
+/*
+#additional-carousel .owl-stage {
+  display: flex;
+  align-items: center;
+}
+
+
+#additional-carousel .owl-item {
+  display: flex;
+  justify-content: center;
+}
+*/
+
+.share-product{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5em;
+    flex-wrap: wrap;
+    height: 5em;
+}
+
+.share-title{
+  font-weight:600;
+  margin-right:5px;
+}
+
+.share-btn{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  color:#fff;
+  font-size:16px;
+  text-decoration:none;
+  transition:0.3s;
+}
+
+.share-btn.facebook{
+  background:#1877f2;
+}
+
+.share-btn.twitter{
+  background:#1da1f2;
+}
+
+.share-btn.instagram{
+  background:#e4405f;
+}
+
+.share-btn:hover{
+  transform:scale(1.1);
+}
+
+/* Responsive */
+@media (max-width:768px){
+  .share-product{
+    justify-content:center;
+  }
+}
+</style>
+
+{{ attach_library('bootstrap_subtheme/product-gallery') }}
+{{ attach_library('bootstrap/node') }}
+{{ attach_library('bootstrap_subtheme/global-styling') }}

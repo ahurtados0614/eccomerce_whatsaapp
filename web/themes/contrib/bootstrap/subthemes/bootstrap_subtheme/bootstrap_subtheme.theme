@@ -1,0 +1,156 @@
+<?php
+
+
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\image\Entity\ImageStyle;
+
+function bootstrap_subtheme_preprocess_page(array &$variables) {
+  // Obtener el logo del sitio
+  $variables['site_logo'] = theme_get_setting('logo.url') ?: '/default-logo.png';
+  // Obtener el mail del sitio
+  $variables['site_mail'] = \Drupal::config('system.site')->get('mail');
+  // Obtener el nombre del sitio
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  
+  // Obtener el eslogan del sitio
+  $variables['site_slogan'] = \Drupal::config('system.site')->get('slogan');
+
+
+ // ==========================
+// 🔹 Obtener el menú PRINCIPAL con submenús
+// ==========================
+$menu_name = 'main';
+$parameters = new MenuTreeParameters();
+$parameters->onlyEnabledLinks(); // Solo enlaces habilitados
+
+$menu_tree = \Drupal::menuTree()->load($menu_name, $parameters);
+
+// Aplicar manipuladores de acceso y orden
+$manipulators = [
+  ['callable' => 'menu.default_tree_manipulators:checkAccess'], // Filtra por permisos de acceso
+  ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'], // Ordena los elementos
+];
+$menu_tree = \Drupal::menuTree()->transform($menu_tree, $manipulators);
+
+// Función recursiva para extraer los elementos del menú con sus subniveles
+function buildMenuTree(array $menu_tree) {
+    $items = [];
+    foreach ($menu_tree as $element) {
+        if ($element->access->isAllowed()) {
+            $item = [
+                'title' => $element->link->getTitle(),
+                'url' => $element->link->getUrlObject()->toString(),
+                'weight' => $element->link->getWeight(),
+                'sub_menu' => [],
+            ];
+            
+            if ($element->hasChildren) {
+                $item['sub_menu'] = buildMenuTree($element->subtree);
+            }
+            
+            $items[] = $item;
+        }
+    }
+    return $items;
+}
+
+// Construir el árbol del menú
+$variables['main_menu_items'] = buildMenuTree($menu_tree);
+
+  // ==========================
+  // 🔹 Obtener el menú de CUENTA DE USUARIO
+  // ==========================
+  $account_menu_name = 'account';
+  $account_parameters = new MenuTreeParameters();
+  $account_parameters->onlyEnabledLinks(); // Solo enlaces habilitados
+
+  $account_menu_tree = \Drupal::menuTree()->load($account_menu_name, $account_parameters);
+
+  // Aplicar manipuladores de acceso y orden
+  $account_menu_tree = \Drupal::menuTree()->transform($account_menu_tree, $manipulators);
+
+  // Extraer los ítems manualmente para Twig
+  $account_menu_items = [];
+  foreach ($account_menu_tree as $key => $element) {
+    if ($element->access->isAllowed()) {
+      $account_menu_items[] = [
+        'title' => $element->link->getTitle(),
+        'url' => $element->link->getUrlObject()->toString(),
+        'weight' => $element->link->getWeight(), // Mantener el orden del menú
+      ];
+    }
+  }
+
+  // Pasar los items a la plantilla
+  $variables['account_menu_items'] = $account_menu_items;
+}
+
+
+function bootstrap_subtheme_preprocess_node(&$variables) {
+
+  if (!empty($variables['node']) && $variables['node']->bundle() === 'article') {
+
+    $node = $variables['node'];
+
+    /*
+     * Imagen principal
+     */
+    if (!$node->field_image->isEmpty()) {
+
+      $file = $node->field_image->entity;
+      $uri = $file->getFileUri();
+
+      if ($style = ImageStyle::load('279x350')) {
+        $variables['small_image'] = $style->buildUrl($uri);
+      }
+
+      $variables['large_image'] = \Drupal::service('file_url_generator')
+        ->generateString($uri);
+    }
+
+    /*
+     * Galería (field_imagen_descripcion)
+     */
+    if (!$node->field_imagen_descripcion->isEmpty()) {
+
+      $gallery = [];
+
+      foreach ($node->field_imagen_descripcion as $item) {
+
+        $file = $item->entity;
+        $uri = $file->getFileUri();
+
+        // Miniatura
+        if ($thumb_style = ImageStyle::load('279x350')) {
+          $thumb = $thumb_style->buildUrl($uri);
+        }
+        else {
+          $thumb = \Drupal::service('file_url_generator')
+            ->generateString($uri);
+        }
+
+        // Imagen grande
+        $large = \Drupal::service('file_url_generator')
+          ->generateString($uri);
+
+        $gallery[] = [
+          'thumb' => $thumb,
+          'large' => $large,
+          'alt' => $item->alt,
+        ];
+      }
+
+      $variables['gallery_images'] = $gallery;
+    }
+  }
+  //codigo para obtener node id
+  if ($variables['node']->bundle() === 'article') {
+
+    $variables['#attached']['drupalSettings']['productData'] = [
+      'id' => $variables['node']->id(),
+      'name' => $variables['node']->label(),
+      'price' => (float) $variables['node']->field_precio_del_articulo->value,
+    ];
+  }
+}

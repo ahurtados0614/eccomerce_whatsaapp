@@ -1,0 +1,142 @@
+<div id="order-message" style="display:none; padding:10px; background:#28a745; color:#fff; margin-bottom:10px;">
+Estado actualizado correctamente
+</div>
+
+<form method="get">
+
+  <input class="form-control" style="display: inline-block;" type="text" name="nombre" placeholder="Cliente"
+         value="{{ filters.nombre }}">
+  
+  <input class="form-control" style="display: inline-block;" type="text" name="celular" placeholder="Celular"
+         value="{{ filters.celular }}">
+
+  <select name="status" class="form-control" style="display: inline-block; height: 54px;">
+    <option value="">Estado</option>
+    <option value="pending" {{ filters.status == 'pending' ? 'selected' }}>Pendiente</option>
+    <option value="processing" {{ filters.status == 'processing' ? 'selected' }}>En proceso</option>
+    <option value="delivered" {{ filters.status == 'delivered' ? 'selected' }}>Entregado</option>
+    <option value="cancelled" {{ filters.status == 'cancelled' ? 'selected' }}>Cancelado</option>
+  </select>
+
+  <button class="misubmit" type="submit">Filtrar</button>
+
+</form>
+<div class="content-table">
+<table class="table">
+<thead>
+<tr>
+<th>Pedido</th>
+<th>Cliente</th>
+<th>Celular</th>
+<th>Total</th>
+<th>Estado</th>
+<th>Acción</th>
+</tr>
+</thead>
+
+<tbody>
+{% for order in orders %}
+<tr>
+<td>{{ order.order_number }}</td>
+<td>{{ order.nombre }}</td>
+<td>{{ order.celular }}</td>
+<td>${{ order.total|number_format(0, ',', '.') }}</td>
+
+<td>
+<select data-id="{{ order.id }}" class="order-status">
+<option value="pending" {{ order.status == 'pending' ? 'selected' }}>Pendiente</option>
+<option value="processing" {{ order.status == 'processing' ? 'selected' }}>En proceso</option>
+<option value="delivered" {{ order.status == 'delivered' ? 'selected' }}>Entregado</option>
+<option value="cancelled" {{ order.status == 'cancelled' ? 'selected' }}>Cancelado</option>
+</select>
+</td>
+
+<td>
+<a target="_blanc" href="/order-review/{{ order.id }}">Ver</a>
+</td>
+
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{{ pager }}
+</table>
+<script>
+document.querySelectorAll('.order-status').forEach(select => {
+
+  select.addEventListener('change', function(){
+
+    const status = this.value;
+    const id = this.dataset.id;
+
+    fetch('/admin/mymobile/order/update-status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'id=' + id + '&status=' + status
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      if(data.status === 'ok'){
+
+        const msg = document.getElementById('order-message');
+        msg.style.display = 'block';
+
+        setTimeout(()=>{
+          msg.style.display = 'none';
+        },3000);
+
+      }
+
+    });
+
+  });
+
+});
+</script>
+<style>
+.form-control {
+    height: 40px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #888;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #e5e5e5;
+    margin: 0em 0.5em;
+}
+.misubmit{
+    display: inline;
+    background: #c0d06d;
+    color: #fff;
+    padding: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 0px;
+    height: 53px;
+    width: 100px;
+    cursor: pointer;
+}
+.misubmit:hover{
+  background: #000;
+}
+@media (max-width:768px){
+  .content-table{
+  overflow-x: scroll;
+  }
+  input.form-control {
+    width: 92%;
+    margin: 0em 0em 1em 0em;
+}
+select.form-control {
+    width: 99%;
+    margin: 0em 0em 1em 0em;
+}
+button.misubmit {
+    width: 100%;
+}
+}
+
+</style>

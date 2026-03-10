@@ -1,0 +1,154 @@
+<div class="order-review">
+
+  <h2>Confirmación de pedido</h2>
+  {% set statuses = {
+  'pending': {'class': 'badge-warning', 'text': 'Pendiente'},
+  'processing': {'class': 'badge-info', 'text': 'En proceso'},
+  'delivered': {'class': 'badge-success', 'text': 'Entregado'},
+  'cancelled': {'class': 'badge-danger', 'text': 'Cancelado'}
+} %}
+  <div class="order-info">
+    <p><strong>Pedido:</strong> {{ order.order_number }}</p>
+    <p><strong>Cliente:</strong> {{ payload.nombre|title }}</p>
+    <p><strong>Celular:</strong> {{ payload.celular }}</p>
+    <p>
+        <strong>Estado del pedido:</strong>
+        <span class="badge {{ statuses[order.status].class }}">
+            {{ statuses[order.status].text }}
+        </span>
+    </p>
+  </div>
+
+  <div class="table-responsive">
+        <table class="table align-middle cart-table">  
+            <thead>
+            <tr>
+                <th class="title-table">Producto</th>
+                <th class="title-table">Precio</th>
+                <th class="title-table">Cantidad</th>
+                <th class="title-table">Total</th>
+            </tr>
+            </thead>
+
+            <tbody id="cart-body">
+
+                    {% set total = 0 %}
+
+                    {% for item in payload.items %}
+
+                        {% set subtotal = item.price * item.quantity %}
+                        {% set total = total + subtotal %}
+
+                        <tr>
+                        <td data-label="Producto">{{ item.name|title }}</td>
+                        <td data-label="Precio">${{ item.price|number_format(0, ',', '.') }}</td>
+                        <td data-label="Cantidad">{{ item.quantity }}</td>
+                        <td data-label="Total">${{ subtotal|number_format(0, ',', '.') }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+            </tbody>
+        </table>
+  </div>
+  <div class="order-total">
+    <strong>Total pagado:</strong>
+    ${{ total|number_format(0, ',', '.') }}
+  </div>
+
+</div>
+<style>
+.order-review{
+  max-width:800px;
+  margin:auto;
+  padding:20px;
+}
+
+.order-info{
+  margin-bottom:20px;
+}
+
+.table-order{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.table-order th,
+.table-order td{
+  border-bottom:1px solid #eee;
+  padding:10px;
+  text-align:left;
+}
+
+.order-total{
+  text-align:right;
+  font-size:18px;
+  margin-top:20px;
+}
+th.title-table {
+    color: #000;
+}
+/* =========================
+   TABLA RESPONSIVE
+========================= */
+
+@media (max-width:768px){
+
+  .cart-table thead{
+    display:none;
+  }
+
+  .cart-table,
+  .cart-table tbody,
+  .cart-table tr,
+  .cart-table td{
+    display:block;
+    width:100%;
+  }
+
+  .cart-table tr{
+    margin-bottom:15px;
+    border:1px solid #e5e5e5;
+    border-radius:8px;
+    padding:12px;
+    background:#fff;
+  }
+
+  .cart-table td{
+    text-align:right;
+    padding-left:50%;
+    position:relative;
+    border:none;
+    border-bottom:1px solid #f0f0f0;
+    padding-top:8px;
+    padding-bottom:8px;
+  }
+
+  .cart-table td:last-child{
+    border-bottom:none;
+  }
+
+  .cart-table td::before{
+    content:attr(data-label);
+    position:absolute;
+    left:12px;
+    width:45%;
+    text-align:left;
+    font-weight:600;
+    color:#333;
+  }
+
+}
+span.badge.badge-warning {
+    background-color: #ffc107;
+}
+span.badge.badge-info {
+    background-color: #17a2b8;
+}
+span.badge.badge-success {
+    background-color: #28a745;
+}
+span.badge.badge-danger {
+    background-color: #dc3545;
+}
+</style>

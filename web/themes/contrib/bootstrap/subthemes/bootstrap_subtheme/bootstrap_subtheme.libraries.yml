@@ -1,0 +1,59 @@
+global-styling:
+  version: 1.x
+
+  css:
+    theme:
+      catalog/view/javascript/font-awesome/css/font-awesome.min.css: {}
+      catalog/view/theme/Vigils/stylesheet/stylesheet.css: {}
+      catalog/view/javascript/jquery/magnific/magnific-popup.css: {}
+      catalog/view/theme/Vigils/stylesheet/codezeel/carousel.css: {}
+      catalog/view/theme/Vigils/stylesheet/codezeel/custom.css: {}
+      catalog/view/theme/Vigils/stylesheet/codezeel/bootstrap.min.css: {}
+      catalog/view/theme/Vigils/stylesheet/codezeel/lightbox.css: {}
+      catalog/view/theme/Vigils/stylesheet/codezeel/animate.css: {}
+      catalog/view/javascript/jquery/swiper/css/swiper.min.css: {}
+      catalog/view/javascript/jquery/swiper/css/opencart.css: {}
+
+  js:
+    https://code.jquery.com/jquery-3.6.4.min.js:
+      type: external
+
+    https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js:
+      type: external
+      attributes:
+        defer: true
+
+    https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js:
+      type: external
+      attributes:
+        defer: true
+
+    catalog/view/javascript/jquery/swiper/js/swiper.jquery.js: {}
+    catalog/view/javascript/codezeel/custom.js: {}
+    catalog/view/javascript/codezeel/jstree.min.js: {}
+    catalog/view/javascript/codezeel/carousel.min.js: {}
+    catalog/view/javascript/codezeel/codezeel.min.js: {}
+    catalog/view/javascript/codezeel/jquery.custom.min.js: {}
+    catalog/view/javascript/codezeel/jquery.formalize.min.js: {}
+    catalog/view/javascript/lightbox/lightbox-2.6.min.js: {}
+    catalog/view/javascript/codezeel/tabs.js: {}
+    catalog/view/javascript/codezeel/jquery.elevatezoom.min.js: {}
+    catalog/view/javascript/codezeel/bootstrap-notify.min.js: {}
+    catalog/view/javascript/codezeel/doubletaptogo.js: {}
+    catalog/view/javascript/codezeel/parallax.js: {}
+    catalog/view/javascript/jquery/magnific/jquery.magnific-popup.min.js: {}
+    catalog/view/javascript/common.js: {}
+    catalog/view/javascript/custom/main-slider.js: {}
+    catalog/view/javascript/custom/cart-custom.js: {}
+
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+product-gallery:
+  js:
+    catalog/view/javascript/custom/product-carousel.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once

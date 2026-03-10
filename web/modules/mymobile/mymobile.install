@@ -1,0 +1,78 @@
+<?php
+function mymobile_schema() {
+
+  $schema['mymobile_orders'] = [
+    'description' => 'Stores MyMobile orders.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'order_number' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'nombre' => [
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+      ],
+      'celular' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'total' => [
+        'type' => 'float',
+        'not null' => TRUE,
+      ],
+      'payload' => [
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'ip_address' => [
+        'type' => 'varchar',
+        'length' => 45,
+        'not null' => FALSE,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'order_number' => ['order_number'],
+    ],
+  ];
+
+  return $schema;
+}
+function mymobile_update_9001() {
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->tableExists('mymobile_orders')) {
+    $definition = mymobile_schema();
+    $schema->createTable('mymobile_orders', $definition['mymobile_orders']);
+  }
+}
+
+function mymobile_update_9002() {
+
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->fieldExists('mymobile_orders', 'status')) {
+
+    $schema->addField('mymobile_orders', 'status', [
+      'type' => 'varchar',
+      'length' => 20,
+      'not null' => TRUE,
+      'default' => 'pending',
+      'description' => 'Order status: pending, processing, delivered, cancelled',
+    ]);
+
+  }
+
+}

@@ -1,0 +1,4 @@
+services:
+  mymobile.order_service:
+    class: Drupal\mymobile\Service\OrderService
+    arguments: ['@database', '@request_stack']

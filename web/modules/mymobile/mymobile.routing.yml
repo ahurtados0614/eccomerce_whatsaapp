@@ -1,0 +1,53 @@
+mimodulo.cart_products:
+  path: '/cart/products'
+  defaults:
+    _controller: '\Drupal\mymobile\Controller\CartController::getProducts'
+    _format: 'json'
+  requirements:
+    _permission: 'access content'
+  methods: [GET]
+  options:
+    no_cache: TRUE
+
+mymobile.payment_register:
+  path: '/api/payment/register'
+  defaults:
+    _controller: '\Drupal\mymobile\Controller\PaymentController::registerPayment'
+    _format: 'json'
+  requirements:
+    _permission: 'access content'
+  methods: [POST]
+  options:
+    no_cache: TRUE
+
+mymobile.order_get:
+  path: '/api/order/{id}'
+  defaults:
+    _controller: '\Drupal\mymobile\Controller\PaymentController::getOrder'
+    _format: 'json'
+  requirements:
+    _permission: 'access content'
+    id: '\d+'
+  methods: [GET]
+
+mymobile.order_review:
+  path: '/order-review/{id}'
+  defaults:
+    _controller: '\Drupal\mymobile\Controller\OrderReviewController::view'
+    _title: 'Revisión de Pedido'
+  requirements:
+    _permission: 'access content'
+mymobile.orders:
+  path: '/admin/mymobile/orders'
+  defaults:
+    _controller: '\Drupal\mymobile\Controller\OrderController::orders'
+    _title: 'Pedidos'
+  requirements:
+    _role: 'administrator+content_editor'
+mymobile.order.update_status:
+  path: '/admin/mymobile/order/update-status'
+  defaults:
+    _controller: '\Drupal\mymobile\Controller\OrderController::updateStatus'
+  methods: [POST]
+  requirements:
+    _role: 'administrator+content_editor'

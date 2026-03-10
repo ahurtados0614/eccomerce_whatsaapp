@@ -1,0 +1,56 @@
+/* CSS Document */
+.swiper-viewport {
+	margin: 0px;
+	z-index: 1;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+}
+/* OpenCart Code */
+.main-slider .swiper-wrapper, .swiper-container {
+	direction: ltr !important;
+}
+.swiper-pagination {
+	bottom: 20px;
+	left: 0;
+	text-align: center;
+	width: 100%;
+}
+.swiper-pagination-bullet {
+	display: inline-block;
+	margin: 0 3px;
+	opacity: 1;
+	cursor: pointer;
+    width: 10px;
+    height: 10px;
+	-webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    background-color: #000000;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    -moz-border-radius: 20px;
+    cursor: pointer;
+    text-indent: -9999px;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+.swiper-pagination-bullet:hover,
+.swiper-pagination-bullet-active {
+	background: #ffffff;
+	-webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+    -webkit-transition: all 500ms ease 0s;
+    -moz-transition: all 500ms ease 0s;
+    -o-transition: all 500ms ease 0s;
+    transition: all 500ms ease 0s;
+}
+.swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled {
+    opacity: 0;
+    cursor: pointer;
+    pointer-events: auto;
+}

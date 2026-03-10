@@ -1,0 +1,5 @@
+name: My Mobile
+type: module
+description: Carrito de Compras
+core_version_requirement: ^11
+package: Custom
