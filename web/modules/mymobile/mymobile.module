@@ -57,6 +57,14 @@ function mymobile_form_system_site_information_settings_alter(&$form, FormStateI
         '#default_value' => $config->get('site_direction'),
         '#description' => t('Ingrese la dirección del comercio.'),
       ];
+
+      $config = \Drupal::config('mymobile.settings');
+        $form['site_information']['api_key'] = [
+        '#type' => 'textfield',
+        '#title' => t('Llave secreta'),
+        '#default_value' => $config->get('api_key'),
+        '#description' => t('Ingrese su llave secreta para conectar a la api.'),
+      ];
       
       // Agregar el submit callback a nivel global del formulario.
       $form['#submit'][] = 'mymobile_site_information_form_submit';
@@ -73,6 +81,7 @@ function mymobile_site_information_form_submit($form, FormStateInterface $form_s
   $config->set('site_whatsapp', $form_state->getValue('site_whatsapp'));
   $config->set('site_telephone', $form_state->getValue('site_telephone'));
   $config->set('site_direction', $form_state->getValue('site_direction'));
+  $config->set('api_key', $form_state->getValue('api_key'));
   $config->save();
   /**
   * \Drupal::logger('mymobile')->notice('Se guardó WhatsApp con el valor: @value', [
@@ -81,10 +90,15 @@ function mymobile_site_information_form_submit($form, FormStateInterface $form_s
   * \Drupal::logger('mymobile')->notice('Se guardó Teléfono con el valor: @value', [
   *  '@value' => $form_state->getValue('site_telephone'),
   * ]);
-    * \Drupal::logger('mymobile')->notice('Se guardó la Dirección con el valor: @value', [
+  * \Drupal::logger('mymobile')->notice('Se guardó la Dirección con el valor: @value', [
   *  '@value' => $form_state->getValue('site_direction'),
   * ]);
+  *
+  * \Drupal::logger('mymobile')->notice('Se guardó la Llave secreta con el valor: @value', [
+  *  '@value' => $form_state->getValue('api_key'),
+  * ]);
   */
+  
 }
 
 /**
@@ -97,7 +111,8 @@ function mymobile_preprocess_block(&$variables) {
   $variables['site_whatsapp'] = $config->get('site_whatsapp') ?? '';
   $variables['site_telephone'] = $config->get('site_telephone') ?? '';
   $variables['site_direction'] = $config->get('site_direction') ?? '';
-   $variables['site_mail'] = \Drupal::config('system.site')->get('mail') ?? '';
+  $variables['site_mail'] = \Drupal::config('system.site')->get('mail') ?? '';
+  $variables['api_key'] = \Drupal::config('system.site')->get('api_key') ?? '';
 
 }
 /**
@@ -111,4 +126,5 @@ function mymobile_preprocess_page(&$variables) {
   $variables['site_telephone'] = $config->get('site_telephone') ?? '';
   $variables['site_direction'] = $config->get('site_direction') ?? '';
   $variables['site_mail'] = \Drupal::config('system.site')->get('mail') ?? '';
+  $variables['api_key'] = \Drupal::config('system.site')->get('api_key') ?? '';
 }

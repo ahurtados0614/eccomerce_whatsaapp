@@ -34,7 +34,8 @@ class PaymentController extends ControllerBase {
 
     // 🔐 Validar API Key
     $api_key = $request->headers->get('X-API-KEY');
-    $config_key = Settings::get('mymobile_api_key');
+    $config = \Drupal::config('mymobile.settings');
+    $config_key = $config->get('api_key') ?? '';;
 
     if (!$api_key || $api_key !== $config_key) {
       return new JsonResponse([
