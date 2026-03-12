@@ -96,7 +96,8 @@
                   </a>
                 </li>
                 {% endif %}
-              <li><span class="desc">Código de producto: </span> Producto {{ node.id }}</li>
+              <li><span class="desc">Id. producto: </span> Producto {{ node.id }}</li>
+              <li><span class="desc">SKU: </span> {{ node.field_codigo_sku.value }}</li>
               <li><span class="desc">Disponibilidad: </span> En stock</li>
             </ul>
 

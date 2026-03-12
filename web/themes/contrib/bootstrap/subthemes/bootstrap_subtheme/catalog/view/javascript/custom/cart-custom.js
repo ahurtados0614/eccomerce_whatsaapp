@@ -53,6 +53,7 @@
           cartMenu.innerHTML += `
             <li style="padding:10px; border-bottom:1px solid #eee;">
               <strong style="font-weight: bold;">${item.name}</strong><br>
+              SKU: ${item.sku}<br>
               Cantidad: ${item.quantity}<br>
               $${item.total_price.toLocaleString('es-CO')} COP
               <button 
@@ -117,11 +118,12 @@
 
         let quantity = parseInt(qtyInput.value);
         if (!quantity || quantity <= 0) return;
-
+        
         const PRODUCT_ID    = productData.id;
         const PRODUCT_NAME  = productData.name;
         const PRODUCT_PRICE = parseFloat(productData.price);
-
+        const PRODUCT_SKU   = productData.sku;
+        const PRODUCT_IMG  = productData.image;
         let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
         const index = cart.findIndex(item => item.id === PRODUCT_ID);
@@ -132,6 +134,8 @@
         } else {
           cart.push({
             id: PRODUCT_ID,
+            sku: PRODUCT_SKU,
+            image: PRODUCT_IMG,
             name: PRODUCT_NAME,
             price: PRODUCT_PRICE,
             quantity: quantity,

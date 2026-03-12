@@ -146,11 +146,18 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
   }
   //codigo para obtener node id
   if ($variables['node']->bundle() === 'article') {
-
+    $image_url = '';
+    if (!$variables['node']->field_image->isEmpty()) {
+      $file = $variables['node']->field_image->entity;
+      $image_url = \Drupal::service('file_url_generator')
+        ->generateString($file->getFileUri());
+    }
     $variables['#attached']['drupalSettings']['productData'] = [
       'id' => $variables['node']->id(),
       'name' => $variables['node']->label(),
       'price' => (float) $variables['node']->field_precio_del_articulo->value,
+      'sku' => $variables['node']->field_codigo_sku->value,
+      'image' => $image_url,
     ];
   }
 }

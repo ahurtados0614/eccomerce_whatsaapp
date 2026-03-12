@@ -23,6 +23,7 @@
         <table class="table align-middle cart-table">  
             <thead>
             <tr>
+                <th class="title-table">Sku</th>
                 <th class="title-table">Producto</th>
                 <th class="title-table">Precio</th>
                 <th class="title-table">Cantidad</th>
@@ -40,6 +41,7 @@
                         {% set total = total + subtotal %}
 
                         <tr>
+                        <td data-label="Producto">{{ item.sku }}</td>
                         <td data-label="Producto">{{ item.name|title }}</td>
                         <td data-label="Precio">${{ item.price|number_format(0, ',', '.') }}</td>
                         <td data-label="Cantidad">{{ item.quantity }}</td>

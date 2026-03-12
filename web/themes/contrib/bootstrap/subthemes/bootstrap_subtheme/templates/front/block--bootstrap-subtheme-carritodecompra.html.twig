@@ -48,6 +48,7 @@
         <table class="table align-middle cart-table">    
           <thead>
             <tr>
+            <th class="title-table">Imagen</th>
               <th class="title-table">Cod SKU</th>
               <th class="title-table">Artículos</th>
               <th class="title-table">Precio</th>
@@ -307,80 +308,97 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function renderCartTable() {
 
-    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
-    if (cart.length === 0) {
-      cartBody.innerHTML = `
-        <tr>
-          <td colspan="6" class="text-center">
-            Tu carrito está vacío
-          </td>
-        </tr>
-      `;
-      return;
-    }
+  if (cart.length === 0) {
+    cartBody.innerHTML = `
+      <tr>
+        <td colspan="7" class="text-center">
+          Tu carrito está vacío
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
-    const ids = cart.map(item => item.id).join(',');
+  const ids = cart.map(item => item.id).join(',');
 
-    fetch(`/cart/products?ids=${ids}`)
-      .then(response => response.json())
-      .then(products => {
+  fetch(`/cart/products?ids=${ids}`)
+    .then(response => response.json())
+    .then(products => {
 
-        cartBody.innerHTML = "";
-        let totalGeneral = 0;
+      cartBody.innerHTML = "";
+      let totalGeneral = 0;
 
-        products.forEach(product => {
+      products.forEach(product => {
 
-          const cartItem = cart.find(c => c.id == product.id);
-          const quantity = cartItem ? cartItem.quantity : 1;
+        const cartItem = cart.find(c => c.id == product.id);
 
-          const total = product.price * quantity;
-          totalGeneral += total;
+        const quantity = cartItem ? cartItem.quantity : 1;
+        const image = cartItem ? cartItem.image : "";
+        const sku = cartItem ? cartItem.sku : "";
 
-          cartBody.innerHTML += `
-            <tr>
-              <td data-label="Cod SKU">${product.id}</td>
-              <td data-label="Artículos">${capitalize(product.name)}</td>
-              <td data-label="Precio">
-                $${product.price.toLocaleString('es-CO')} COP
-              </td>
-              <td data-label="Cantidad" class="text-center">
-                <input type="number"
-                       min="1"
-                       value="${quantity}"
-                       data-id="${product.id}"
-                       class="form-control update-qty"
-                       style="width:80px;margin:auto;">
-              </td>
-              <td data-label="Eliminar" class="text-center">
-                <button data-id="${product.id}"
-                        class="btn btn-sm btn-danger remove-row">
-                  ✕
-                </button>
-              </td>
-              <td data-label="Total" class="text-end">
-                $${total.toLocaleString('es-CO')} COP
-              </td>
-            </tr>
-          `;
-        });
+        const total = product.price * quantity;
+        totalGeneral += total;
 
         cartBody.innerHTML += `
           <tr>
-            <td colspan="5" class="text-end">
-              <strong>Total General</strong>
+
+            <td data-label="Imagen">
+              <img src="${image}" 
+                   style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
             </td>
-            <td class="text-end">
-              <strong>
-                $${totalGeneral.toLocaleString('es-CO')} COP
-              </strong>
+
+           <td data-label="Cod SKU">${sku || product.sku || product.id}</td>
+
+            <td data-label="Artículos">
+              ${capitalize(product.name)}
             </td>
+
+            <td data-label="Precio">
+              $${product.price.toLocaleString('es-CO')} COP
+            </td>
+
+            <td data-label="Cantidad" class="text-center">
+              <input type="number"
+                     min="1"
+                     value="${quantity}"
+                     data-id="${product.id}"
+                     class="form-control update-qty"
+                     style="width:80px;margin:auto;">
+            </td>
+
+            <td data-label="Eliminar" class="text-center">
+              <button data-id="${product.id}"
+                      class="btn btn-sm btn-danger remove-row">
+                ✕
+              </button>
+            </td>
+
+            <td data-label="Total" class="text-end">
+              $${total.toLocaleString('es-CO')} COP
+            </td>
+
           </tr>
         `;
-
-        attachEvents();
       });
-  }
+
+      cartBody.innerHTML += `
+        <tr>
+          <td colspan="6" class="text-end">
+            <strong>Total General</strong>
+          </td>
+          <td class="text-end">
+            <strong>
+              $${totalGeneral.toLocaleString('es-CO')} COP
+            </strong>
+          </td>
+        </tr>
+      `;
+
+      attachEvents();
+    });
+}
 
   function attachEvents() {
 
@@ -466,7 +484,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         items.push({
           id: product.id,
-          sku: product.id,
+          sku: cartItem.sku || product.sku || product.id,
           name: product.name,
           price: product.price,
           quantity: cartItem.quantity

@@ -7,8 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\mymobile\Service\OrderService;
-use Drupal\Core\Site\Settings;
-use Drupal\Core\Url;
 
 class PaymentController extends ControllerBase {
 
@@ -35,7 +33,7 @@ class PaymentController extends ControllerBase {
     // 🔐 Validar API Key
     $api_key = $request->headers->get('X-API-KEY');
     $config = \Drupal::config('mymobile.settings');
-    $config_key = $config->get('api_key') ?? '';;
+    $config_key = $config->get('api_key') ?? '';
 
     if (!$api_key || $api_key !== $config_key) {
       return new JsonResponse([
@@ -59,10 +57,53 @@ class PaymentController extends ControllerBase {
 
     try {
 
+      // 🔹 Normalizar items y validar SKU
+      $items = [];
+
+      foreach ($content['items'] as $item) {
+
+        if (
+          empty($item['id']) ||
+          empty($item['name']) ||
+          empty($item['price']) ||
+          empty($item['quantity'])
+        ) {
+          return new JsonResponse([
+            'status' => 'fail',
+            'message' => 'Invalid product data'
+          ], 400);
+        }
+
+        $items[] = [
+          'id' => $item['id'],
+          'sku' => $item['sku'] ?? '',
+          'name' => $item['name'],
+          'price' => (float) $item['price'],
+          'quantity' => (int) $item['quantity'],
+        ];
+      }
+
+      $content['items'] = $items;
+
+      // Crear pedido
       $order = $this->orderService->createOrder($content);
+
       $base_url = \Drupal::request()->getSchemeAndHttpHost();
       $order_link = $base_url . '/order-review/' . $order['id'];
       $site_name = \Drupal::config('system.site')->get('name');
+
+      // Construir texto de items con SKU
+      $items_text = "";
+
+      foreach ($items as $item) {
+
+        $subtotal = $item['price'] * $item['quantity'];
+
+        $items_text .= "SKU: {$item['sku']} - {$item['name']} x{$item['quantity']} - COP "
+          . number_format($subtotal, 0, ',', '.') . "\n";
+      }
+
+      // Mensaje WhatsApp
       $message = "Hola, soy {$content['nombre']},\n"
         . "Link a mi pedido: {$order_link}\n"
         . "Pedido: {$order['order_number']}\n"
@@ -70,10 +111,10 @@ class PaymentController extends ControllerBase {
         . "Celular: {$content['celular']}\n"
         . "========================\n"
         . "Quiero hacer este pedido en {$site_name}:\n\n"
-        . $order['items_text']
+        . $items_text
         . "========================\n"
         . "TOTAL: COP " . number_format($order['total'], 0, ',', '.');
-      $config = \Drupal::config('mymobile.settings');
+
       $whatsapp_number = $config->get('site_whatsapp') ?? '';
       $whatsapp_url = "https://wa.me/{$whatsapp_number}?text=" . urlencode($message);
 
