@@ -7,3 +7,6 @@ web/sites/default/files/
 
 # Entorno local
 web/sites/*/settings.local.php
+
+#access
+.htaccess
