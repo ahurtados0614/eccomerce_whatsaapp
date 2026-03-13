@@ -3,7 +3,8 @@ web/sites/default/settings.php
 web/sites/default/services.yml
 
 # Files subidos por usuarios
-web/sites/default/files/
+web/sites/default/files/*
+web/sites/default/files/.htaccess
 
 # Entorno local
 web/sites/*/settings.local.php

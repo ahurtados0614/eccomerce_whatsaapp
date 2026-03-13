@@ -40,7 +40,7 @@
                         {% set subtotal = item.price * item.quantity %}
                         {% set total = total + subtotal %}
 
-                        <tr>
+                        <tr>                        
                         <td data-label="Producto">{{ item.sku }}</td>
                         <td data-label="Producto">{{ item.name|title }}</td>
                         <td data-label="Precio">${{ item.price|number_format(0, ',', '.') }}</td>

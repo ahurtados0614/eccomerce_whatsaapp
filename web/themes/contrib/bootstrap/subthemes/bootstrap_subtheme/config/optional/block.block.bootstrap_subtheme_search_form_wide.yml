@@ -7,7 +7,7 @@ dependencies:
     - bootstrap_subtheme
 id: bootstrap_subtheme_search_form_wide
 theme: bootstrap_subtheme
-region: top_header_form
+region: filter_side_navbar
 weight: -7
 provider: null
 plugin: search_form_block

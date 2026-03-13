@@ -68,6 +68,38 @@
 */
 #}
 {# see https://www.drupal.org/project/drupal/issues/953034#comment-14192130 #}
+
+<div class="side-navbar d-flex flex-column" id="sidebar">
+
+  <!-- botón cerrar -->
+  <div class="sidebar-header">
+    <button id="close-btn" class="close-btn">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+
+  <ul class="nav flex-column w-100">
+
+    <div id="logo2"><center>
+                              {% if site_logo or site_name %}
+                              <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">
+                                <img src="{{ site_logo }}" title="{{ site_name }}" alt="{{ site_name }}"
+                                  class="img-responsive" /></a>
+                              {% endif %}
+                  </center></div>
+
+    {% if page.filter_side_navbar %}
+      {{ page.filter_side_navbar }}
+    {% endif %}
+
+  </ul>
+</div>
+ <!-- Main Wrapper -->
+  <div class="p-1 my-container active-cont">
+    <!-- Top Nav -->
+    
+    <!--End Top Nav -->
+    
 {% set sidebar_first_exists = page.sidebar_first|render|striptags('<img><video><audio><drupal-render-placeholder>')|trim
       is not empty %}
       {% set sidebar_second_exists =
@@ -117,13 +149,13 @@
                             <div id="cart" class="btn-group btn-block">
                               <span class="cart_heading dropdown-toggle" data-bs-toggle="dropdown">My Cart</span>
 
-<button type="button"
-  class="btn btn-inverse btn-block btn-lg dropdown-toggle"
-  data-bs-toggle="dropdown">
-  <i class="fa fa-shopping-cart"></i>
-  <span id="cart-total">$0.00</span>
-  <span id="cart-quantity">0</span>
-</button>
+                              <button type="button"
+                                class="btn btn-inverse btn-block btn-lg dropdown-toggle"
+                                data-bs-toggle="dropdown">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span id="cart-total">$0.00</span>
+                                <span id="cart-quantity">0</span>
+                              </button>
                               <ul class="dropdown-menu pull-right cart-menu" id="cart-menu" style="text-align: left;">
                                 <li>
                                   <p class="text-center">¡Tu carrito de compras está vacío!</p>
@@ -161,7 +193,7 @@
                   </div>
 
                   <div class="header-top-inner">
-                    <div class="container">
+                    <div class="container" style="padding-left: 0px;  margin-left: 0px;">
                       <nav class="nav-container" role="navigation">
 
                         <div class="nav-inner">
@@ -169,6 +201,9 @@
                           <!-- Opencart 3 level Category Menu-->
                           <div id="menu" class="main-menu">
                             <ul class="nav navbar-nav">
+                            <li class="top_level" style="float: left;">
+                            <a id="menu-btn"> </a>
+                            </li>
                               {% for item in main_menu_items %}
                               <li class="top_level">
                                {% if item.url is not empty %}
@@ -193,6 +228,10 @@
                             <span class="menu-text">Menu</span>
                           </div>
                           <ul class="main-navigation">
+                           <li class="top_level">
+                            <a href="#" id="menu-btn-mobile">
+                              <i class="fa fa-filter"></i>Filtros</a>
+                          </li>
                            {% for item in main_menu_items %}
                             {% if item.url %}
                               <li class="top_level">
@@ -367,7 +406,13 @@
             </footer>
             </div>
             </div>
+  </div>
             <style>
+            div#main {
+                width: 100%;
+                padding-left: 5em;
+                padding-right: 5em;
+            }
               /* Ocultar ambos por defecto */
               #menu,
               #res-menu {
@@ -386,7 +431,7 @@
 
                 #res-menu {
                   display: block;
-                  width: 14%;
+                  width: 100%;
                 }
 
                 .nav-responsive {
@@ -455,75 +500,245 @@
                 .main-navigation li a:hover {
                   background: #222;
                 }
+                a#menu-btn-mobile {
+                    padding: 16px 19px 15px 17px;
+                }
               }
             </style>
            <script>
-document.addEventListener("DOMContentLoaded", function () {
+           //------------------
+document.addEventListener("DOMContentLoaded", function() {
+  const sidebar = document.querySelector("#sidebar");
+  const container = document.querySelector(".my-container");
+  const closeBtn = document.querySelector("#close-btn");
+  const menuButtons = document.querySelectorAll("#menu-btn, #menu-btn-mobile");
 
-  const accountWrapper = document.querySelector(".myaccount");
-  const accountToggle = document.querySelector(".myaccount > .dropdown-toggle");
-  const accountMenu = document.querySelector(".myaccount-menu");
-
-  const searchWrapper = document.querySelector("#search");
-  const searchButton = document.querySelector("#search .search_button");
-  const searchToggle = document.querySelector("#search .search_toggle");
-
-  const toggle = document.querySelector(".nav-responsive");
-  const menu = document.querySelector(".main-navigation");
-
-  const cartWrapper = document.querySelector("#cart");
-
-  // ===== Cuenta =====
-  if (accountToggle && accountMenu) {
-    accountToggle.addEventListener("click", function(e){
+  // Abrir sidebar al hacer clic en cualquier botón
+  menuButtons.forEach(btn => {
+    btn.addEventListener("click", function(e) {
       e.preventDefault();
       e.stopPropagation();
-      accountMenu.classList.toggle("open");
+      sidebar.classList.add("open");
+      container.classList.add("shift");
     });
-  }
-
-  // ===== Buscador =====
-  if (searchButton && searchToggle) {
-    searchButton.addEventListener("click", function(e){
-      e.stopPropagation();
-      searchToggle.classList.toggle("open");
-
-      const input = searchToggle.querySelector("input");
-      if (input) input.focus();
-    });
-  }
-
-  // ===== Menú móvil =====
-  if (toggle && menu) {
-    toggle.addEventListener("click", function(e){
-      e.stopPropagation();
-      menu.classList.toggle("open");
-    });
-  }
-
-  // ===== Evitar conflicto con carrito =====
-  if (cartWrapper) {
-    cartWrapper.addEventListener("click", function(e){
-      e.stopPropagation();
-    });
-  }
-
-  // ===== Click fuera =====
-  document.addEventListener("click", function(e){
-
-    if (accountWrapper && !accountWrapper.contains(e.target)) {
-      accountMenu.classList.remove("open");
-    }
-
-    if (searchWrapper && !searchWrapper.contains(e.target)) {
-      searchToggle.classList.remove("open");
-    }
-
-    if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
-      menu.classList.remove("open");
-    }
-
   });
 
+  // Cerrar sidebar
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function() {
+      sidebar.classList.remove("open");
+      container.classList.remove("shift");
+    });
+  }
+
+  // Click fuera del sidebar cierra
+  document.addEventListener("click", function(e) {
+    if (!sidebar.contains(e.target) && ![...menuButtons].some(btn => btn.contains(e.target))) {
+      sidebar.classList.remove("open");
+      container.classList.remove("shift");
+    }
+  });
 });
-</script>
+
+           //-------------------
+                    document.addEventListener("DOMContentLoaded", function () {
+
+                      const accountWrapper = document.querySelector(".myaccount");
+                      const accountToggle = document.querySelector(".myaccount > .dropdown-toggle");
+                      const accountMenu = document.querySelector(".myaccount-menu");
+
+                      const searchWrapper = document.querySelector("#search");
+                      const searchButton = document.querySelector("#search .search_button");
+                      const searchToggle = document.querySelector("#search .search_toggle");
+
+                      const toggle = document.querySelector(".nav-responsive");
+                      const menu = document.querySelector(".main-navigation");
+
+                      const cartWrapper = document.querySelector("#cart");
+
+                      // ===== Cuenta =====
+                      if (accountToggle && accountMenu) {
+                        accountToggle.addEventListener("click", function(e){
+                          e.preventDefault();
+                          e.stopPropagation();
+                          accountMenu.classList.toggle("open");
+                        });
+                      }
+
+                      // ===== Buscador =====
+                      if (searchButton && searchToggle) {
+                        searchButton.addEventListener("click", function(e){
+                          e.stopPropagation();
+                          searchToggle.classList.toggle("open");
+
+                          const input = searchToggle.querySelector("input");
+                          if (input) input.focus();
+                        });
+                      }
+
+                      // ===== Menú móvil =====
+                      if (toggle && menu) {
+                        toggle.addEventListener("click", function(e){
+                          e.stopPropagation();
+                          menu.classList.toggle("open");
+                        });
+                      }
+
+                      // ===== Evitar conflicto con carrito =====
+                      if (cartWrapper) {
+                        cartWrapper.addEventListener("click", function(e){
+                          e.stopPropagation();
+                        });
+                      }
+
+                      // ===== Click fuera =====
+                      document.addEventListener("click", function(e){
+
+                        if (accountWrapper && !accountWrapper.contains(e.target)) {
+                          accountMenu.classList.remove("open");
+                        }
+
+                        if (searchWrapper && !searchWrapper.contains(e.target)) {
+                          searchToggle.classList.remove("open");
+                        }
+
+                        if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
+                          menu.classList.remove("open");
+                        }
+
+                      });
+
+                    });
+             </script>
+            <style>
+            span.fieldset-legend {
+                  color: #fff !important;
+              }
+              label.form-check-label {
+                  color: #fff!important;
+              }
+              /* Sidebar base */
+              .side-navbar {
+                width: 350px;
+                height: 100vh;
+                position: fixed;
+                top: 0;
+                left: -350px; /* oculto por defecto */
+                background: #100901;
+                transition: left 0.3s ease;
+                z-index: 1000;
+                overflow-y: auto;
+                padding-top: 20px;
+              }
+
+              /* Cuando está abierto */
+              .side-navbar.open {
+                left: 0;
+              }
+
+              /* Contenedor principal se mueve al abrir sidebar */
+              .my-container {
+                transition: margin-left 0.3s ease;
+              }
+              .my-container.shift {
+                margin-left: 350px; /* Desktop */
+              }
+
+              /* Botón cerrar */
+              .sidebar-header {
+                display: flex;
+                justify-content: flex-end;
+                padding: 10px 15px;
+              }
+              .close-btn {
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 22px;
+                cursor: pointer;
+              }
+
+              /* Logo toggle */
+              #logo2 { display: none; }
+              .side-navbar.open #logo2 { display: block; }
+              .side-navbar.open ~ .my-container #logo { display: none; }
+              label {
+                color: #ffffff;
+              }
+              .side-navbar.open {
+                left: 0;
+              }
+              /* ===== MOBILE ===== */
+              @media (max-width: 991px) {
+                .side-navbar { width: 80%; left: -80%; }
+                .side-navbar.open { left: 0; }
+                .my-container.shift { margin-left: 0; } /* No desplazamos el contenido en móvil */
+              }
+              /* contenido principal */
+              .my-container {
+                transition: margin-left 0.3s ease;
+              }
+
+              .my-container.shift {
+                margin-left: 250px;
+              }
+
+              /* botón cerrar */
+              .sidebar-header {
+                display: flex;
+                justify-content: flex-end;
+                padding: 10px 15px;
+              }
+
+              .close-btn {
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 22px;
+                cursor: pointer;
+              }
+
+              /* botón menú */
+              #menu-btn::before {
+                    content: "\F0C9";
+                    font-family: "FontAwesome";
+                    /* position: absolute; */
+                    left: 0;
+                    top: 10px;
+                    font-size: 18px;
+                    font-weight: 400;
+                    display: block;
+                    color: #ffffff;
+              }
+              /* ocultar formulario */
+              [id^="block-bootstrap-subtheme-formularioexpuesto"]{
+                display:none;
+              }
+
+              /* mostrar cuando sidebar abre */
+              .side-navbar.open [id^="block-bootstrap-subtheme-formularioexpuesto"]{
+                display:block;
+                width: 90% !important;
+              }
+              section.row.region.region-filter-side-navbar {
+                  padding-left: 10%;
+              }
+
+              /* estado inicial (sidebar cerrado) */
+              #logo2{
+                display:none;
+              }
+
+              #logo{
+                display:block;
+              }
+
+              /* cuando el sidebar está abierto */
+              .side-navbar.open ~ .my-container #logo{
+                display:none;
+              }
+
+              .side-navbar.open #logo2{
+                display:block;
+              }
+            </style>
