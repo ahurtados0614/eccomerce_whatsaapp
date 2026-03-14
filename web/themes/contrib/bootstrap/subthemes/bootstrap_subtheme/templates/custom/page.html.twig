@@ -68,7 +68,7 @@
 */
 #}
 {# see https://www.drupal.org/project/drupal/issues/953034#comment-14192130 #}
-
+{% if is_front %}
 <div class="side-navbar d-flex flex-column" id="sidebar">
 
   <!-- botón cerrar -->
@@ -83,8 +83,7 @@
     <div id="logo2"><center>
                               {% if site_logo or site_name %}
                               <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">
-                                <img src="{{ site_logo }}" title="{{ site_name }}" alt="{{ site_name }}"
-                                  class="img-responsive" /></a>
+                                <img src="{{ site_logo }}" title="{{ site_name }}" alt="{{ site_name }}" style="width: 70% !important;" class="img-responsive" /></a>
                               {% endif %}
                   </center></div>
 
@@ -94,6 +93,7 @@
 
   </ul>
 </div>
+{% endif %}
  <!-- Main Wrapper -->
   <div class="p-1 my-container active-cont">
     <!-- Top Nav -->
@@ -108,7 +108,6 @@
             <div id="page-wrapper">
               <div id="page">
                 {% block head %}
-                {% if page.secondary_menu or page.top_header or page.top_header_form %}
                 <nav id="top">
                   <div class="container">
                     <div class="nav-left navcms">
@@ -201,9 +200,11 @@
                           <!-- Opencart 3 level Category Menu-->
                           <div id="menu" class="main-menu">
                             <ul class="nav navbar-nav">
+                            {% if is_front %}    
                             <li class="top_level" style="float: left;">
                             <a id="menu-btn"> </a>
                             </li>
+                            {% endif %}
                               {% for item in main_menu_items %}
                               <li class="top_level">
                                {% if item.url is not empty %}
@@ -228,13 +229,15 @@
                             <span class="menu-text">Menu</span>
                           </div>
                           <ul class="main-navigation">
-                           <li class="top_level">
+                            {% if is_front %}
+                           <li class="top_level" style="width: 100%">
                             <a href="#" id="menu-btn-mobile">
                               <i class="fa fa-filter"></i>Filtros</a>
                           </li>
+                          {% endif %}
                            {% for item in main_menu_items %}
                             {% if item.url %}
-                              <li class="top_level">
+                              <li class="top_level" style="width: 100%">
                                 <a href="{{ item.url }}">{{ item.title }}</a>
                               </li>
                             {% endif %}
@@ -262,7 +265,7 @@
                   </div>
                   {% endif %}
                   </nav>
-                  {% endif %}
+                  
                   {% if page.header or page.primary_menu or page.header_form %}
                   <header id="header" class="header" role="banner" aria-label="{{ 'Site header'|t}}">
                     <nav{{ navbar_attributes }}>
