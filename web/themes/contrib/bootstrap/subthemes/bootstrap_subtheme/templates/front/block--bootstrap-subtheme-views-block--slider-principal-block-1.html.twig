@@ -89,12 +89,30 @@
   </div> {# content-top #}
 
   <style>
+  /* SLIDER FULL WIDTH */
+.slider-full-width{
+  width:100vw;
+  margin-left:calc(-50vw + 50%);
+  overflow:hidden;
+}
+
+/* asegurar que swiper ocupe todo */
+.slider-full-width .swiper-container,
+.slider-full-width .swiper-wrapper,
+.slider-full-width .swiper-slide{
+  width:100%;
+}
+
+/* imagen responsive */
+.slider-full-width .swiper-slide img{
+  width:100%;
+  height:auto;
+  display:block;
+}
     .swiper-slide text-center swiper-slide-duplicate swiper-slide-active{
         width: 100%;
     }
-    .img-responsive {
-      width:100% !important;
-    }
+   
     .swiper-button-prev,
     .swiper-button-next {
       position: absolute;

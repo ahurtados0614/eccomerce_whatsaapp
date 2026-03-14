@@ -316,15 +316,11 @@
                     </aside>
                   </div>
                   {% endif %}
-                  {% if page.featured_top %}
-                  {% block featured %}
-                  <div class="featured-top">
-                    <aside class="featured-top__inner section {{ container }} clearfix" role="complementary">
+                 {% if page.featured_top %}
+                    <div class="slider-full-width">
                       {{ page.featured_top }}
-                    </aside>
-                  </div>
-                  {% endblock %}
-                  {% endif %}
+                    </div>
+                    {% endif %}
                   <div id="main-wrapper" class="layout-main-wrapper clearfix">
                     {% block content %}
                     <div id="main" class="{{ container }}">
@@ -411,6 +407,9 @@
             </div>
   </div>
             <style>
+            #main{
+              padding:0;
+            }
             div#main {
                 width: 100%;
                 padding-left: 5em;
@@ -614,6 +613,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     });
              </script>
             <style>
+            #main{
+  padding:0;
+}
+html,body{
+overflow-x:hidden;
+}
             span.fieldset-legend {
                   color: #fff !important;
               }
@@ -673,7 +678,7 @@ document.addEventListener("DOMContentLoaded", function() {
               }
               /* ===== MOBILE ===== */
               @media (max-width: 991px) {
-                .side-navbar { width: 80%; left: -80%; }
+                .side-navbar { width: 70%; left: -70%; }
                 .side-navbar.open { left: 0; }
                 .my-container.shift { margin-left: 0; } /* No desplazamos el contenido en móvil */
               }
