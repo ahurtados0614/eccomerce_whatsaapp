@@ -23,3 +23,48 @@
     {{ row.content }}
 
 {% endfor %}
+<style>
+    .product-details{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+.product-details .caption{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+.shopnow{
+  margin-top:auto;
+}
+.shopnow {
+  width: fit-content !important;
+}
+span.spacing {
+    min-height: 2em;
+}
+
+.pagination>li>a, .pagination>li>span  {
+    width: fit-content !important;
+}
+.product-block .image{
+  position:relative;
+}
+
+.product-badge{
+  position:absolute;
+  top:15px;
+  right:0;
+  background:#c0d06d;
+  color:#fff;
+  font-weight:bold;
+  padding:6px 18px 6px 14px;
+  font-size:14px;
+  line-height:1;
+  z-index:10;
+  clip-path: polygon(10px 0,100% 0,100% 100%,10px 100%,0 50%);
+}
+
+</style>

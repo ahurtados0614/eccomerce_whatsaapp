@@ -106,10 +106,18 @@
               </li>
               
               {% if node.field_precio_anterior.value %}
+                 {% set precio_anterior = node.field_precio_anterior.value + 0 %}
+                 {% set precio_actual = node.field_precio_del_articulo.value + 0 %}
+                {% if precio_anterior > precio_actual %}
+                    {% set descuento = ((precio_anterior - precio_actual) / precio_anterior) * 100 %}
+                 {% endif %}
               <li class="price-tax">Antes: <span style="text-decoration: line-through;">${{ node.field_precio_anterior.value|replace({'$':''})|number_format(0, ',', '.') }} COP.</span></li>
               {% endif %}
             </ul>
-
+                {% if precio_anterior and precio_anterior > precio_actual %}
+                <span class="product-badge">-{{ descuento|round(0) }}%</span>
+                {% endif %}
+             
             <div id="product">
               <div class="form-group qty">
                 <label class="control-label" for="input-quantity">Cantidad</label>
@@ -272,6 +280,17 @@
   .share-product{
     justify-content:center;
   }
+}
+
+.product-badge{
+  background:#c0d06d;
+  color:#fff;
+  font-weight:bold;
+  padding:6px 18px 6px 14px;
+  font-size:14px;
+  line-height:1;
+  z-index:10;
+  clip-path: polygon(10px 0,100% 0,100% 100%,10px 100%,0 50%);
 }
 </style>
 

@@ -749,4 +749,30 @@ overflow-x:hidden;
               .side-navbar.open #logo2{
                 display:block;
               }
+              #search .search_toggle{
+                  display:none;
+                }
+                
+                #search .search_toggle.open{
+                  display:block;
+                }
+                
+            /* Desktop */
+                @media (min-width: 992px){
+                  #search .search_toggle{
+                    display:block;
+                  }
+                }
+                
+                /* Mobile */
+                @media (max-width: 991px){
+                  #search .search_toggle{
+                    display:none;
+                  }
+                
+                  #search .search_toggle.open{
+                    display:block;
+                  }
+                }
+
             </style>

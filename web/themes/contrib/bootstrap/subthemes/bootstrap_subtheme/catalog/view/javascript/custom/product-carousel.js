@@ -9,8 +9,8 @@
           $(el).elevateZoom({
             gallery: false,
             cursor: "pointer",
-            //zoomType: "lens",
-            zoomType: "window",
+            zoomType: "lens",
+            //zoomType: "window",
             lensSize: 250,
             zoomLevel: 1.5
           });
