@@ -44,12 +44,86 @@
   {{ title_suffix }}
   {% block content %}
     <br>
-      {{ content }}
-    
+    <div class="galeria" id="content_tags_publicidad">
+      
+    </div>
   {% endblock %}
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+loadItemsTagsPublicidad();
+//Carga los items del slider principal
+function loadItemsTagsPublicidad() {
+    
+    let url = 'api/tags_offerts';
+    let itemAcumTags = ``;
+    
+    fetch(url).then(res => res.json()).then(dato => {
+        let items="";
+		 for (let index = 0; index < dato.length; index++) {
+          const element = dato[index];
+          itemAcumTags += element.items;
+     }                
+        document.getElementById("content_tags_publicidad").innerHTML += itemAcumTags;
+    })
+}
+</script>
 <style>
+.galeria {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+}
 
+.item {
+    flex: 1;
+    position: relative;
+}
+
+.item a {
+    display: block;
+    text-decoration: none;
+    border: none;
+    outline: none;
+}
+
+.item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}
+
+.item img.mobile {
+    display: block;
+}
+
+.item img.desktop {
+    display: none;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+
+  .item img.desktop {
+      display: block;
+      aspect-ratio: 16 / 9;
+  }
+
+  .item img.mobile {
+      display: none;
+  }
+
+}
+
+
+
+/*
 .view-id-etiquetas_de_oferta > .row{
   display: flex;
   flex-wrap: wrap;
@@ -80,4 +154,5 @@ a.link_offers-tag:hover {
     color: #fff;
     background: #000;
 }
+*/
 </style>
