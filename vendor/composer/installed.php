@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-master_kawaii',
+        'version' => 'dev-master_kawaii',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => null,
+        'reference' => '664f639a4843a750a2529eeeba9bd5aef44b7758',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -143,6 +143,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/admin_toolbar',
             'aliases' => array(),
             'reference' => '3.6.3',
+            'dev_requirement' => false,
+        ),
+        'drupal/backup_migrate' => array(
+            'pretty_version' => '5.1.4',
+            'version' => '5.1.4.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/backup_migrate',
+            'aliases' => array(),
+            'reference' => '5.1.4',
             'dev_requirement' => false,
         ),
         'drupal/better_exposed_filters' => array(
@@ -416,12 +425,12 @@
             'dev_requirement' => false,
         ),
         'drupal/recommended-project' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-master_kawaii',
+            'version' => 'dev-master_kawaii',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => null,
+            'reference' => '664f639a4843a750a2529eeeba9bd5aef44b7758',
             'dev_requirement' => false,
         ),
         'drupal/smtp' => array(
