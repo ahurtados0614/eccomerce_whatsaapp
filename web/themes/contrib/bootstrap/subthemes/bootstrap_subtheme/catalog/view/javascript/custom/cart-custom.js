@@ -76,7 +76,7 @@
       <a href="/cart"
          style="
            display:block;
-           background:#c0d06d;
+           background:#a6e1e9;
            color:#fff;
            padding:8px;
            border-radius:4px;

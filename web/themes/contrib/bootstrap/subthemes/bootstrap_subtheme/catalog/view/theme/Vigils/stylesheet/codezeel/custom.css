@@ -499,7 +499,7 @@ span.customSelect.changed {
 
 #footer .social-block li.twitter a:hover {
     color: #ffffff;
-    background-color: #c0d06d;
+    background-color: #a6e1e9;
 }
 
 label.form-check-label {
@@ -507,7 +507,7 @@ label.form-check-label {
     text-transform: uppercase;
 }
 legend {
-    border-bottom: 2px solid #c0d06d !important;
+    border-bottom: 2px solid lightpink !important;
 }
 span.page-link{
 	width: 14% !important;
@@ -521,7 +521,7 @@ ul.pagination.js-pager__items {
     width: 50%;
 }
 .shopnow {
-    border: 1px solid #c0d06d !important;
+    border: 1px solid #a6e1e9 !important;
     padding: 1% 4%;
     border-radius: 16px;
 	font-weight: bold;
@@ -530,10 +530,10 @@ ul.pagination.js-pager__items {
 }
 
 .shopnow:hover {
-	background: #c0d06d !important;
+	background: #a6e1e9 !important;
 	color: #555 !important;
 }
 .shop-now:hover {
-	background: #c0d06d !important;
+	background: #a6e1e9 !important;
 	color: #555 !important;
 }

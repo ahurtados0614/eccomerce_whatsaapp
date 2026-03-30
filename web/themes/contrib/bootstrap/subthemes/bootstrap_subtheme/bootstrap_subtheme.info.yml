@@ -37,3 +37,7 @@ regions:
 version: '5.0.2'
 project: 'bootstrap'
 datestamp: 1749514451
+
+features:
+  favicon: true
+  logo: true
