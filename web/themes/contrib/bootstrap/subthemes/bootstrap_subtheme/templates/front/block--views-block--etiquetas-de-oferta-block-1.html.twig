@@ -44,7 +44,7 @@
   {{ title_suffix }}
   {% block content %}
     <br>
-    <div class="galeria" id="content_tags_publicidad">
+    <div class="row" style="display: flex; flex-wrap: wrap; justify-content: center;" id="content_tags_publicidad">
       
     </div>
   {% endblock %}
@@ -69,6 +69,7 @@ function loadItemsTagsPublicidad() {
 }
 </script>
 <style>
+/*
 .galeria {
     display: flex;
     justify-content: center;
@@ -107,7 +108,7 @@ function loadItemsTagsPublicidad() {
     display: none;
 }
 
-/* Desktop */
+
 @media (min-width: 768px) {
 
   .item img.desktop {
@@ -120,9 +121,77 @@ function loadItemsTagsPublicidad() {
   }
 
 }
+*/
+.img-wrapper {
+  display: block;
+  width: 100%;
+  max-width: 150px; /* puedes ajustar */
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+}
 
+/* imágenes */
+.img-wrapper img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 
+  top: 0;
+  left: 0;
+}
 
+/* título encima de la imagen */
+.caption-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  
+  /* altura uniforme */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* estilo visual */
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 14px;
+  margin: 0;
+  padding: 5px;
+
+  text-align: center;
+  line-height: 1.2;
+
+  /* evita que textos largos rompan el diseño */
+  overflow: hidden;
+}
+
+/* responsive ajuste */
+@media (max-width: 768px) {
+  .caption-title {
+    height: 35px;
+    font-size: 12px;
+  }
+}
+/* Mostrar solo una imagen según dispositivo */
+.desktop {
+  display: block;
+}
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: block;
+  }
+}
 /*
 .view-id-etiquetas_de_oferta > .row{
   display: flex;
