@@ -81,7 +81,9 @@
 <div id="spinner"></div>
 {% endif %}
     {# ===== HEADER ===== #}
-<header class="header header-5 {% if logged_in %}user-logged{% endif %} {% if not is_front %}header-inner{% endif %}" role="banner">
+   {% set current_path = path('<current>') %}
+{% set is_search = '/search/node' in current_path %}
+<header class="header header-5 {% if logged_in %}user-logged{% endif %} {% if not is_front %}header-inner{% endif %}  {% if is_search %}menuinter{% endif %}" role="banner">
   <div class="header-middle sticky-header">
     <div class="container-fluid">
 
@@ -258,6 +260,18 @@
           </div>
       </div>
     </footer>
-
+{% if is_search %}
+<style>
+div#main {
+    margin-top: 7em;
+    padding: 0% 3%;
+}
+@media (max-width: 991px) {
+div#main {
+    margin-top: 4em;
+}
+}
+</style>
+{% endif %}
   </div>
 </div>
