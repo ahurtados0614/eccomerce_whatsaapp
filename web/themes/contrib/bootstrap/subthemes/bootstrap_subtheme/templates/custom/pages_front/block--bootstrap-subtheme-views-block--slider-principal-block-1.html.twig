@@ -1,0 +1,104 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main content
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ *
+ * @ingroup themeable
+ */
+#}
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ */
+#}
+{%
+  set classes = [
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+  ]
+%}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+
+  {% if label %}
+    <h2{{ title_attributes }}>{{ label }}</h2>
+  {% endif %}
+
+  {{ title_suffix }}
+
+  {% block content %}
+
+  <div class="intro-slider-container mb-0">
+    <div class="intro-slider owl-carousel owl-theme owl-nav-inside owl-light" data-toggle="owl" data-owl-options='{"nav": false, "dots": false}' id="content_item_slider">
+       
+    </div>
+  </div>
+
+
+  {% endblock %}
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+loadItemsMainSlider();
+//Carga los items del slider principal
+function loadItemsMainSlider() {
+    
+    let url = 'api/slider-principal';
+    let itemAcumMainSlider = ``;
+    
+    fetch(url).then(res => res.json()).then(dato => {
+        let items="";
+		 for (let index = 0; index < dato.length; index++) {
+          const element = dato[index];
+          enlace = element.enlace;
+          imagen = element.imagen;
+          titulo = element.titulo;
+          subtitle1 = element.subtitle1;
+          subtitle2 = element.subtitle2;
+          txtboton = element.txtboton;
+          itemAcumMainSlider += `<div class="intro-slide" style="background-image: url(${imagen});">
+            <div class="container intro-content text-center">
+                <h3 class="intro-subtitle text-white">${subtitle1}</h3><!-- End .h3 intro-subtitle -->
+                <h1 class="intro-title text-white">${titulo}</h1><!-- End .intro-title -->
+                <div class="intro-text text-white">${subtitle2}</div><!-- End .intro-text -->
+                <a href="${enlace}" class="btn btn-primary">${txtboton}</a>
+            </div><!-- End .intro-content -->
+        </div>`;
+     }                
+        document.getElementById("content_item_slider").innerHTML += itemAcumMainSlider;
+    })
+}
+</script>
+<style>
+.intro-subtitle, .intro-title, .intro-text{
+  text-transform: capitalize;
+}
+</style>

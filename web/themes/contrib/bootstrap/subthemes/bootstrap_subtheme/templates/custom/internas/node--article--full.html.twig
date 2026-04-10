@@ -1,0 +1,323 @@
+{#
+/**
+ * @file
+ * Bootstrap's theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+     Only "getter" methods (method names starting with "get", "has", or "is")
+     and a few common methods such as "id" and "label" are available. Calling
+     other methods (such as node.delete) will result in an exception.
+ * - label: The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: Themed creation date field.
+ * - author_name: Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ */
+#}
+{{ attach_library('bootstrap/node') }}
+
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+<article{{ attributes.addClass(classes) }}>
+  <div{{ content_attributes.addClass('node__content', 'clearfix') }}>
+    <div class="page-content {% if logged_in %}user-logged-produc-detail{% endif %}" >
+                <div class="container">
+                    <div class="product-details-top mb-2">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12 col-xs-12">
+                                <div class="product-gallery">
+                                    <figure class="product-main-image">
+                                        <img id="product-zoom"
+                                            src="{{ file_url(node.field_image.0.entity.fileuri) }}"
+                                            data-zoom-image="{{ file_url(node.field_image.0.entity.fileuri) }}"
+                                            alt="{{ node.field_image.0.alt }}">
+                                        <!--<a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                            <i class="icon-arrows"></i>
+                                        </a>-->
+                                    </figure><!-- End .product-main-image -->
+
+                                   <div id="product-zoom-gallery" class="product-image-gallery">
+
+                                        {% for item in node.field_image %}
+                                          <a class="product-gallery-item {{ loop.first ? 'active' : '' }}"
+                                            href="#"
+                                            data-image="{{ file_url(item.entity.fileuri) }}"
+                                            data-zoom-image="{{ file_url(item.entity.fileuri) }}">
+                                            
+                                            <img src="{{ file_url(item.entity.fileuri) }}" alt="{{ item.alt }}">
+                                          </a>
+                                        {% endfor %}
+
+                                        {% for itemDesc in node.field_imagen_descripcion %}
+                                          <a class="product-gallery-item"
+                                            href="#"
+                                            data-image="{{ file_url(itemDesc.entity.fileuri) }}"
+                                            data-zoom-image="{{ file_url(itemDesc.entity.fileuri) }}">
+                                            
+                                            <img src="{{ file_url(itemDesc.entity.fileuri) }}" alt="{{ itemDesc.alt }}">
+                                          </a>
+                                        {% endfor %}
+
+                                      </div><!-- End .product-image-gallery -->
+                                </div><!-- End .product-gallery -->
+                            </div><!-- End .col-md-6 -->
+
+                            <div class="col-md-9 col-sm-12 col-xs-12">
+                                <div class="product-details">
+                                    <h1 class="product-title">{{ node.label }}</h1><!-- End .product-title -->
+
+                                    <div class="product-price">
+                                        ${{ node.field_precio_del_articulo.value|replace({'$':''})|number_format(0, ',', '.') }} COP.
+                                    </div><!-- End .product-price -->
+                                    
+                                        {% if node.field_precio_anterior.value %}
+                                        <div class="product-price">
+                                            {% set precio_anterior = node.field_precio_anterior.value + 0 %}
+                                            {% set precio_actual = node.field_precio_del_articulo.value + 0 %}
+                                            {% if precio_anterior > precio_actual %}
+                                                {% set descuento = ((precio_anterior - precio_actual) / precio_anterior) * 100 %}
+                                            {% endif %}
+                                          <span class="price-tax">Antes: <span style="text-decoration: line-through;">${{ node.field_precio_anterior.value|replace({'$':''})|number_format(0, ',', '.') }} COP.</span></span>
+                                        </div>
+                                        {% endif %}
+                                        {% if precio_anterior and precio_anterior > precio_actual %}
+                                        <span class="product-badge">-{{ descuento|round(0) }}%</span>
+                                        {% endif %}
+                                    <div class="product-content">
+                                        <br>
+                                        {{content.body['#items'].value|striptags|slice(0, 150) ~ '...'}} <a href="#product-info-link" class="readmore">Leer Más</a>
+                                    </div><!-- End .product-content -->
+
+                                   
+                                    <div class="details-filter-row details-row-size">
+                                        <label for="quantity" class="quantity_class">Cantidad:&nbsp;</label>
+                                        <div class="product-details-quantity">
+                                            <input type="hidden" name="product_id" value="43" />
+                                            <input type="number" id="quantity" class="form-control" value="1" min="1"  step="1" data-decimals="0">
+                                        </div><!-- End .product-details-quantity -->
+                                    </div><!-- End .details-filter-row -->
+
+                                    <div class="product-details-action">
+                                        <button type="button" id="button-cart" class="btn-product btn-cart"><span>AGREGAR AL CARRITO</span></button>
+                                    </div><!-- End .product-details-action -->
+
+                                    <div class="product-details-footer">
+                                        <div class="product-cat">
+                                            
+                                      
+                                            {% if node.field_tipo_de_producto|length %}
+                                              <span>Category:</span>
+                                              
+                                              {% for tipo in node.field_tipo_de_producto %}
+                                                <a href="index.html?route=product/search&amp;tag={{ tipo.entity.name.value|url_encode }}">
+                                                  {{ tipo.entity.name.value }}
+                                                </a>{% if not loop.last %}, {% endif %}
+                                              {% endfor %}
+                                            {% endif %}
+                                        </div><!-- End .product-cat -->
+
+                                        <div class="social-icons social-icons-sm">
+                                            <span class="social-label">Compartir:</span>
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ url('<current>') }}" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                                            <a  href="https://twitter.com/intent/tweet?url={{ url('<current>') }}&text={{ label|url_encode }}" target="_blank" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                                            <a href="https://www.instagram.com/" target="_blank" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                                             </div>
+                                    </div><!-- End .product-details-footer -->
+                                </div><!-- End .product-details -->
+                            </div><!-- End .col-md-6 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .product-details-top -->
+                </div><!-- End .container -->
+
+                <div class="product-details-tab product-details-extended" id="product-info-link">
+                    <div class="container">
+                        <ul class="nav nav-pills justify-content" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active"  data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Descripción</a>
+                            </li>
+                  
+                        </ul>
+                    </div><!-- End .container -->
+
+                    <div class="tab-content">
+                        
+                          <div class="tab-pane fade show active" id="product-info-tab">                            <div class="product-desc-content">
+                                <div class="container">
+                                    {{ content.body }}
+                                </div><!-- End .container -->
+                            </div><!-- End .product-desc-content -->
+                        </div><!-- .End .tab-pane -->
+                       
+                    </div><!-- End .tab-content -->
+                </div><!-- End .product-details-tab -->
+
+                
+            </div><!-- End .page-content -->
+  </div>
+</article>
+<style>
+.product-details-top.mb-2 {
+    padding-top: 5em;
+}
+@media screen and (max-width: 900px) {
+.product-details-top.mb-2 {
+    padding-top: 3em;
+}
+  .product-details-action {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  #button-cart {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+}
+.header-5 {
+  margin-top: 0rem !important
+}
+.page-content.user-logged-produc-detail {
+    margin-top: 6em;
+}
+.product-details .product-price {
+    font-size: 2.4rem;
+}
+.product-price {
+    display: flex;
+    align-items: center;
+    flex-flow: wrap;
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.25;
+    color: #cc6666;
+    margin-bottom: 1.3rem;
+}
+.product-title {
+  text-transform: capitalize;
+}
+.product-details .product-title {
+    font-weight: 400;
+    font-size: 2.4rem;
+    letter-spacing: -.025em;
+    margin-bottom: 1.2rem;
+    margin-top: -.5rem;
+    padding-right: 1rem;
+}
+
+span.price-tax {
+    font-size: 0.6em;
+    color: #888888;
+}
+.product-badge {
+    position: initial !important;
+}
+.clearfix.text-formatted.field.field--name-body.field--type-text-with-summary.field--label-hidden.field__item>p {
+    text-align: justify;
+}
+.btn-product.btn-cart:hover span,
+.btn-product.btn-cart:focus span,
+.btn-product.btn-cart:active span {
+  color: #fff !important;
+}
+
+.quantity_class{
+  margin-right: 1em;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const mainImage = document.getElementById("product-zoom");
+  const items = document.querySelectorAll(".product-gallery-item");
+
+  if (!mainImage || !items.length) return;
+
+  items.forEach(function (item) {
+
+    item.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const newImage = this.getAttribute("data-image");
+      const newZoom  = this.getAttribute("data-zoom-image") || newImage;
+
+      if (!newImage) return;
+
+      /* ===== CAMBIAR IMAGEN ===== */
+      mainImage.src = newImage;
+      mainImage.setAttribute("data-zoom-image", newZoom);
+
+      /* ===== ZOOM (si existe) ===== */
+      if (window.jQuery && jQuery(mainImage).data('elevateZoom')) {
+        jQuery(mainImage).data('elevateZoom').swaptheimage(newImage, newZoom);
+      }
+
+      /* ===== CLASE ACTIVA ===== */
+      document.querySelectorAll(".product-gallery-item").forEach(i => {
+        i.classList.remove("active");
+      });
+
+      this.classList.add("active");
+
+    });
+
+  });
+
+});
+</script>

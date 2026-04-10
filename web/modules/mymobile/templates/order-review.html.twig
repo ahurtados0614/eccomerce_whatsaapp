@@ -23,6 +23,7 @@
         <table class="table align-middle cart-table">  
             <thead>
             <tr>
+                <th class="title-table">Imagen</th>
                 <th class="title-table">Sku</th>
                 <th class="title-table">Producto</th>
                 <th class="title-table">Precio</th>
@@ -40,7 +41,8 @@
                         {% set subtotal = item.price * item.quantity %}
                         {% set total = total + subtotal %}
 
-                        <tr>                        
+                        <tr>          
+                        <td data-label="Image"><img src="{{ item.image }}" class="imgproduct"></td>         
                         <td data-label="Producto">{{ item.sku }}</td>
                         <td data-label="Producto">{{ item.name|title }}</td>
                         <td data-label="Precio">${{ item.price|number_format(0, ',', '.') }}</td>
@@ -60,10 +62,18 @@
 
 </div>
 <style>
+@media (max-width: 768px) {
+  .order-review{
+    padding:15% 2% 2% 2% !important;
+  }
+}
+.header-5 {
+    margin-top: 0rem;
+}
 .order-review{
-  max-width:800px;
+  max-width:90%;
   margin:auto;
-  padding:20px;
+  padding:8% 2% 2% 2%;
 }
 
 .order-info{
@@ -152,5 +162,9 @@ span.badge.badge-success {
 }
 span.badge.badge-danger {
     background-color: #dc3545;
+}
+img.imgproduct {
+    width: 60px;
+    height: auto;
 }
 </style>

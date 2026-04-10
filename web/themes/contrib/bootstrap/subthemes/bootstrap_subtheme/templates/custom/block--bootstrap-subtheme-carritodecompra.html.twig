@@ -1,0 +1,714 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main content
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+  ]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {% block content %}
+  
+    <div{{ content_attributes.addClass('content') }}>
+    {% if label %}
+    <h1 class="product-title">{{ label }}</h1>
+  {% endif %}
+      <div class="table-responsive">
+        <table class="table align-middle cart-table">    
+          <thead>
+            <tr>
+            <th class="title-table">Imagen</th>
+              <th class="title-table">Cod SKU</th>
+              <th class="title-table">Artículos</th>
+              <th class="title-table">Precio</th>
+              <th class="title-table text-center">Cantidad</th>
+              <th class="title-table text-center">Eliminar</th>
+              <th class="title-table text-end">Total</th>
+            </tr>
+          </thead>
+
+          <tbody id="cart-body">
+            <!-- Ejemplo de fila -->
+            <tr>
+              <td data-label="Cod SKU">SKU123</td>
+              <td data-label="Artículos">Laptop HP</td>
+              <td data-label="Precio">$2.000.000</td>
+              <td data-label="Cantidad" class="text-center">1</td>
+              <td data-label="Eliminar" class="text-center">
+                <button class="btn btn-sm btn-danger">✕</button>
+              </td>
+              <td data-label="Total" class="text-end">$2.000.000</td>
+            </tr>
+          </tbody>
+
+        </table>
+        <div class="text-right mt-3">
+          <button class="btn btn-success btn-whatsapp" data-bs-toggle="modal" data-bs-target="#myModalWhatsapp">
+            <i class="fab fa-whatsapp" style="font-size:24px"></i> Comprar por WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- The Modal -->
+<div class="modal" id="myModalWhatsapp">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+     <div class="modal-header d-flex align-items-center">
+  <h4 class="modal-title mb-0" style="color: #fff !important">Formulario de compra</h4>
+  <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" style="    background: transparent;
+    color: #ffffff;
+    border: 0px;
+    font-weight: bold;">X</button>
+</div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="mb-3">
+            <label>Ingresa tu nombres y apellidos<span class="required_input">*</span></label>
+            <input type="text" name="name" class="form-control" placeholder="Alvaro Hurtado Sanmartin" required="">
+        </div>
+        <div class="mb-3" style="margin-top: 1em;">
+            <label>Ingresa tu WhatsApp<span class="required_input">*</span></label>
+            <div style="display:flex">
+            <input type="text" style="display:inline-block; width: 13%;" name="prefix" id="prefix" class="form-control" placeholder="57" value="57" required="">
+            <input type="tel" style="display:inline-block;width: 85%;margin-left: 2%;" name="phone" class="form-control" placeholder="3005096309"  required="">
+
+            </div>
+        </div>
+        <div class="mb-3 custom-checkbox">
+ <div class="custom-check-wrapper">
+  
+  <input type="checkbox" id="terms" name="terms" required>
+  
+  <label for="terms">
+    <span class="checkmark"></span>
+    He leído y acepto los <a href="/terms">términos y condiciones</a>, y las <a href="/data-processing">políticas de tratamiento de la información de Kawaii</a>.
+  </label>
+</div>
+</div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" id="btn-whatsapp-order" class="btn btn-success">Ordenar por WhatsApp</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  {% endblock %}
+</div>
+<style>
+.custom-check-wrapper label {
+   color: #a19a9a;
+}
+
+
+.modal-header {
+  display: flex !important;
+  align-items: center;
+}
+
+.modal-title {
+  margin: 0;
+  width: auto !important;
+}
+
+.modal-header .btn-close {
+  margin-left: auto;
+}
+th.title-table {
+    color: #000;
+}
+
+.product-title {
+    font-weight: 400;
+    font-size: 2.4rem;
+    letter-spacing: -.025em;
+    margin-bottom: 1.2rem;
+    margin-top: -.5rem;
+    padding-right: 1rem;
+}
+
+/* =========================
+   TABLA CARRITO RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+  .cart-table thead {
+    display: none;
+  }
+
+  .cart-table,
+  .cart-table tbody,
+  .cart-table tr,
+  .cart-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .cart-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 12px;
+    background: #fff;
+  }
+
+  .cart-table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .cart-table td:last-child {
+    border-bottom: none;
+  }
+
+  .cart-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 12px;
+    width: 45%;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+  }
+
+}
+.modal-backdrop.show {
+  opacity: 0.5 !important;
+}
+
+.modal-backdrop {
+  background-color: rgba(0,0,0,0.5) !important;
+}
+
+.modal-title{
+      font-weight: 600 !important;
+      color: #fff !important*/
+}
+.modal-body {
+    padding: 1em;
+}
+.modal-header {
+    background: #cc6666 none repeat scroll 0 0;
+}
+
+.btn-whatsapp:hover {
+    background-color: #000000;
+}
+.btn-whatsapp {
+  background-color: #25D366;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 8px;
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  body:not(.path-frontpage) .content {
+    padding: 5em 2em 2em 2em;
+}
+  .btn-whatsapp {
+    width: 100%;
+  }
+
+  
+}
+.custom-check-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
+      margin-top: 1em;
+}
+.header-5 {
+    top: -10px;
+   }
+/* Ocultamos el checkbox real */
+.custom-check-wrapper input {
+  display: none;
+}
+button#btn-whatsapp-order {
+    border-radius: 10px;
+}
+/* Caja personalizada */
+.custom-check-wrapper .checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #212529;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 3px;
+  margin-right: 1%;
+  margin-top: 1%;
+}
+
+/* Cuando está marcado */
+.custom-check-wrapper input:checked + label .checkmark {
+  background-color: #7aa93c;
+}
+
+/* El ✔ blanco */
+.custom-check-wrapper input:checked + label .checkmark::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Label */
+.custom-check-wrapper label {
+  display: inline;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+/* Links */
+.custom-check-wrapper a {
+  color: #212529;
+  text-decoration: none;
+  font-weight: normal;
+}</style>
+
+<script>
+function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+document.addEventListener("DOMContentLoaded", function () {
+
+  const CART_KEY = "cartProducts";
+  const cartBody = document.getElementById("cart-body");
+
+  if (!cartBody) return;
+
+  function renderCartTable() {
+
+  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+  if (cart.length === 0) {
+    cartBody.innerHTML = `
+      <tr>
+        <td colspan="7" class="text-center">
+          Tu carrito está vacío
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const ids = cart.map(item => item.id).join(',');
+
+  fetch(`/cart/products?ids=${ids}`)
+    .then(response => response.json())
+    .then(products => {
+
+      cartBody.innerHTML = "";
+      let totalGeneral = 0;
+
+      products.forEach(product => {
+
+        const cartItem = cart.find(c => c.id == product.id);
+
+        const quantity = cartItem ? cartItem.quantity : 1;
+        const image = cartItem ? cartItem.image : "";
+        const sku = cartItem ? cartItem.sku : "";
+
+        const total = product.price * quantity;
+        totalGeneral += total;
+
+        cartBody.innerHTML += `
+          <tr>
+
+            <td data-label="Imagen">
+              <img class="tableimg" src="${image}" 
+                   style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
+            </td>
+
+           <td data-label="Cod SKU">${sku || product.sku || product.id}</td>
+
+            <td data-label="Artículos">
+              ${capitalize(product.name)}
+            </td>
+
+            <td data-label="Precio">
+              $${product.price.toLocaleString('es-CO')} COP
+            </td>
+
+            <td data-label="Cantidad" class="text-center">
+              <input type="number"
+                     min="1"
+                     value="${quantity}"
+                     data-id="${product.id}"
+                     class="form-control update-qty"
+                     style="width:80px;margin:auto;">
+            </td>
+
+            <td data-label="Eliminar" class="text-center">
+              <button data-id="${product.id}"
+                      class="btn btn-sm btn-danger remove-row">
+                ✕
+              </button>
+            </td>
+
+            <td data-label="Total" class="text-end">
+              $${total.toLocaleString('es-CO')} COP
+            </td>
+
+          </tr>
+        `;
+      });
+
+      cartBody.innerHTML += `
+        <tr style="border-bottom: 0px !important;">
+          <td colspan="6" class="text-end">
+            <strong>Total General</strong>
+          </td>
+          <td class="text-end">
+            <strong>
+              $${totalGeneral.toLocaleString('es-CO')} COP
+            </strong>
+          </td>
+        </tr>
+      `;
+
+      attachEvents();
+    });
+}
+
+  function attachEvents() {
+
+    document.querySelectorAll(".remove-row").forEach(btn => {
+      btn.addEventListener("click", function () {
+
+        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+        cart = cart.filter(item => item.id != this.dataset.id);
+
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        renderCartTable();
+      });
+    });
+
+    document.querySelectorAll(".update-qty").forEach(input => {
+      input.addEventListener("change", function () {
+
+        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+        const item = cart.find(c => c.id == this.dataset.id);
+
+        if (item) {
+          item.quantity = parseInt(this.value) || 1;
+        }
+
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        renderCartTable();
+      });
+    });
+  }
+
+  window.addEventListener("storage", renderCartTable);
+
+  renderCartTable();
+
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const btnOrder = document.getElementById("btn-whatsapp-order");
+  if (!btnOrder) return;
+
+  const CART_KEY = "cartProducts";
+  const API_KEY = "gwRd2UyD0K8BUZh2CoLt";
+
+  btnOrder.addEventListener("click", async function () {
+
+    const nombre = document.querySelector('input[name="name"]').value.trim();
+    const prefix = document.querySelector('input[name="prefix"]').value.trim();
+    const phone = document.querySelector('input[name="phone"]').value.trim();
+    const terms = document.getElementById("terms").checked;
+
+    if (!nombre || !phone) {
+      alert("Debes ingresar tu nombre y teléfono");
+      return;
+    }
+
+    if (!terms) {
+      alert("Debes aceptar los términos y condiciones");
+      return;
+    }
+
+    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+    if (cart.length === 0) {
+      alert("Tu carrito está vacío");
+      return;
+    }
+
+    const ids = cart.map(item => item.id).join(',');
+
+    try {
+
+      const productsRes = await fetch(`/cart/products?ids=${ids}`);
+      const products = await productsRes.json();
+
+      let items = [];
+
+      products.forEach(product => {
+
+        const cartItem = cart.find(c => c.id == product.id);
+
+        items.push({
+          id: product.id,
+          sku: cartItem.sku || product.sku || product.id,
+          name: product.name,
+          price: product.price,
+          quantity: cartItem.quantity
+        });
+
+      });
+
+      const payload = {
+        nombre: nombre,
+        celular: prefix + phone,
+        items: items
+      };
+
+      const response = await fetch("/api/payment/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": API_KEY
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (data.status !== "success") {
+        alert("Error generando el pedido");
+        return;
+      }
+
+      localStorage.removeItem(CART_KEY);
+
+      window.location.href = data.whatsapp_url;
+
+    } catch (error) {
+
+      console.error(error);
+      alert("Error procesando el pedido");
+
+    }
+
+  });
+
+});
+</script>
+<style>
+@media (max-width: 768px) {
+  img.tableimg {
+    margin-top: 2em;
+}
+}
+.remove-row{
+  min-width: auto !important;
+}
+table {
+    max-width: 100%;
+    background-color: transparent;
+}
+
+th {
+    text-align: left;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#cc6666>tr>th,.table>tbody>tr>th,.table>tfoot>tr>th,#cc6666>tr>td,.table>tbody>tr>td,.table>tfoot>tr>td {
+    padding: 10px 15px;
+    vertical-align: top;
+    border-top: 1px solid #e5e5e5;
+	background-color: #fff;
+}
+
+#cc6666>tr>th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.table>caption+thead>tr:first-child>th,.table>colgroup+thead>tr:first-child>th,#cc6666:first-child>tr:first-child>th,.table>caption+thead>tr:first-child>td,.table>colgroup+thead>tr:first-child>td,#cc6666:first-child>tr:first-child>td {
+    border-top: 0;
+}
+
+.table>tbody+tbody {
+    border-top: 2px solid #e5e5e5;
+}
+
+.table .table {
+    background-color: #fff;
+}
+
+.table-condensed>thead>tr>th,.table-condensed>tbody>tr>th,.table-condensed>tfoot>tr>th,.table-condensed>thead>tr>td,.table-condensed>tbody>tr>td,.table-condensed>tfoot>tr>td {
+    padding: 5px;
+}
+
+.table-bordered {
+    border: 1px solid #e5e5e5;
+}
+
+.table-bordered>thead>tr>th,.table-bordered>tbody>tr>th,.table-bordered>tfoot>tr>th,.table-bordered>thead>tr>td,.table-bordered>tbody>tr>td,.table-bordered>tfoot>tr>td {
+    border: 1px solid #e5e5e5;
+}
+.table-bordered>thead>tr>td{border-bottom:none;}
+.table-bordered>thead>tr>th,.table-bordered>thead>tr>td {
+    border-bottom-width: 2px;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,.table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #fff;
+}
+
+.table-hover>tbody>tr:hover>td,.table-hover>tbody>tr:hover>th {  
+}
+
+table col[class*=col-] {
+    position: static;
+    float: none;
+    display: table-column;
+}
+
+table td[class*=col-],table th[class*=col-] {
+    position: static;
+    float: none;
+    display: table-cell;
+}
+
+#cc6666>tr>td.active,.table>tbody>tr>td.active,.table>tfoot>tr>td.active,#cc6666>tr>th.active,.table>tbody>tr>th.active,.table>tfoot>tr>th.active,#cc6666>tr.active>td,.table>tbody>tr.active>td,.table>tfoot>tr.active>td,#cc6666>tr.active>th,.table>tbody>tr.active>th,.table>tfoot>tr.active>th {
+    background-color: #f5f5f5;
+}
+
+.table-hover>tbody>tr>td.active:hover,.table-hover>tbody>tr>th.active:hover,.table-hover>tbody>tr.active:hover>td,.table-hover>tbody>tr.active:hover>th {
+    background-color: #e8e8e8;
+}
+
+#cc6666>tr>td.success,.table>tbody>tr>td.success,.table>tfoot>tr>td.success,#cc6666>tr>th.success,.table>tbody>tr>th.success,.table>tfoot>tr>th.success,#cc6666>tr.success>td,.table>tbody>tr.success>td,.table>tfoot>tr.success>td,#cc6666>tr.success>th,.table>tbody>tr.success>th,.table>tfoot>tr.success>th {
+    background-color: #dff0d8;
+}
+
+.table-hover>tbody>tr>td.success:hover,.table-hover>tbody>tr>th.success:hover,.table-hover>tbody>tr.success:hover>td,.table-hover>tbody>tr.success:hover>th {
+    background-color: #d0e9c6;
+}
+
+#cc6666>tr>td.info,.table>tbody>tr>td.info,.table>tfoot>tr>td.info,#cc6666>tr>th.info,.table>tbody>tr>th.info,.table>tfoot>tr>th.info,#cc6666>tr.info>td,.table>tbody>tr.info>td,.table>tfoot>tr.info>td,#cc6666>tr.info>th,.table>tbody>tr.info>th,.table>tfoot>tr.info>th {
+    background-color: #d9edf7;
+}
+
+.table-hover>tbody>tr>td.info:hover,.table-hover>tbody>tr>th.info:hover,.table-hover>tbody>tr.info:hover>td,.table-hover>tbody>tr.info:hover>th {
+    background-color: #c4e3f3;
+}
+
+#cc6666>tr>td.warning,.table>tbody>tr>td.warning,.table>tfoot>tr>td.warning,#cc6666>tr>th.warning,.table>tbody>tr>th.warning,.table>tfoot>tr>th.warning,#cc6666>tr.warning>td,.table>tbody>tr.warning>td,.table>tfoot>tr.warning>td,#cc6666>tr.warning>th,.table>tbody>tr.warning>th,.table>tfoot>tr.warning>th {
+    background-color: #fcf8e3;
+}
+
+.table-hover>tbody>tr>td.warning:hover,.table-hover>tbody>tr>th.warning:hover,.table-hover>tbody>tr.warning:hover>td,.table-hover>tbody>tr.warning:hover>th {
+    background-color: #faf2cc;
+}
+
+#cc6666>tr>td.danger,.table>tbody>tr>td.danger,.table>tfoot>tr>td.danger,#cc6666>tr>th.danger,.table>tbody>tr>th.danger,.table>tfoot>tr>th.danger,#cc6666>tr.danger>td,.table>tbody>tr.danger>td,.table>tfoot>tr.danger>td,#cc6666>tr.danger>th,.table>tbody>tr.danger>th,.table>tfoot>tr.danger>th {
+    background-color: #f2dede;
+}
+
+.table-hover>tbody>tr>td.danger:hover,.table-hover>tbody>tr>th.danger:hover,.table-hover>tbody>tr.danger:hover>td,.table-hover>tbody>tr.danger:hover>th {
+    background-color: #ebcccc;
+}
+
+@media (max-width:767px) {
+.table-responsive {
+	float: left;
+	margin-bottom: 15px;
+	overflow: auto;
+	width: 100%;
+	-ms-overflow-style: -ms-autohiding-scrollbar;       
+	-webkit-overflow-scrolling: touch;
+}
+
+.table-responsive>.table {
+	margin-bottom: 0;
+}
+
+.table-responsive>#cc6666>tr>th,.table-responsive>.table>tbody>tr>th,.table-responsive>.table>tfoot>tr>th,.table-responsive>#cc6666>tr>td,.table-responsive>.table>tbody>tr>td,.table-responsive>.table>tfoot>tr>td {
+	white-space: nowrap;
+}
+
+.table-responsive>.table-bordered>thead>tr>th:first-child,.table-responsive>.table-bordered>tbody>tr>th:first-child,.table-responsive>.table-bordered>tfoot>tr>th:first-child,.table-responsive>.table-bordered>thead>tr>td:first-child,.table-responsive>.table-bordered>tbody>tr>td:first-child,.table-responsive>.table-bordered>tfoot>tr>td:first-child {
+	border-left: 0;
+}
+
+.table-responsive>.table-bordered>thead>tr>th:last-child,.table-responsive>.table-bordered>tbody>tr>th:last-child,.table-responsive>.table-bordered>tfoot>tr>th:last-child,.table-responsive>.table-bordered>thead>tr>td:last-child,.table-responsive>.table-bordered>tbody>tr>td:last-child,.table-responsive>.table-bordered>tfoot>tr>td:last-child {
+	border-right: 0;
+}
+
+.table-responsive>.table-bordered>tbody>tr:last-child>th,.table-responsive>.table-bordered>tfoot>tr:last-child>th,.table-responsive>.table-bordered>tbody>tr:last-child>td,.table-responsive>.table-bordered>tfoot>tr:last-child>td {
+	border-bottom: 0;
+}
+}
+
+/*//////////*/
+#cc6666>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, #cc6666>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    border-bottom: 0px;
+}
+</style>

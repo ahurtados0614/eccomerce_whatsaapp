@@ -1,0 +1,142 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main content
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+  ]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% block content %}
+  <div class="container">
+
+    <div class="heading heading-center mb-3">
+      {% if label %}
+        <h2 class="title">{{ label }}</h2>
+      {% endif %}
+    </div>
+
+    <div class="tab-content tab-content-carousel">
+      <div class="tab-pane p-0 fade show active">
+
+        <!-- 🔥 IMPORTANTE: SIN data-toggle -->
+        <div id="content_product_tendencia"
+             class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow">
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  {% endblock %}
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  loadItemsproductTendencia();
+
+});
+
+
+/* ===========================
+   🔥 CARGAR PRODUCTOS
+=========================== */
+function loadItemsproductTendencia() {
+
+  let url = 'api/trendy-products';
+  let container = document.getElementById("content_product_tendencia");
+
+  if (!container) return;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(dato => {
+
+      let html = "";
+
+      dato.forEach(element => {
+        html += element.items;
+      });
+
+      // 🔥 insertar contenido
+      container.innerHTML = html;
+
+      // 🔥 inicializar owl DESPUÉS
+      setTimeout(() => {
+        initOwlTrendy();
+      }, 100);
+
+    })
+    .catch(err => {
+      console.error("❌ Error cargando productos:", err);
+    });
+}
+
+
+/* ===========================
+   🔥 INICIALIZAR OWL
+=========================== */
+function initOwlTrendy() {
+
+  const $el = $("#content_product_tendencia");
+
+  if (!$el.length) return;
+
+  // 🔥 evitar doble init
+  if ($el.hasClass("owl-loaded")) {
+    $el.trigger("destroy.owl.carousel");
+    $el.removeClass("owl-loaded");
+    $el.find(".owl-stage-outer").children().unwrap();
+  }
+
+  $el.owlCarousel({
+    nav: false,
+    dots: true,
+    margin: 20,
+    loop: false,
+    responsive: {
+      0: { items: 2 },
+      480: { items: 2 },
+      768: { items: 3 },
+      992: { items: 4 },
+      1200: { items: 4, nav: true }
+    }
+  });
+
+}
+</script>

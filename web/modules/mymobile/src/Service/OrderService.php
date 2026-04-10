@@ -5,7 +5,8 @@ namespace Drupal\mymobile\Service;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Database\Query\PagerSelectExtender;
-
+use Drupal\node\Entity\Node;
+use Drupal\file\Entity\File;
 
 class OrderService {
 
@@ -62,14 +63,53 @@ class OrderService {
     ];
   }
 
+
+
+
 public function getOrder($id = null) {
 
   $query = $this->database->select('mymobile_orders', 'o')
     ->fields('o');
 
   if (!empty($id)) {
+
     $query->condition('id', $id);
-    return $query->execute()->fetchAssoc();
+    $order = $query->execute()->fetchAssoc();
+
+    if ($order) {
+
+      $payload = json_decode($order['payload'], TRUE);
+
+      if (!empty($payload['items'])) {
+
+        foreach ($payload['items'] as &$item) {
+
+          if (!empty($item['id'])) { // 👈 CAMBIO IMPORTANTE
+
+            $node = Node::load($item['id']);
+
+            if ($node && $node->hasField('field_image') && !$node->get('field_image')->isEmpty()) {
+
+              $file = $node->get('field_image')->entity;
+
+              if ($file) {
+                $url = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
+$item['image'] = $url;
+              }
+
+            }
+
+          }
+
+        }
+
+      }
+      //\Drupal::logger('mymobile')->info('<pre>' . print_r($payload, TRUE) . '</pre>');
+      // 👇 devolver array (no json)
+      $order['payload'] = $payload;
+    }
+
+    return $order;
   }
 
   return $query->execute()->fetchAllAssoc('id');

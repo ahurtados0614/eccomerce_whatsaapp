@@ -68,724 +68,196 @@
 */
 #}
 {# see https://www.drupal.org/project/drupal/issues/953034#comment-14192130 #}
-{% if is_front %}
-<div class="side-navbar d-flex flex-column" id="sidebar">
+{#
+/**
+ * @file
+ * Theme override to display a single page.
+ */
+#}
 
-  <!-- botón cerrar -->
-  <div class="sidebar-header">
-    <button id="close-btn" class="close-btn">
-      <i class="fa fa-times"></i>
-    </button>
+<div id="page-wrapper">
+  <div id="page">
+  {% if not logged_in %}
+<div id="spinner"></div>
+{% endif %}
+    {# ===== HEADER ===== #}
+<header class="header header-5 {% if logged_in %}user-logged{% endif %} {% if not is_front %}header-inner{% endif %}" role="banner">
+  <div class="header-middle sticky-header">
+    <div class="container-fluid">
+
+      <div class="header-left">
+
+        <button class="mobile-menu-toggler navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+          <span class="sr-only">Toggle mobile menu</span>
+          <i class="icon-bars"></i>
+        </button>
+
+        {% if site_logo %}
+          <a href="{{ path('<front>') }}" class="logo">
+            <img src="{{ site_logo }}" alt="{{ site_name }}" with="105" height="2">
+          </a>
+        {% endif %}
+        
+        {% if page.primary_menu %}
+          <nav class="main-nav">
+          <span class="mobile-menu-close"><i class="icon-close"></i></span>
+          <form style="display:none;" action="/search/node" accept-charset="UTF-8" method="get" class="mobile-search">
+                <label for="keys" class="sr-only">Busca tus productos aqui</label>
+                <input type="search" class="form-control" name="keys" id="keys" placeholder="Buscar en..." required>
+                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+            </form>
+            {{ page.primary_menu }}
+          </nav>
+        {% endif %}
+
+      </div>
+
+      <div class="header-right">
+
+        {# 🔍 BUSCADOR #}
+        <div class="header-search">
+          {{ page.header_form }}
+        </div>
+
+       <div class="header-right">
+                        <div class="header-search header-search-extended header-search-visible">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                            <form action="/search/node" accept-charset="UTF-8"  method="get">
+                                <div class="header-search-wrapper">
+                                    <label for="keys" class="sr-only">Buscar</label>
+                                    <input type="search" class="form-control" name="keys" id="keys" placeholder="Buscar productos ..." required>
+                                    <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                </div><!-- End .header-search-wrapper -->
+                            </form>
+                        </div><!-- End .header-search -->
+                        
+                        <div class="dropdown cart-dropdown">
+                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <i class="icon-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+
+                                <div class="dropdown-cart-products">
+                                  <!-- Productos dinámicos -->
+                                </div>
+
+                                <!-- TOTAL -->
+                                <div class="dropdown-cart-total">
+                                  <span>Total</span>
+                                  <span class="cart-total-price">$0</span>
+                                </div>
+
+                                <!-- ACCIONES -->
+                                <div class="dropdown-cart-action">
+                                  <a href="/cart" class="btn btn-outline-primary-2">
+                                    <span>Finalizar Compra</span>
+                                    <i class="icon-long-arrow-right"></i>
+                                  </a>
+                                </div>
+
+                              </div><!-- End .dropdown-menu -->
+                        </div><!-- End .cart-dropdown -->
+                    </div>
+
+      </div>
+
+    </div>
   </div>
 
-  <ul class="nav flex-column w-100">
+</header>
 
-    <div id="logo2"><center>
-                              {% if site_logo or site_name %}
-                              <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">
-                                <img src="{{ site_logo }}" title="{{ site_name }}" alt="{{ site_name }}" style="width: 70% !important;" class="img-responsive" /></a>
-                              {% endif %}
-                  </center></div>
-
-    {% if page.filter_side_navbar %}
-      {{ page.filter_side_navbar }}
+    {# ===== HIGHLIGHTED ===== #}
+    {% if page.highlighted %}
+      <div class="highlighted">
+        <div class="{{ container }}">
+          {{ page.highlighted }}
+        </div>
+      </div>
     {% endif %}
 
-  </ul>
-</div>
-{% endif %}
- <!-- Main Wrapper -->
-  <div class="p-1 my-container active-cont">
-    <!-- Top Nav -->
-    
-    <!--End Top Nav -->
-    
-{% set sidebar_first_exists = page.sidebar_first|render|striptags('<img><video><audio><drupal-render-placeholder>')|trim
-      is not empty %}
-      {% set sidebar_second_exists =
-      page.sidebar_second|render|striptags('<img><video><audio><drupal-render-placeholder>')|trim is not empty %}
+    {# ===== FEATURED TOP ===== #}
+    {% if page.featured_top %}
+      <div class="featured-top">
+        {{ page.featured_top }}
+      </div>
+    {% endif %}
 
-            <div id="page-wrapper">
-              <div id="page">
-                {% block head %}
-                <nav id="top">
-                  <div class="container">
-                    <div class="nav-left navcms">
-                      Envío rápido de accesorios tech: haz tu pedido antes de las 7 p.m.
-                    </div>
-                    <div id="top-links" class="nav pull-left">
-                      <div class="lang-curr">
-                        <div class="dropdown myaccount">
-                          <a href="/" title="Account" class="dropdown-toggle" data-bs-toggle="dropdown">
-                            <span class="hidden-xs hidden-sm hidden-md">Cuenta</span><i class="fa fa-angle-down"
-                              aria-hidden="true"></i></a>
-                          <ul class="dropdown-menu dropdown-menu-right myaccount-menu">
-                            {% if account_menu_items %}
-                            {% for item_account in account_menu_items %}
-                            <li><a href="{{ item_account.url }}">{{ item_account.title }}</a></li>
-                            {% endfor %}
-                            {% endif %}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                </nav>
-                <header>
-                  <div class="header-container">
-                    <div class="container">
-                      <div class="row">
-                        <div class="header-main">
-                          <div class="header-logo">
-                            <div id="logo">
-                              {% if site_logo or site_name %}
-                              <a href="{{ path('<front>') }}" title="{{ 'Home'|t }}" rel="home">
-                                <img src="{{ site_logo }}" title="{{ site_name }}" alt="{{ site_name }}"
-                                  class="img-responsive" /></a>
-                              {% endif %}
-                            </div>
-                          </div>
-                          <div class="header-cart">
-                            <div id="cart" class="btn-group btn-block">
-                              <span class="cart_heading dropdown-toggle" data-bs-toggle="dropdown">My Cart</span>
+    {# ===== MAIN ===== #}
+    <div id="main-wrapper" class="layout-main-wrapper clearfix">
+      <div id="main" class="main">
 
-                              <button type="button"
-                                class="btn btn-inverse btn-block btn-lg dropdown-toggle"
-                                data-bs-toggle="dropdown">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span id="cart-total">$0.00</span>
-                                <span id="cart-quantity">0</span>
-                              </button>
-                              <ul class="dropdown-menu pull-right cart-menu" id="cart-menu" style="text-align: left;">
-                                <li>
-                                  <p class="text-center">¡Tu carrito de compras está vacío!</p>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
+        {{ page.breadcrumb }}
 
-                          <div class="header-cms-block">
-                            <a class="header-cms" href="index2724.html?route=information/contact">Contact Us
-                              <span class="contact-title">Llamanos</span>
-                              <span class="contact-text">+57 {{ site_telephone }}</span>
-                            </a>
-                          </div>
-                          <div id="search" class="input-group">
-                            <span class="search_button"></span>
-                            <div class="search_toggle">
-                              <div id="searchbox">
-                                <form action="/search/node" method="get" id="search-block-form--2"
-                                  accept-charset="UTF-8" class="search-form search-block-form form-row">
-                                  <input type="text" id="edit-keys--2" name="keys" value=""
-                                    placeholder="Busca tus articulos aqui" class="form-control input-lg" />
-                                  <span class="input-group-btn">
-                                    <button data-drupal-selector="edit-submit" type="button" id="edit-submit--3"
-                                      value="Buscar" class="btn btn-default btn-lg">Search<i
-                                        class="fa fa-search"></i></button>
-                                  </span>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+        <div class="row">
 
-                  <div class="header-top-inner">
-                    <div class="container" style="padding-left: 0px;  margin-left: 0px;">
-                      <nav class="nav-container" role="navigation">
-
-                        <div class="nav-inner">
-                          <!-- ======= Menu Code START ========= -->
-                          <!-- Opencart 3 level Category Menu-->
-                          <div id="menu" class="main-menu">
-                            <ul class="nav navbar-nav">
-                            {% if is_front %}    
-                            <li class="top_level" style="float: left;">
-                            <a id="menu-btn"> </a>
-                            </li>
-                            {% endif %}
-                              {% for item in main_menu_items %}
-                              <li class="top_level">
-                               {% if item.url is not empty %}
-                                  <a href="{{ item.url }}">
-                                {% else %}
-                                  <a href="#">
-                                {% endif %}
-                                  {{ item.title }}
-                                </a>
-                              </li>
-                              {% endfor %}
-                            </ul>
-                          </div>
-                        </div>
-
-                        <!--  =============================================== Mobile menu start  =============================================  -->
-                        <div id="res-menu" class="main-menu nav-container1">
-                          <div class="nav-responsive">
-                            <div class="hamburger">
-
-                            </div>
-                            <span class="menu-text">Menu</span>
-                          </div>
-                          <ul class="main-navigation">
-                            {% if is_front %}
-                           <li class="top_level" style="width: 100%">
-                            <a href="#" id="menu-btn-mobile">
-                              <i class="fa fa-filter"></i>Filtros</a>
-                          </li>
-                          {% endif %}
-                           {% for item in main_menu_items %}
-                            {% if item.url %}
-                              <li class="top_level" style="width: 100%">
-                                <a href="{{ item.url }}">{{ item.title }}</a>
-                              </li>
-                            {% endif %}
-                          {% endfor %}
-                          </ul>
-                        </div>
-                      </nav>
-                    </div>
-                  </div>
-                </header>
-                <!-- ======= Quick view JS ========= -->
-                <nav{{ navbar_top_attributes }}>
-                  {% if container_navbar %}
-                  <div class="container">
-                    {% endif %}
-
-                    {{ page.secondary_menu }}
-                    {{ page.top_header }}
-                    {% if page.top_header_form %}
-                    <div class="form-inline navbar-form ms-auto">
-                      {{ page.top_header_form }}
-                    </div>
-                    {% endif %}
-                    {% if container_navbar %}
-                  </div>
-                  {% endif %}
-                  </nav>
-                  
-                  {% if page.header or page.primary_menu or page.header_form %}
-                  <header id="header" class="header" role="banner" aria-label="{{ 'Site header'|t}}">
-                    <nav{{ navbar_attributes }}>
-                      {% if container_navbar %}
-                      <div class="container">
-                        {% endif %}
-                        {{ page.header }}
-                        {% if page.primary_menu or page.header_form %}
-                        <button class="navbar-toggler collapsed" type="button"
-                          data-bs-toggle="{{ navbar_collapse_btn_data }}" data-bs-target="#CollapsingNavbar"
-                          aria-controls="CollapsingNavbar" aria-expanded="false" aria-label="Toggle navigation"><span
-                            class="navbar-toggler-icon"></span></button>
-                        <div class="{{ navbar_collapse_class }}" id="CollapsingNavbar">
-                          {% if navbar_offcanvas %}
-                          <div class="offcanvas-header">
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                              aria-label="Close"></button>
-                          </div>
-                          <div class="offcanvas-body">
-                            {% endif %}
-                            {{ page.primary_menu }}
-                            {% if page.header_form %}
-                            <div class="form-inline navbar-form justify-content-end">
-                              {{ page.header_form }}
-                            </div>
-                            {% endif %}
-                            {% if navbar_offcanvas %}
-                          </div>
-                          {% endif %}
-                        </div>
-                        {% endif %}
-                        {% if sidebar_collapse %}
-                        <button class="navbar-toggler navbar-toggler-left collapsed" type="button"
-                          data-bs-toggle="collapse" data-bs-target="#CollapsingLeft" aria-controls="CollapsingLeft"
-                          aria-expanded="false" aria-label="Toggle navigation"></button>
-                        {% endif %}
-                        {% if container_navbar %}
-                      </div>
-                      {% endif %}
-                      </nav>
-                  </header>
-                  {% endif %}
-                  {% endblock %}
-                  {% if page.highlighted %}
-                  <div class="highlighted">
-                    <aside class="{{ container }} section clearfix" role="complementary">
-                      {{ page.highlighted }}
-                    </aside>
-                  </div>
-                  {% endif %}
-                 {% if page.featured_top %}
-                    <div class="slider-full-width">
-                      {{ page.featured_top }}
-                    </div>
-                    {% endif %}
-                  <div id="main-wrapper" class="layout-main-wrapper clearfix">
-                    {% block content %}
-                    <div id="main" class="{{ container }}">
-                      {{ page.breadcrumb }}
-
-                      <div class="row clearfix">
-
-                        {# ===== SIDEBAR FIRST ===== #}
-                        {% if sidebar_first_exists %}
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                          <aside class="section" role="complementary">
-                            {{ page.sidebar_first }}
-                          </aside>
-                        </div>
-                        {% endif %}
-
-                        {# ===== MAIN CONTENT ===== #}
-                        <div class="
-          {% if sidebar_first_exists and sidebar_second_exists %}
-            col-lg-6 col-md-6
-          {% elseif sidebar_first_exists or sidebar_second_exists %}
-            col-lg-9 col-md-9
-          {% else %}
-            col-lg-12 col-md-12
+          {# SIDEBAR FIRST #}
+          {% if page.sidebar_first %}
+            <aside class="col-lg-3">
+              {{ page.sidebar_first }}
+            </aside>
           {% endif %}
-          col-sm-12">
 
-                          <main{{ content_attributes }}>
-                            <section class="section">
-                              <a href="#main-content" id="main-content" tabindex="-1"></a>
-                              {{ page.content }}
-                            </section>
-                            </main>
-                        </div>
-
-                        {# ===== SIDEBAR SECOND ===== #}
-                        {% if sidebar_second_exists %}
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                          <aside class="section" role="complementary">
-                            {{ page.sidebar_second }}
-                          </aside>
-                        </div>
-                        {% endif %}
-
-                      </div>
-                    </div>
-                    {% endblock %}
-                  </div>
-              
-            </div>
-            {% if page.featured_bottom_first or page.featured_bottom_second or page.featured_bottom_third %}
-            <div class="featured-bottom">
-              <aside class="{{ container }} clearfix" role="complementary">
-                {{ page.featured_bottom_first }}
-                {{ page.featured_bottom_second }}
-                {{ page.featured_bottom_third }}
-              </aside>
-            </div>
+          {# CONTENT #}
+          <main class="
+            {% if page.sidebar_first and page.sidebar_second %}
+              col-lg-6
+            {% elseif page.sidebar_first or page.sidebar_second %}
+              col-lg-9
+            {% else %}
+              col-lg-12
             {% endif %}
-            <footer class="site-footer">
-              {% block footer %}
-              <div class="{{ container }}">
-                {% if page.footer_first or page.footer_second or page.footer_third or page.footer_fourth %}
-                <div class="site-footer__top clearfix ">
-                <div class="row">
-                <div class="footer-blocks">
-                  {{ page.footer_first }}
-                  {{ page.footer_second }}
-                  {{ page.footer_third }}
-                  {{ page.footer_fourth }}
-                  </div>
-                </div>
-                </div>
-                {% endif %}
-                {% if page.footer_fifth %}
-                <div class="site-footer__bottom">
-                  {{ page.footer_fifth }}
-                </div>
-                {% endif %}
+          ">
+            <a id="main-content" tabindex="-1"></a>
+            {{ page.content }}
+          </main>
+
+          {# SIDEBAR SECOND #}
+          {% if page.sidebar_second %}
+            <aside class="col-lg-3">
+              {{ page.sidebar_second }}
+            </aside>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+    {# ===== FEATURED BOTTOM ===== #}
+    {% if page.featured_bottom_first or page.featured_bottom_second or page.featured_bottom_third %}
+      <div class="featured-bottom">
+        <div class="{{ container }}">
+          {{ page.featured_bottom_first }}
+          {{ page.featured_bottom_second }}
+          {{ page.featured_bottom_third }}
+        </div>
+      </div>
+    {% endif %}
+
+    {# ===== FOOTER ===== #}
+    <footer class="footer footer-2">
+      <div class="footer-middle border-0">
+          <div class="container">
+
+            {% if page.footer_first or page.footer_second or page.footer_third or page.footer_fourth %}
+              <div class="row">
+                {{ page.footer_first }}
+                {{ page.footer_second }}
+                {{ page.footer_third }}
+                {{ page.footer_fourth }}
               </div>
-              {% endblock %}
-            </footer>
-            </div>
-            </div>
+            {% endif %}
+
+            {% if page.footer_fifth %}
+              <div class="footer-bottom">
+                {{ page.footer_fifth }}
+              </div>
+            {% endif %}
+
+          </div>
+      </div>
+    </footer>
+
   </div>
-            <style>
-            .li-icons {
-                  font-size: 14px !important;
-                  color: #FFFFFF;
-            }
-            .li-icons > a > span {
-                color: #FFFFFF;
-            }
-            .site-footer {
-    background: url('/themes/contrib/bootstrap/subthemes/bootstrap_subtheme/catalog/view/theme/Vigils/image/codezeel/bg_footer.webp') !important;
-    background-repeat: repeat !important;
-    background-size: 1219px 310px !important;
-    background-attachment: fixed !important;
-}
-            #main{
-              padding:0;
-            }
-            div#main {
-                width: 100%;
-                padding-left: 5em;
-                padding-right: 5em;
-            }
-              /* Ocultar ambos por defecto */
-              #menu,
-              #res-menu {
-                display: none;
-              }
-
-              /* ================= DESKTOP ================= */
-              @media (min-width: 992px) {
-                #menu {
-                  display: block;
-                }
-              }
-
-              /* ================= MOBILE ================= */
-              @media (max-width: 991px) {
-
-                #res-menu {
-                  display: block;
-                  width: 100%;
-                }
-
-                .nav-responsive {
-                  margin-top: -1.5em;
-                  display: flex;
-                  align-items: center;
-                  gap: 12px;
-                  padding: 1px 15px 15px 15px;
-                  color: #fff;
-                  cursor: pointer;
-
-                }
-
-
-                /* HAMBURGUESA */
-
-                .hamburger::before {
-                  content: "\F0C9";
-                  font-family: "FontAwesome";
-                  /*position: absolute;*/
-                  left: 0;
-                  top: 10px;
-                  font-size: 18px;
-                  font-weight: 400;
-                  display: block;
-                  color: #ffffff;
-                }
-
-                .hamburger {
-                  width: 28px;
-                  height: 20px;
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: space-between;
-                }
-
-                .hamburger span {
-                  display: block;
-                  height: 3px;
-                  background: #fff;
-                  border-radius: 2px;
-                }
-
-                /* Menú desplegable */
-                .main-navigation {
-                  display: none;
-                  list-style: none;
-                  padding: 0;
-                  margin: 0;
-
-                }
-
-                .main-navigation.open {
-                  display: block;
-                }
-                
-
-                .main-navigation li a {
-                  display: block;
-                  padding: 12px 15px;
-                  color: #fff;
-                  text-decoration: none;
-                  border-bottom: 1px solid #222;
-                }
-
-                .main-navigation li a:hover {
-                  background: #222;
-                }
-                a#menu-btn-mobile {
-                    padding: 16px 19px 15px 17px;
-                }
-              }
-            </style>
-           <script>
-           //------------------
-document.addEventListener("DOMContentLoaded", function() {
-  const sidebar = document.querySelector("#sidebar");
-  const container = document.querySelector(".my-container");
-  const closeBtn = document.querySelector("#close-btn");
-  const menuButtons = document.querySelectorAll("#menu-btn, #menu-btn-mobile");
-
-  // Abrir sidebar al hacer clic en cualquier botón
-  menuButtons.forEach(btn => {
-    btn.addEventListener("click", function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      sidebar.classList.add("open");
-      container.classList.add("shift");
-    });
-  });
-
-  // Cerrar sidebar
-  if (closeBtn) {
-    closeBtn.addEventListener("click", function() {
-      sidebar.classList.remove("open");
-      container.classList.remove("shift");
-    });
-  }
-
-  // Click fuera del sidebar cierra
-  document.addEventListener("click", function(e) {
-    if (!sidebar.contains(e.target) && ![...menuButtons].some(btn => btn.contains(e.target))) {
-      sidebar.classList.remove("open");
-      container.classList.remove("shift");
-    }
-  });
-});
-
-           //-------------------
-                    document.addEventListener("DOMContentLoaded", function () {
-
-                      const accountWrapper = document.querySelector(".myaccount");
-                      const accountToggle = document.querySelector(".myaccount > .dropdown-toggle");
-                      const accountMenu = document.querySelector(".myaccount-menu");
-
-                      const searchWrapper = document.querySelector("#search");
-                      const searchButton = document.querySelector("#search .search_button");
-                      const searchToggle = document.querySelector("#search .search_toggle");
-
-                      const toggle = document.querySelector(".nav-responsive");
-                      const menu = document.querySelector(".main-navigation");
-
-                      const cartWrapper = document.querySelector("#cart");
-
-                      // ===== Cuenta =====
-                      if (accountToggle && accountMenu) {
-                        accountToggle.addEventListener("click", function(e){
-                          e.preventDefault();
-                          e.stopPropagation();
-                          accountMenu.classList.toggle("open");
-                        });
-                      }
-
-                      // ===== Buscador =====
-                      if (searchButton && searchToggle) {
-                        searchButton.addEventListener("click", function(e){
-                          e.stopPropagation();
-                          searchToggle.classList.toggle("open");
-
-                          const input = searchToggle.querySelector("input");
-                          if (input) input.focus();
-                        });
-                      }
-
-                      // ===== Menú móvil =====
-                      if (toggle && menu) {
-                        toggle.addEventListener("click", function(e){
-                          e.stopPropagation();
-                          menu.classList.toggle("open");
-                        });
-                      }
-
-                      // ===== Evitar conflicto con carrito =====
-                      if (cartWrapper) {
-                        cartWrapper.addEventListener("click", function(e){
-                          e.stopPropagation();
-                        });
-                      }
-
-                      // ===== Click fuera =====
-                      document.addEventListener("click", function(e){
-
-                        if (accountWrapper && !accountWrapper.contains(e.target)) {
-                          accountMenu.classList.remove("open");
-                        }
-
-                        if (searchWrapper && !searchWrapper.contains(e.target)) {
-                          searchToggle.classList.remove("open");
-                        }
-
-                        if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
-                          menu.classList.remove("open");
-                        }
-
-                      });
-
-                    });
-             </script>
-            <style>
-            #main{
-  padding:0;
-}
-html,body{
-overflow-x:hidden;
-}
-            span.fieldset-legend {
-                  color: #012b30 !important;
-              }
-              label.form-check-label {
-                  color: #00616e !important;
-              }
-              /* Sidebar base */
-              .side-navbar {
-                width: 350px;
-                height: 100vh;
-                position: fixed;
-                top: 0;
-                left: -350px; /* oculto por defecto */
-                background: #a6e1e9;
-                transition: left 0.3s ease;
-                z-index: 1000;
-                overflow-y: auto;
-                padding-top: 20px;
-              }
-
-              /* Cuando está abierto */
-              .side-navbar.open {
-                left: 0;
-              }
-
-              /* Contenedor principal se mueve al abrir sidebar */
-              .my-container {
-                transition: margin-left 0.3s ease;
-              }
-              .my-container.shift {
-                margin-left: 350px; /* Desktop */
-              }
-
-              /* Botón cerrar */
-              .sidebar-header {
-                display: flex;
-                justify-content: flex-end;
-                padding: 10px 15px;
-              }
-              .close-btn {
-                background: transparent;
-                border: none;
-                color: white;
-                font-size: 22px;
-                cursor: pointer;
-              }
-
-              /* Logo toggle */
-              #logo2 { display: none; }
-              .side-navbar.open #logo2 { display: block; }
-              .side-navbar.open ~ .my-container #logo { display: none; }
-              label {
-                color: #ffffff;
-              }
-              .side-navbar.open {
-                left: 0;
-              }
-              /* ===== MOBILE ===== */
-              @media (max-width: 991px) {
-                .side-navbar { width: 70%; left: -70%; }
-                .side-navbar.open { left: 0; }
-                .my-container.shift { margin-left: 0; } /* No desplazamos el contenido en móvil */
-              }
-              /* contenido principal */
-              .my-container {
-                transition: margin-left 0.3s ease;
-              }
-
-              .my-container.shift {
-                margin-left: 250px;
-              }
-
-              /* botón cerrar */
-              .sidebar-header {
-                display: flex;
-                justify-content: flex-end;
-                padding: 10px 15px;
-              }
-
-              .close-btn {
-                background: transparent;
-                border: none;
-                color: white;
-                font-size: 22px;
-                cursor: pointer;
-              }
-
-              /* botón menú */
-              #menu-btn::before {
-                    content: "\F0C9";
-                    font-family: "FontAwesome";
-                    /* position: absolute; */
-                    left: 0;
-                    top: 10px;
-                    font-size: 18px;
-                    font-weight: 400;
-                    display: block;
-                    color: #ffffff;
-              }
-              /* ocultar formulario */
-              [id^="block-bootstrap-subtheme-formularioexpuesto"]{
-                display:none;
-              }
-
-              /* mostrar cuando sidebar abre */
-              .side-navbar.open [id^="block-bootstrap-subtheme-formularioexpuesto"]{
-                display:block;
-                width: 90% !important;
-              }
-              section.row.region.region-filter-side-navbar {
-                  padding-left: 10%;
-              }
-
-              /* estado inicial (sidebar cerrado) */
-              #logo2{
-                display:none;
-              }
-
-              #logo{
-                display:block;
-              }
-
-              /* cuando el sidebar está abierto */
-              .side-navbar.open ~ .my-container #logo{
-                display:none;
-              }
-
-              .side-navbar.open #logo2{
-                display:block;
-              }
-              #search .search_toggle{
-                  display:none;
-                }
-                
-                #search .search_toggle.open{
-                  display:block;
-                }
-                
-            /* Desktop */
-                @media (min-width: 992px){
-                  #search .search_toggle{
-                    display:block;
-                  }
-                }
-                
-                /* Mobile */
-                @media (max-width: 991px){
-                  #search .search_toggle{
-                    display:none;
-                  }
-                
-                  #search .search_toggle.open{
-                    display:block;
-                  }
-                }
-
-            </style>
+</div>

@@ -19,7 +19,7 @@ class OrderReviewController extends ControllerBase {
       $order = $data['data'];
 
       // Decodificar payload
-      $payload = json_decode($order['payload'], TRUE);
+      $payload = $order['payload'];
 
     } catch (\Exception $e) {
 

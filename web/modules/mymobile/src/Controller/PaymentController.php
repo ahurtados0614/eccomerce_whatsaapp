@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\mymobile\Service\OrderService;
 
+
 class PaymentController extends ControllerBase {
 
   /**
@@ -141,21 +142,23 @@ class PaymentController extends ControllerBase {
   /**
    * Obtener pedido.
    */
-  public function getOrder($id) {
 
-    $order = $this->orderService->getOrder($id);
 
-    if (!$order) {
-      return new JsonResponse([
-        'status' => 'fail',
-        'message' => 'Order not found'
-      ], 404);
-    }
+public function getOrder($id) {
 
+  $order = $this->orderService->getOrder($id);
+
+  if (!$order) {
     return new JsonResponse([
-      'status' => 'success',
-      'data' => $order
-    ]);
+      'status' => 'fail',
+      'message' => 'Order not found'
+    ], 404);
   }
+
+  return new JsonResponse([
+    'status' => 'success',
+    'data' => $order
+  ]);
+}
 
 }
