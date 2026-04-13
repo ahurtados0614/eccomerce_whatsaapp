@@ -29,6 +29,7 @@
         "drupal/metatag": "^2.2",
         "drupal/pathauto": "^1.14",
         "drupal/smtp": "^1.4",
+        "drupal/statistics": "^1.0",
         "drupal/views_infinite_scroll": "^2.0",
         "drupal/xmlsitemap": "^2.0",
         "drush/drush": "^13.7"

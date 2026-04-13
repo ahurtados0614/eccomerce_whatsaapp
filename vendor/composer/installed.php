@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '664f639a4843a750a2529eeeba9bd5aef44b7758',
+        'reference' => '03428f33014f5b33a3be5fefb06c86cc074e193b',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -430,7 +430,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '664f639a4843a750a2529eeeba9bd5aef44b7758',
+            'reference' => '03428f33014f5b33a3be5fefb06c86cc074e193b',
             'dev_requirement' => false,
         ),
         'drupal/smtp' => array(
@@ -440,6 +440,15 @@
             'install_path' => __DIR__ . '/../../web/modules/contrib/smtp',
             'aliases' => array(),
             'reference' => '8.x-1.4',
+            'dev_requirement' => false,
+        ),
+        'drupal/statistics' => array(
+            'pretty_version' => '1.0.1',
+            'version' => '1.0.1.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/statistics',
+            'aliases' => array(),
+            'reference' => '1.0.1',
             'dev_requirement' => false,
         ),
         'drupal/token' => array(

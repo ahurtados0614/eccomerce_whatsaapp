@@ -156,20 +156,32 @@
                                     </div><!-- End .product-details-action -->
 
                                     <div class="product-details-footer">
-                                        <div class="product-cat">
+                                         {% if node.field_marca|length %}
+                                        
+                                        <div class="product-cat" style="width:100%;text-transform: uppercase;">
+                                        <span style="font-weight:bold">Marca:</span>
+                                              <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': node.field_marca.entity.id}) }}">
+                                                {{ node.field_marca.entity.name.value }}
+                                              </a>
+                                        </div>
+                                         <br>
+                                        {% endif %}
+                                        <div class="product-cat" style="width:100%;text-transform: uppercase;">
                                             
-                                      
-                                            {% if node.field_tipo_de_producto|length %}
-                                              <span>Category:</span>
+                                          {% if node.field_tipo_de_producto|length %}
+                          
+                                              <span style="font-weight:bold">Tipo de Producto:</span>
                                               
                                               {% for tipo in node.field_tipo_de_producto %}
-                                                <a href="index.html?route=product/search&amp;tag={{ tipo.entity.name.value|url_encode }}">
-                                                  {{ tipo.entity.name.value }}
-                                                </a>{% if not loop.last %}, {% endif %}
+                                                {% if tipo.entity %}
+                                                  <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': tipo.entity.id}) }}">
+                                                    {{ tipo.entity.label }}
+                                                  </a>{% if not loop.last %}, {% endif %}
+                                                {% endif %}
                                               {% endfor %}
                                             {% endif %}
                                         </div><!-- End .product-cat -->
-
+                                        
                                         <div class="social-icons social-icons-sm">
                                             <span class="social-label">Compartir:</span>
                                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ url('<current>') }}" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>

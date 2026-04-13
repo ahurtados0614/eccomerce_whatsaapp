@@ -161,3 +161,60 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
     ];
   }
 }
+
+function bootstrap_subtheme_preprocess_block(&$variables) {
+
+  if ($variables['plugin_id'] === 'views_block:productos_en_tendencia-block_6') {
+
+    $node = NULL;
+
+    // 🔥 Obtener nodo (tu código)
+    $node = \Drupal::routeMatch()->getParameter('node');
+
+    if (is_numeric($node)) {
+      $node = \Drupal\node\Entity\Node::load($node);
+    }
+
+    if (!$node) {
+      $node = \Drupal::request()->attributes->get('node');
+    }
+
+    if (!$node) {
+      $nid = \Drupal::request()->attributes->get('node_id');
+      if ($nid) {
+        $node = \Drupal\node\Entity\Node::load($nid);
+      }
+    }
+
+    // ============================
+    // 🔥 AQUÍ VIENE LO NUEVO
+    // ============================
+
+    $terms_ids = [];
+
+    if ($node instanceof \Drupal\node\NodeInterface) {
+
+      $variables['node_id'] = $node->id();
+
+      // 🔥 CAMBIA ESTE NOMBRE POR EL REAL
+      if ($node->hasField('field_tipo_de_producto') && !$node->get('field_tipo_de_producto')->isEmpty()) {
+
+        foreach ($node->get('field_tipo_de_producto') as $term) {
+          $terms_ids[] = $term->target_id;
+        }
+      }
+
+    } else {
+      $variables['node_id'] = 0;
+    }
+
+    // ✅ enviar a twig
+    $variables['term_ids'] = $terms_ids;
+
+    // ✅ enviar a JS (recomendado)
+    $variables['#attached']['drupalSettings']['productData'] = [
+      'id' => $variables['node_id'],
+      'terms' => $terms_ids,
+    ];
+  }
+}
