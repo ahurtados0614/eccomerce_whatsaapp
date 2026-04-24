@@ -73,28 +73,49 @@ function loadItemsMainSlider() {
     
     let url = 'api/slider-principal';
     let itemAcumMainSlider = ``;
-    
-    fetch(url).then(res => res.json()).then(dato => {
-        let items="";
-		 for (let index = 0; index < dato.length; index++) {
-          const element = dato[index];
-          enlace = element.enlace;
-          imagen = element.imagen;
-          titulo = element.titulo;
-          subtitle1 = element.subtitle1;
-          subtitle2 = element.subtitle2;
-          txtboton = element.txtboton;
-          itemAcumMainSlider += `<div class="intro-slide" style="background-image: url(${imagen});">
-            <div class="container intro-content text-center">
-                <h3 class="intro-subtitle text-white">${subtitle1}</h3><!-- End .h3 intro-subtitle -->
-                <h1 class="intro-title text-white">${titulo}</h1><!-- End .intro-title -->
-                <div class="intro-text text-white">${subtitle2}</div><!-- End .intro-text -->
-                <a href="${enlace}" class="btn btn-primary">${txtboton}</a>
-            </div><!-- End .intro-content -->
-        </div>`;
-     }                
-        document.getElementById("content_item_slider").innerHTML += itemAcumMainSlider;
-    })
+
+    fetch(url)
+    .then(res => res.json())
+    .then(dato => {
+
+        for (let index = 0; index < dato.length; index++) {
+            const element = dato[index];
+
+            itemAcumMainSlider += `
+            <div class="intro-slide" style="background-image: url(${element.imagen});">
+                <div class="container intro-content text-center">
+                    <h3 class="intro-subtitle text-white">${element.subtitle1}</h3>
+                    <h1 class="intro-title text-white">${element.titulo}</h1>
+                    <div class="intro-text text-white">${element.subtitle2}</div>
+                    <a href="${element.enlace}" class="btn btn-primary">${element.txtboton}</a>
+                </div>
+            </div>`;
+        }
+
+        let $slider = $('#content_item_slider');
+
+        // 1. Insertar items
+        $slider.html(itemAcumMainSlider);
+
+        // 2. DESTRUIR si ya existe (importante en Drupal)
+        if ($slider.hasClass('owl-loaded')) {
+            $slider.trigger('destroy.owl.carousel');
+            $slider.removeClass('owl-loaded');
+            $slider.find('.owl-stage-outer').children().unwrap();
+        }
+
+        // 3. INICIALIZAR manualmente
+        $slider.owlCarousel({
+            items: 1,
+            loop: true,
+            nav: true,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            smartSpeed: 800
+        });
+
+    });
 }
 </script>
 <style>
