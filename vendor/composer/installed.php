@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '03428f33014f5b33a3be5fefb06c86cc074e193b',
+        'reference' => 'ae7bacd52b96a643b424a7be9fbc129480dab9b3',
         'name' => 'drupal/recommended-project',
         'dev' => true,
     ),
@@ -170,6 +170,15 @@
             'install_path' => __DIR__ . '/../../web/themes/contrib/bootstrap',
             'aliases' => array(),
             'reference' => '5.0.2',
+            'dev_requirement' => false,
+        ),
+        'drupal/color_pickr' => array(
+            'pretty_version' => '1.1.3',
+            'version' => '1.1.3.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/color_pickr',
+            'aliases' => array(),
+            'reference' => '1.1.3',
             'dev_requirement' => false,
         ),
         'drupal/core' => array(
@@ -430,7 +439,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '03428f33014f5b33a3be5fefb06c86cc074e193b',
+            'reference' => 'ae7bacd52b96a643b424a7be9fbc129480dab9b3',
             'dev_requirement' => false,
         ),
         'drupal/smtp' => array(

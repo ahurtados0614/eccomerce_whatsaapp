@@ -379,7 +379,29 @@ document.addEventListener("DOMContentLoaded", function () {
             <td data-label="Artículos">
               ${capitalize(product.name)}
             </td>
-
+            <td data-label="Color">
+             ${cartItem.color ? `
+  <div style="margin-top:5px;">
+    Color:
+    <span style="
+      display:inline-block;
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background:${cartItem.color};
+      border:1px solid #ccc;
+      vertical-align:middle;
+    "></span>
+  </div>
+` : ''}
+            </td>
+            <td data-label="Talla">
+             ${cartItem.talla ? `
+  <div>
+    Talla: ${cartItem.talla.toUpperCase()}
+  </div>
+` : ''}
+            </td>
             <td data-label="Precio">
               $${product.price.toLocaleString('es-CO')} COP
             </td>
@@ -462,9 +484,208 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <script>
+function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const CART_KEY = "cartProducts";
+  const cartBody = document.getElementById("cart-body");
+
+  if (!cartBody) return;
+
+  function renderCartTable() {
+
+    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+    if (cart.length === 0) {
+      cartBody.innerHTML = `
+        <tr>
+          <td colspan="7" class="text-center">
+            Tu carrito está vacío
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const ids = [...new Set(cart.map(item => item.id))].join(',');
+
+    fetch(`/cart/products?ids=${ids}`)
+      .then(response => response.json())
+      .then(products => {
+
+        cartBody.innerHTML = "";
+        let totalGeneral = 0;
+
+        cart.forEach(cartItem => {
+
+          const product = products.find(
+            p => p.id == cartItem.id
+          );
+
+          if (!product) return;
+
+          const quantity = cartItem.quantity || 1;
+          const image = cartItem.image || "";
+          const sku = cartItem.sku || "";
+
+          const total = product.price * quantity;
+          totalGeneral += total;
+
+          cartBody.innerHTML += `
+            <tr>
+
+              <td data-label="Imagen">
+                <img class="tableimg" 
+                     src="${image}" 
+                     style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
+              </td>
+
+              <td data-label="Cod SKU">
+                ${sku || product.sku || product.id}
+              </td>
+
+              <td data-label="Artículos">
+
+                ${capitalize(product.name)}
+
+                ${cartItem.color ? `
+                  <div style="margin-top:5px;">
+                    Color:
+                    <span style="
+                      display:inline-block;
+                      width:14px;
+                      height:14px;
+                      border-radius:50%;
+                      background:${cartItem.color};
+                      border:1px solid #ccc;
+                      vertical-align:middle;
+                    "></span>
+                  </div>
+                ` : ''}
+
+                ${cartItem.talla ? `
+                  <div>
+                    Talla: ${cartItem.talla.toUpperCase()}
+                  </div>
+                ` : ''}
+
+              </td>
+
+              <td data-label="Precio">
+                $${product.price.toLocaleString('es-CO')} COP
+              </td>
+
+              <td data-label="Cantidad" class="text-center">
+                <input type="number"
+                       min="1"
+                       value="${quantity}"
+                       data-id="${cartItem.cart_id || product.id}"
+                       class="form-control update-qty"
+                       style="width:80px;margin:auto;">
+              </td>
+
+              <td data-label="Eliminar" class="text-center">
+                <button data-id="${cartItem.cart_id || product.id}"
+                        class="btn btn-sm btn-danger remove-row">
+                  ✕
+                </button>
+              </td>
+
+              <td data-label="Total" class="text-end">
+                $${total.toLocaleString('es-CO')} COP
+              </td>
+
+            </tr>
+          `;
+        });
+
+        cartBody.innerHTML += `
+          <tr style="border-bottom:0px !important;">
+            <td colspan="6" class="text-end">
+              <strong>Total General</strong>
+            </td>
+            <td class="text-end">
+              <strong>
+                $${totalGeneral.toLocaleString('es-CO')} COP
+              </strong>
+            </td>
+          </tr>
+        `;
+
+        attachEvents();
+
+      })
+      .catch(error => {
+        console.error(error);
+
+        cartBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center">
+              Error cargando productos
+            </td>
+          </tr>
+        `;
+      });
+  }
+
+  function attachEvents() {
+
+    document.querySelectorAll(".remove-row").forEach(btn => {
+
+      btn.addEventListener("click", function () {
+
+        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+        cart = cart.filter(item => {
+          return (item.cart_id || item.id) != this.dataset.id;
+        });
+
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+        renderCartTable();
+
+      });
+
+    });
+
+    document.querySelectorAll(".update-qty").forEach(input => {
+
+      input.addEventListener("change", function () {
+
+        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+        const item = cart.find(c => {
+          return (c.cart_id || c.id) == this.dataset.id;
+        });
+
+        if (item) {
+          item.quantity = parseInt(this.value) || 1;
+        }
+
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+        renderCartTable();
+
+      });
+
+    });
+
+  }
+
+  window.addEventListener("storage", renderCartTable);
+
+  renderCartTable();
+
+});
+</script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
 
   const btnOrder = document.getElementById("btn-whatsapp-order");
+
   if (!btnOrder) return;
 
   const CART_KEY = "cartProducts";
@@ -494,25 +715,31 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const ids = cart.map(item => item.id).join(',');
-
     try {
+
+      const ids = [...new Set(cart.map(item => item.id))].join(',');
 
       const productsRes = await fetch(`/cart/products?ids=${ids}`);
       const products = await productsRes.json();
 
       let items = [];
 
-      products.forEach(product => {
+      cart.forEach(cartItem => {
 
-        const cartItem = cart.find(c => c.id == product.id);
+        const product = products.find(
+          p => p.id == cartItem.id
+        );
+
+        if (!product) return;
 
         items.push({
           id: product.id,
           sku: cartItem.sku || product.sku || product.id,
           name: product.name,
           price: product.price,
-          quantity: cartItem.quantity
+          quantity: cartItem.quantity || 1,
+          color: cartItem.color || null,
+          talla: cartItem.talla || null,
         });
 
       });

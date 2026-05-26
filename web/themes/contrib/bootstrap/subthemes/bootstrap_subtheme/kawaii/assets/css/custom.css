@@ -183,3 +183,113 @@ section.row.region.region-footer-second {
 header.header.header-5.header-inner.menuinter {
     margin-top: 0px;
 }
+
+/*filter custom*/
+/* ==========================
+   SIDEBAR FILTROS
+========================== */
+
+.sidebar-shop .widget{
+    border-bottom:1px solid #ebebeb;
+    padding:1rem 0;
+}
+
+.sidebar-shop .widget-title{
+    margin:0;
+    font-size:16px;
+    font-weight:600;
+}
+
+.sidebar-shop .widget-title a{
+    display:block;
+    position:relative;
+    color:#333;
+    text-decoration:none;
+    padding-right:20px;
+}
+
+.sidebar-shop .widget-title a:after{
+    position:absolute;
+    right:0;
+    top:50%;
+    transform:translateY(-50%);
+    transition:.3s;
+}
+
+
+
+.sidebar-shop .widget-body{
+    padding-top:15px;
+}
+
+.sidebar-shop .filter-items{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+
+/* ==========================
+   LIMPIAR BOOTSTRAP DRUPAL
+========================== */
+
+.sidebar-shop .checkbox{
+    margin:0;
+}
+
+.sidebar-shop .form-checkboxes{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+
+/* ==========================
+   ALINEACIÓN CHECKBOX
+========================== */
+
+.sidebar-shop .form-check{
+    display:flex !important;
+    align-items:center !important;
+    gap:10px;
+
+    margin:0 !important;
+    padding-left:0 !important;
+    min-height:auto;
+}
+
+
+/* Bootstrap mueve los switch */
+.sidebar-shop .form-switch .form-check-input{
+    margin-left:0 !important;
+    margin-top:0 !important;
+}
+
+
+/* checkbox */
+.sidebar-shop .form-check-input{
+    position:relative;
+    top:0;
+    margin:0 !important;
+    flex-shrink:0;
+}
+
+
+/* texto */
+.sidebar-shop .form-check-label{
+    margin:0;
+    line-height:1.3;
+}
+
+
+/* Drupal mete espacios extra */
+.sidebar-shop .mb-3{
+    margin-bottom:0 !important;
+}
+
+
+/* hover */
+.sidebar-shop .form-check:hover label{
+    color:#c96;
+    cursor:pointer;
+}

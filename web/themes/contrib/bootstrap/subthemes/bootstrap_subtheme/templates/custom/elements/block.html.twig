@@ -29,11 +29,6 @@
  * @ingroup themeable
  */
 #}
-{#
-/**
- * Template block
- */
-#}
 {%
   set classes = [
     'block',
@@ -41,76 +36,15 @@
     'block-' ~ plugin_id|clean_class,
   ]
 %}
-
 <div{{ attributes.addClass(classes) }}>
-
   {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes }}>{{ label }}</h2>
+  {% endif %}
   {{ title_suffix }}
-
   {% block content %}
-
-    <div class="pt-6 new-arrivals">
-
-      {% if label %}
-        <div class="heading heading-center mb-3">
-          <h2 class="title">{{ label }}</h2>
-        </div>
-      {% endif %}
-
-      <div class="tab-content">
-
-        <div class="tab-pane p-0 fade show active">
-
-          <div class="products">
-
-            <div
-              class="row js-products-container"
-              data-api="api/product-detail"
-              data-initial-load="4"
-              data-load-more="4"
-            ></div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="more-container text-center mt-1 mb-3">
-
-        <a
-          href="#"
-          class="btn btn-outline-primary-2 btn-round btn-more js-load-more"
-        >
-          CARGAR MÁS
-        </a>
-
-      </div>
-
+    <div{{ content_attributes.addClass('content') }}>
+      {{ content }}
     </div>
-
   {% endblock %}
-
 </div>
-
-<style>
-
-h2.title {
-  margin: 3%;
-}
-
-.header-5 {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 1040;
-  background-color: transparent;
-  margin-top: 0rem;
-}
-
-.new-arrivals{
-  padding: 0em 1em 0em 0em;
-}
-
-</style>

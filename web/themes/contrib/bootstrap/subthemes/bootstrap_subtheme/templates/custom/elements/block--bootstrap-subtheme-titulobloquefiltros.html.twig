@@ -29,11 +29,6 @@
  * @ingroup themeable
  */
 #}
-{#
-/**
- * Template block
- */
-#}
 {%
   set classes = [
     'block',
@@ -42,75 +37,23 @@
   ]
 %}
 
-<div{{ attributes.addClass(classes) }}>
-
-  {{ title_prefix }}
-  {{ title_suffix }}
-
-  {% block content %}
-
-    <div class="pt-6 new-arrivals">
-
-      {% if label %}
-        <div class="heading heading-center mb-3">
-          <h2 class="title">{{ label }}</h2>
-        </div>
-      {% endif %}
-
-      <div class="tab-content">
-
-        <div class="tab-pane p-0 fade show active">
-
-          <div class="products">
-
-            <div
-              class="row js-products-container"
-              data-api="api/product-detail"
-              data-initial-load="4"
-              data-load-more="4"
-            ></div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="more-container text-center mt-1 mb-3">
-
-        <a
-          href="#"
-          class="btn btn-outline-primary-2 btn-round btn-more js-load-more"
-        >
-          CARGAR MÁS
-        </a>
-
-      </div>
-
-    </div>
-
-  {% endblock %}
-
+<div class="widget widget-clean pt-6">
+    {% if label %}
+    <label>    
+    {{ label }}
+    </label>
+  {% endif %}:
 </div>
-
 <style>
-
-h2.title {
-  margin: 3%;
+.widget.widget-clean {
+    padding: 0em 0em 1em 0em;
+    margin: 0em 2em;
 }
-
-.header-5 {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 1040;
-  background-color: transparent;
-  margin-top: 0rem;
+.widget {
+    margin-bottom: 0.5rem;
 }
-
-.new-arrivals{
-  padding: 0em 1em 0em 0em;
+h3.widget-title {
+    margin-top: 1em !important;
+    margin-bottom: -0.5em !important;
 }
-
 </style>

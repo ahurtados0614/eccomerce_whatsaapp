@@ -20,6 +20,7 @@
         "drupal/backup_migrate": "^5.1",
         "drupal/better_exposed_filters": "^7.1",
         "drupal/bootstrap": "^5.0",
+        "drupal/color_pickr": "^1.1",
         "drupal/core-composer-scaffold": "^11.3",
         "drupal/core-project-message": "^11.3",
         "drupal/core-recipe-unpack": "^11.3",

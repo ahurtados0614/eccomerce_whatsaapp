@@ -1,0 +1,16 @@
+.sample__color {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background-color: var(--color);
+}
+
+#color_picker11 {
+  position: absolute;
+}
+
+.pickr .pcr-button {
+  border: 1px solid rgba(142, 146, 156, 0.5);
+}

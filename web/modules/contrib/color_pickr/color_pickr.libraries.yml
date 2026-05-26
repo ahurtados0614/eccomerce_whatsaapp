@@ -1,0 +1,19 @@
+color_pickr:
+  version: VERSION
+  css:
+    theme:
+      css/color_pickr.css: {}
+      css/classic.min.css: {}
+      css/monolith.min.css: {}
+      css/nano.min.css: {}
+  js:
+    js/pickr.min.js: {}
+    js/color_pickr.js: {}
+  dependencies:
+    - core/once
+
+color_pickr_front:
+  version: VERSION
+  css:
+    theme:
+      css/color-pickr-front.css: {}

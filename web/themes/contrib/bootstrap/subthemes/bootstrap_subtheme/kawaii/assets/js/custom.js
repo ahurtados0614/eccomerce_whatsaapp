@@ -105,3 +105,236 @@ document.addEventListener("click", function (e) {
   }
 
 });
+
+//filtros
+
+
+(function (Drupal, once) {
+
+  Drupal.behaviors.productsAjax = {
+
+    attach(context) {
+
+      once(
+        'productsAjax',
+        '.js-products-container',
+        context
+      ).forEach(function (container) {
+
+        let allProducts = [];
+
+        let currentIndex = 0;
+
+        const INITIAL_LOAD =
+          parseInt(container.dataset.initialLoad) || 12;
+
+        const LOAD_MORE =
+          parseInt(container.dataset.loadMore) || 12;
+
+        const api =
+          container.dataset.api;
+
+        const wrapper =
+          container.closest('.new-arrivals');
+
+        const btnLoadMore =
+          wrapper.querySelector('.js-load-more');
+
+        /*
+         * 🔥 LIMPIAR
+         */
+        container.innerHTML = '';
+
+        /* =========================================
+           🔥 EVENTO FILTROS
+        ========================================= */
+        document.addEventListener('change', function (e) {
+
+          if (e.target.classList.contains('js-filter')) {
+
+            currentIndex = 0;
+
+            allProducts = [];
+
+            container.innerHTML = '';
+
+            loadProducts();
+
+          }
+
+        });
+
+        /* =========================================
+           🔥 LOAD PRODUCTS
+        ========================================= */
+        function loadProducts() {
+
+          const queryString =
+            buildFiltersQuery();
+
+          fetch(api + '?' + queryString)
+
+            .then(res => res.json())
+
+            .then(dato => {
+
+              allProducts = [];
+
+              dato.forEach(el => {
+
+                allProducts.push(el.items);
+
+              });
+
+              renderProducts(INITIAL_LOAD);
+
+              toggleButton();
+
+            })
+
+            .catch(err => {
+
+              console.error(err);
+
+            });
+
+        }
+
+        /* =========================================
+           🔥 QUERYSTRING
+        ========================================= */
+        function buildFiltersQuery() {
+
+          const params =
+            new URLSearchParams();
+
+          const checkedFilters =
+            document.querySelectorAll('.js-filter:checked');
+
+          checkedFilters.forEach((checkbox) => {
+
+            const filter =
+              checkbox.dataset.filter;
+
+            const value =
+              checkbox.value;
+
+            params.append(
+              `${filter}[${value}]`,
+              value
+            );
+
+          });
+
+          params.append(
+            'sort_by',
+            'field_precio_del_articulo_value'
+          );
+
+          params.append(
+            'sort_order',
+            'DESC'
+          );
+
+          /*
+           * 🔥 UPDATE URL
+           */
+          const newUrl =
+            window.location.pathname +
+            '?' +
+            params.toString();
+
+          window.history.replaceState(
+            {},
+            '',
+            newUrl
+          );
+
+          return params.toString();
+
+        }
+
+        /* =========================================
+           🔥 RENDER
+        ========================================= */
+        function renderProducts(limit) {
+
+          let html = '';
+
+          const nextItems =
+            allProducts.slice(
+              currentIndex,
+              currentIndex + limit
+            );
+
+          nextItems.forEach(item => {
+
+            html += item;
+
+          });
+
+          if (currentIndex === 0) {
+
+            container.innerHTML = html;
+
+          } else {
+
+            container.innerHTML += html;
+
+          }
+
+          currentIndex += limit;
+
+        }
+
+        /* =========================================
+           🔥 LOAD MORE
+        ========================================= */
+        if (btnLoadMore) {
+
+          btnLoadMore.addEventListener(
+            'click',
+            function (e) {
+
+              e.preventDefault();
+
+              renderProducts(LOAD_MORE);
+
+              toggleButton();
+
+            }
+          );
+
+        }
+
+        /* =========================================
+           🔥 BUTTON
+        ========================================= */
+        function toggleButton() {
+
+          if (!btnLoadMore) return;
+
+          if (currentIndex >= allProducts.length) {
+
+            btnLoadMore.style.display = 'none';
+
+          } else {
+
+            btnLoadMore.style.display = 'inline-block';
+
+          }
+
+        }
+
+        /* =========================================
+           🔥 INIT
+        ========================================= */
+        loadProducts();
+
+      });
+
+    }
+
+  };
+
+})(Drupal, once);

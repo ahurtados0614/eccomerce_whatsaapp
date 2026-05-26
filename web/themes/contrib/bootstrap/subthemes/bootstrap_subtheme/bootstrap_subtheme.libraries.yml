@@ -11,11 +11,12 @@ global-styling:
       kawaii/assets/css/skins/skin-demo-5.css: {}
       kawaii/assets/css/demos/demo-5.css: {}
       kawaii/assets/css/custom.css: {}
+
       https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css:
         type: external
-      
 
   js:
+
     https://code.jquery.com/jquery-3.6.4.min.js:
       type: external
 
@@ -43,13 +44,6 @@ global-styling:
     kawaii/assets/js/cart-custom.js: {}
     kawaii/assets/js/custom.js: {}
 
-  dependencies:
-    - core/jquery
-    - core/drupal
-
-product-gallery:
-  js:
-    catalog/view/javascript/custom/product-carousel.js: {}
   dependencies:
     - core/jquery
     - core/drupal

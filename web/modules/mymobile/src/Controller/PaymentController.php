@@ -9,18 +9,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\mymobile\Service\OrderService;
 
 
-class PaymentController extends ControllerBase {
+class PaymentController extends ControllerBase
+{
 
   /**
    * @var \Drupal\mymobile\Service\OrderService
    */
   protected $orderService;
 
-  public function __construct(OrderService $order_service) {
+  public function __construct(OrderService $order_service)
+  {
     $this->orderService = $order_service;
   }
 
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container)
+  {
     return new static(
       $container->get('mymobile.order_service')
     );
@@ -29,7 +32,8 @@ class PaymentController extends ControllerBase {
   /**
    * Registrar pago / pedido.
    */
-  public function registerPayment(Request $request) {
+  public function registerPayment(Request $request)
+  {
 
     // 🔐 Validar API Key
     $api_key = $request->headers->get('X-API-KEY');
@@ -81,6 +85,8 @@ class PaymentController extends ControllerBase {
           'name' => $item['name'],
           'price' => (float) $item['price'],
           'quantity' => (int) $item['quantity'],
+          'color' => $item['color'] ?? '',
+          'talla' => $item['talla'] ?? '',
         ];
       }
 
@@ -100,8 +106,20 @@ class PaymentController extends ControllerBase {
 
         $subtotal = $item['price'] * $item['quantity'];
 
-        $items_text .= "SKU: {$item['sku']} - {$item['name']} x{$item['quantity']} - COP "
-          . number_format($subtotal, 0, ',', '.') . "\n";
+        $color_text = !empty($item['color'])
+          ? " | Color: {$item['color']}"
+          : '';
+
+        $talla_text = !empty($item['talla'])
+          ? " | Talla: {$item['talla']}"
+          : '';
+
+        $items_text .= "SKU: {$item['sku']} - {$item['name']} x{$item['quantity']}"
+          . $color_text
+          . $talla_text
+          . " - COP "
+          . number_format($subtotal, 0, ',', '.')
+          . "\n";
       }
 
       // Mensaje WhatsApp
@@ -126,9 +144,7 @@ class PaymentController extends ControllerBase {
         'whatsapp_message' => $message,
         'whatsapp_url' => $whatsapp_url
       ]);
-
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
 
       \Drupal::logger('mymobile')->error($e->getMessage());
 
@@ -144,21 +160,21 @@ class PaymentController extends ControllerBase {
    */
 
 
-public function getOrder($id) {
+  public function getOrder($id)
+  {
 
-  $order = $this->orderService->getOrder($id);
+    $order = $this->orderService->getOrder($id);
 
-  if (!$order) {
+    if (!$order) {
+      return new JsonResponse([
+        'status' => 'fail',
+        'message' => 'Order not found'
+      ], 404);
+    }
+
     return new JsonResponse([
-      'status' => 'fail',
-      'message' => 'Order not found'
-    ], 404);
+      'status' => 'success',
+      'data' => $order
+    ]);
   }
-
-  return new JsonResponse([
-    'status' => 'success',
-    'data' => $order
-  ]);
-}
-
 }

@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Contains color_pickr.module.
+ */
+
+use Drupal\color_pickr\Utility\Html;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function color_pickr_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.color_pickr':
+      $text = file_get_contents(__DIR__ . '/README.md');
+      if (!\Drupal::moduleHandler()->moduleExists('markdown')) {
+        return '<pre>' . Html::escape($text) . '</pre>';
+      }
+      else {
+        // Use the Markdown filter to render the README.
+        $filter_manager = \Drupal::service('plugin.manager.filter');
+        $settings = \Drupal::configFactory()->get('markdown.settings')->getRawData();
+        $config = ['settings' => $settings];
+        $filter = $filter_manager->createInstance('markdown', $config);
+        return $filter->process($text, 'en');
+      }
+      // @todo Load text from Readme.md.
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The CKEditor Mentions, see <a href=":doc_url">online documentation for the CKEditor Mentions</a>.', [':doc_url' => 'https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html']) . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function color_pickr_theme() {
+  return [
+    'color_pickr_default' => [
+      'variables' => ['color_pickr' => NULL],
+      'template' => 'color-pickr-default',
+    ],
+    'color_pickr_square' => [
+      'variables' => ['color_pickr' => NULL],
+      'template' => 'color-pickr-square',
+    ],
+    'color_pickr_circle' => [
+      'variables' => ['color_pickr' => NULL],
+      'template' => 'color-pickr-circle',
+    ],
+    'color_pickr_hexagon' => [
+      'variables' => ['color_pickr' => NULL],
+      'template' => 'color-pickr-hexagon',
+    ],
+    'color_pickr_line' => [
+      'variables' => ['color_pickr' => NULL],
+      'template' => 'color-pickr-line',
+    ],
+  ];
+}

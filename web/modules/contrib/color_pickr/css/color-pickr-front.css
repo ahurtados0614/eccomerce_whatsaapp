@@ -1,0 +1,47 @@
+.color-pickr-square {
+  width: 20px;
+  height: 20px;
+  margin: .5em;
+}
+
+.color-pickr-circle {
+  width: 20px;
+  height: 20px;
+  margin: .5em;
+  border-radius: 50%;
+}
+
+.color-pickr-rectangle {
+  width: 30px;
+  height: 20px;
+  margin: 2em;
+}
+
+.color-pickr-hexagon {
+  width: 1em;
+  height: 1.8em;
+  margin: 0.5em;
+}
+
+.color-pickr-hexagon:before {
+  transform: rotate(60deg);
+}
+
+.color-pickr-hexagon:after {
+  transform: rotate(-60deg);
+}
+
+.color-pickr-hexagon:before,
+.color-pickr-hexagon:after {
+  content: "";
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  border-radius: inherit;
+  background: inherit;
+}
+
+.color-pickr-line {
+  height: 2px;
+  margin: .5em;
+}

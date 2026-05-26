@@ -41,123 +41,76 @@
     'block-' ~ plugin_id|clean_class,
   ]
 %}
+
 <div{{ attributes.addClass(classes) }}>
+
   {{ title_prefix }}
   {{ title_suffix }}
 
   {% block content %}
-    <div class="container pt-6 new-arrivals">
-        {% if label %}
+
+    <div class="pt-6 new-arrivals">
+
+      {% if label %}
         <div class="heading heading-center mb-3">
-            <h2 class="title">{{ label }}</h2>
+          <h2 class="title">{{ label }}</h2>
         </div>
-        {% endif %}
+      {% endif %}
 
-        <div class="tab-content">
-            <div class="tab-pane p-0 fade show active">
-                <div class="products">
-                    <div class="row justify-content-between" id="content_product_novedades"></div>
-                </div>
-            </div>
+      <div class="tab-content">
+
+        <div class="tab-pane p-0 fade show active">
+
+          <div class="products">
+
+            <div
+              class="row js-products-container"
+              data-api="api/product-mayorista"
+              data-initial-load="4"
+              data-load-more="4"
+            ></div>
+
+          </div>
+
         </div>
 
-        <div class="more-container text-center mt-1 mb-3">
-            <a href="#" id="btnLoadMore" class="btn btn-outline-primary-2 btn-round btn-more">
-              CARGAR MÁS
-            </a>
-        </div>
+      </div>
+
+      <div class="more-container text-center mt-1 mb-3">
+
+        <a
+          href="#"
+          class="btn btn-outline-primary-2 btn-round btn-more js-load-more"
+        >
+          CARGAR MÁS
+        </a>
+
+      </div>
 
     </div>
+
   {% endblock %}
+
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  let allProducts = [];
-  let currentIndex = 0;
-
-  const INITIAL_LOAD = 4;
-  const LOAD_MORE = 4;
-
-  const container = document.getElementById("content_product_novedades");
-  const btnLoadMore = document.getElementById("btnLoadMore");
-
-  if (!container) return;
-
-  /* ===========================
-     🔥 CARGAR DATA
-  =========================== */
-  fetch('api/product-mayorista')
-    .then(res => res.json())
-    .then(dato => {
-
-      // guardar todos los productos
-      dato.forEach(el => {
-        allProducts.push(el.items);
-      });
-
-      // 🔥 primera carga
-      renderProducts(INITIAL_LOAD);
-
-      // ocultar botón si no hay más
-      toggleButton();
-
-    })
-    .catch(err => console.error("❌ Error:", err));
-
-  /* ===========================
-     🔥 RENDER
-  =========================== */
-  function renderProducts(limit) {
-
-    let html = "";
-
-    const nextItems = allProducts.slice(currentIndex, currentIndex + limit);
-
-    nextItems.forEach(item => {
-      html += item;
-    });
-
-    container.innerHTML += html;
-
-    currentIndex += limit;
-  }
-
-  /* ===========================
-     🔥 BOTÓN CARGAR MÁS
-  =========================== */
-  btnLoadMore.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    renderProducts(LOAD_MORE);
-    toggleButton();
-  });
-
-  /* ===========================
-     🔥 MOSTRAR / OCULTAR BOTÓN
-  =========================== */
-  function toggleButton() {
-    if (currentIndex >= allProducts.length) {
-      btnLoadMore.style.display = "none";
-    } else {
-      btnLoadMore.style.display = "inline-block";
-    }
-  }
-
-});
-</script>
 <style>
+
 h2.title {
-    margin: 3%;
+  margin: 3%;
 }
+
 .header-5 {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 1040;
-    background-color: transparent;
-    margin-top: 0rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1040;
+  background-color: transparent;
+  margin-top: 0rem;
 }
+
+.new-arrivals{
+  padding: 0em 1em 0em 0em;
+}
+
 </style>

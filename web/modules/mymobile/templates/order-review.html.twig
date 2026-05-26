@@ -20,40 +20,129 @@
   </div>
 
   <div class="table-responsive">
-        <table class="table align-middle cart-table">  
-            <thead>
+      {% set total = 0 %}
+{% set has_color = false %}
+{% set has_talla = false %}
+
+{# Detectar si algún producto tiene color o talla #}
+{% for item in payload.items %}
+  {% if item.color %}
+    {% set has_color = true %}
+  {% endif %}
+
+  {% if item.talla %}
+    {% set has_talla = true %}
+  {% endif %}
+{% endfor %}
+
+<table class="table align-middle cart-table">
+
+    <thead>
+        <tr>
+            <th class="title-table">Imagen</th>
+            <th class="title-table">Sku</th>
+            <th class="title-table">Producto</th>
+
+            {% if has_color %}
+              <th class="title-table">Color</th>
+            {% endif %}
+
+            {% if has_talla %}
+              <th class="title-table">Talla</th>
+            {% endif %}
+
+            <th class="title-table">Precio</th>
+            <th class="title-table">Cantidad</th>
+            <th class="title-table">Total</th>
+        </tr>
+    </thead>
+
+    <tbody id="cart-body">
+
+        {% for item in payload.items %}
+
+            {% set subtotal = item.price * item.quantity %}
+            {% set total = total + subtotal %}
+
             <tr>
-                <th class="title-table">Imagen</th>
-                <th class="title-table">Sku</th>
-                <th class="title-table">Producto</th>
-                <th class="title-table">Precio</th>
-                <th class="title-table">Cantidad</th>
-                <th class="title-table">Total</th>
+
+                <td data-label="Imagen">
+                    <img src="{{ item.image }}" class="imgproduct">
+                </td>
+
+                <td data-label="SKU">
+                    {{ item.sku }}
+                </td>
+
+                <td data-label="Producto">
+                    {{ item.name|title }}
+                </td>
+
+                {% if has_color %}
+                <td data-label="Color">
+
+                  {% if item.color %}
+                    <div class="product-nav product-nav-dots">
+
+                      <span
+                        class="color-option"
+                        title="{{ item.color }}"
+                        style="background-color: {{ item.color }};">
+                      </span>
+
+                    </div>
+                  {% else %}
+                    -
+                  {% endif %}
+
+                </td>
+              {% endif %}
+
+                {% if has_talla %}
+                  <td data-label="Talla" style="text-transform: uppercase;">
+                    {{ item.talla ?: '-' }}
+                  </td>
+                {% endif %}
+
+                <td data-label="Precio">
+                    ${{ item.price|number_format(0, ',', '.') }}
+                </td>
+
+                <td data-label="Cantidad">
+                    {{ item.quantity }}
+                </td>
+
+                <td data-label="Total">
+                    ${{ subtotal|number_format(0, ',', '.') }}
+                </td>
+
             </tr>
-            </thead>
 
-            <tbody id="cart-body">
+        {% endfor %}
 
-                    {% set total = 0 %}
+        <tr>
+            <td colspan="
+              {% if has_color and has_talla %}
+                7
+              {% elseif has_color or has_talla %}
+                6
+              {% else %}
+                5
+              {% endif %}
+            " class="text-end">
+                <strong>Total General</strong>
+            </td>
 
-                    {% for item in payload.items %}
+            <td>
+                <strong>
+                    ${{ total|number_format(0, ',', '.') }}
+                </strong>
+            </td>
+        </tr>
 
-                        {% set subtotal = item.price * item.quantity %}
-                        {% set total = total + subtotal %}
+    </tbody>
 
-                        <tr>          
-                        <td data-label="Image"><img src="{{ item.image }}" class="imgproduct"></td>         
-                        <td data-label="Producto">{{ item.sku }}</td>
-                        <td data-label="Producto">{{ item.name|title }}</td>
-                        <td data-label="Precio">${{ item.price|number_format(0, ',', '.') }}</td>
-                        <td data-label="Cantidad">{{ item.quantity }}</td>
-                        <td data-label="Total">${{ subtotal|number_format(0, ',', '.') }}</td>
-                        </tr>
-
-                    {% endfor %}
-
-            </tbody>
-        </table>
+</table>
   </div>
   <div class="order-total">
     <strong>Total pagado:</strong>

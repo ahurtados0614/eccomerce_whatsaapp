@@ -8,17 +8,20 @@ use Drupal\Core\Database\Query\PagerSelectExtender;
 use Drupal\node\Entity\Node;
 use Drupal\file\Entity\File;
 
-class OrderService {
+class OrderService
+{
 
   protected $database;
   protected $requestStack;
 
-  public function __construct(Connection $database, RequestStack $request_stack) {
+  public function __construct(Connection $database, RequestStack $request_stack)
+  {
     $this->database = $database;
     $this->requestStack = $request_stack;
   }
 
-  public function createOrder(array $data) {
+  public function createOrder(array $data)
+  {
 
     $total = 0;
     $items_text = '';
@@ -28,8 +31,20 @@ class OrderService {
       $item_total = $item['price'] * $item['quantity'];
       $total += $item_total;
 
-      $items_text .= "- {$item['quantity']} {$item['name']} [SKU: {$item['sku']}] "
-        . "/ COP " . number_format($item['price'], 0, ',', '.') . "\n";
+      $color_text = !empty($item['color'])
+        ? " | Color: {$item['color']}"
+        : '';
+
+      $talla_text = !empty($item['talla'])
+        ? " | Talla: {$item['talla']}"
+        : '';
+
+      $items_text .= "- {$item['quantity']} {$item['name']} [SKU: {$item['sku']}]"
+        . $color_text
+        . $talla_text
+        . " / COP "
+        . number_format($item['price'], 0, ',', '.')
+        . "\n";
     }
 
     // Insertar primero para obtener ID
@@ -66,81 +81,78 @@ class OrderService {
 
 
 
-public function getOrder($id = null) {
+  public function getOrder($id = null)
+  {
 
-  $query = $this->database->select('mymobile_orders', 'o')
-    ->fields('o');
+    $query = $this->database->select('mymobile_orders', 'o')
+      ->fields('o');
 
-  if (!empty($id)) {
+    if (!empty($id)) {
 
-    $query->condition('id', $id);
-    $order = $query->execute()->fetchAssoc();
+      $query->condition('id', $id);
+      $order = $query->execute()->fetchAssoc();
 
-    if ($order) {
+      if ($order) {
 
-      $payload = json_decode($order['payload'], TRUE);
+        $payload = json_decode($order['payload'], TRUE);
 
-      if (!empty($payload['items'])) {
+        if (!empty($payload['items'])) {
 
-        foreach ($payload['items'] as &$item) {
+          foreach ($payload['items'] as &$item) {
 
-          if (!empty($item['id'])) { // 👈 CAMBIO IMPORTANTE
+            if (!empty($item['id'])) { // 👈 CAMBIO IMPORTANTE
 
-            $node = Node::load($item['id']);
+              $node = Node::load($item['id']);
 
-            if ($node && $node->hasField('field_image') && !$node->get('field_image')->isEmpty()) {
+              if ($node && $node->hasField('field_image') && !$node->get('field_image')->isEmpty()) {
 
-              $file = $node->get('field_image')->entity;
+                $file = $node->get('field_image')->entity;
 
-              if ($file) {
-                $url = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
-$item['image'] = $url;
+                if ($file) {
+                  $url = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
+                  $item['image'] = $url;
+                }
               }
-
             }
-
           }
-
         }
-
+        //\Drupal::logger('mymobile')->info('<pre>' . print_r($payload, TRUE) . '</pre>');
+        // 👇 devolver array (no json)
+        $order['payload'] = $payload;
       }
-      //\Drupal::logger('mymobile')->info('<pre>' . print_r($payload, TRUE) . '</pre>');
-      // 👇 devolver array (no json)
-      $order['payload'] = $payload;
+
+      return $order;
     }
 
-    return $order;
+    return $query->execute()->fetchAllAssoc('id');
   }
 
-  return $query->execute()->fetchAllAssoc('id');
-}
 
 
+  public function getOrdersFilter($filters = [], $limit = 50)
+  {
 
-public function getOrdersFilter($filters = [], $limit = 50) {
+    $query = $this->database->select('mymobile_orders', 'o')
+      ->fields('o')
+      ->orderBy('created', 'DESC');
 
-  $query = $this->database->select('mymobile_orders', 'o')
-    ->fields('o')
-    ->orderBy('created', 'DESC');
+    if (!empty($filters['status'])) {
+      $query->condition('status', $filters['status']);
+    }
 
-  if (!empty($filters['status'])) {
-    $query->condition('status', $filters['status']);
+    if (!empty($filters['nombre'])) {
+      $query->condition('nombre', '%' . $filters['nombre'] . '%', 'LIKE');
+    }
+
+    if (!empty($filters['celular'])) {
+      $query->condition('celular', '%' . $filters['celular'] . '%', 'LIKE');
+    }
+
+    /** @var PagerSelectExtender $pager */
+    $pager = $query->extend(PagerSelectExtender::class);
+
+    $pager->limit($limit);
+
+    return $pager->execute()->fetchAllAssoc('id');
   }
-
-  if (!empty($filters['nombre'])) {
-    $query->condition('nombre', '%' . $filters['nombre'] . '%', 'LIKE');
-  }
-
-  if (!empty($filters['celular'])) {
-    $query->condition('celular', '%' . $filters['celular'] . '%', 'LIKE');
-  }
-
-  /** @var PagerSelectExtender $pager */
-  $pager = $query->extend(PagerSelectExtender::class);
-
-  $pager->limit($limit);
-
-  return $pager->execute()->fetchAllAssoc('id');
-}
-
 }
