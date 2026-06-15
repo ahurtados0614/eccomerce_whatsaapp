@@ -231,7 +231,7 @@ th.title-table {
     padding: 1em;
 }
 .modal-header {
-    background: #cc6666 none repeat scroll 0 0;
+    background: #d4af37 none repeat scroll 0 0;
 }
 
 .btn-whatsapp:hover {
@@ -320,168 +320,7 @@ button#btn-whatsapp-order {
   font-weight: normal;
 }</style>
 
-<script>
-function capitalize(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-document.addEventListener("DOMContentLoaded", function () {
 
-  const CART_KEY = "cartProducts";
-  const cartBody = document.getElementById("cart-body");
-
-  if (!cartBody) return;
-
-  function renderCartTable() {
-
-  let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-
-  if (cart.length === 0) {
-    cartBody.innerHTML = `
-      <tr>
-        <td colspan="7" class="text-center">
-          Tu carrito está vacío
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  const ids = cart.map(item => item.id).join(',');
-
-  fetch(`/cart/products?ids=${ids}`)
-    .then(response => response.json())
-    .then(products => {
-
-      cartBody.innerHTML = "";
-      let totalGeneral = 0;
-
-      products.forEach(product => {
-
-        const cartItem = cart.find(c => c.id == product.id);
-
-        const quantity = cartItem ? cartItem.quantity : 1;
-        const image = cartItem ? cartItem.image : "";
-        const sku = cartItem ? cartItem.sku : "";
-
-        const total = product.price * quantity;
-        totalGeneral += total;
-
-        cartBody.innerHTML += `
-          <tr>
-
-            <td data-label="Imagen">
-              <img class="tableimg" src="${image}" 
-                   style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
-            </td>
-
-           <td data-label="Cod SKU">${sku || product.sku || product.id}</td>
-
-            <td data-label="Artículos">
-              ${capitalize(product.name)}
-            </td>
-            <td data-label="Color">
-             ${cartItem.color ? `
-  <div style="margin-top:5px;">
-    Color:
-    <span style="
-      display:inline-block;
-      width:14px;
-      height:14px;
-      border-radius:50%;
-      background:${cartItem.color};
-      border:1px solid #ccc;
-      vertical-align:middle;
-    "></span>
-  </div>
-` : ''}
-            </td>
-            <td data-label="Talla">
-             ${cartItem.talla ? `
-  <div>
-    Talla: ${cartItem.talla.toUpperCase()}
-  </div>
-` : ''}
-            </td>
-            <td data-label="Precio">
-              $${product.price.toLocaleString('es-CO')} COP
-            </td>
-
-            <td data-label="Cantidad" class="text-center">
-              <input type="number"
-                     min="1"
-                     value="${quantity}"
-                     data-id="${product.id}"
-                     class="form-control update-qty"
-                     style="width:80px;margin:auto;">
-            </td>
-
-            <td data-label="Eliminar" class="text-center">
-              <button data-id="${product.id}"
-                      class="btn btn-sm btn-danger remove-row">
-                ✕
-              </button>
-            </td>
-
-            <td data-label="Total" class="text-end">
-              $${total.toLocaleString('es-CO')} COP
-            </td>
-
-          </tr>
-        `;
-      });
-
-      cartBody.innerHTML += `
-        <tr style="border-bottom: 0px !important;">
-          <td colspan="6" class="text-end">
-            <strong>Total General</strong>
-          </td>
-          <td class="text-end">
-            <strong>
-              $${totalGeneral.toLocaleString('es-CO')} COP
-            </strong>
-          </td>
-        </tr>
-      `;
-
-      attachEvents();
-    });
-}
-
-  function attachEvents() {
-
-    document.querySelectorAll(".remove-row").forEach(btn => {
-      btn.addEventListener("click", function () {
-
-        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-        cart = cart.filter(item => item.id != this.dataset.id);
-
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
-        renderCartTable();
-      });
-    });
-
-    document.querySelectorAll(".update-qty").forEach(input => {
-      input.addEventListener("change", function () {
-
-        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-        const item = cart.find(c => c.id == this.dataset.id);
-
-        if (item) {
-          item.quantity = parseInt(this.value) || 1;
-        }
-
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
-        renderCartTable();
-      });
-    });
-  }
-
-  window.addEventListener("storage", renderCartTable);
-
-  renderCartTable();
-
-});
-</script>
 
 <script>
 function capitalize(text) {
@@ -527,7 +366,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           if (!product) return;
 
-          const quantity = cartItem.quantity || 1;
+          const quantity = parseInt(cartItem.quantity) || 1;
           const image = cartItem.image || "";
           const sku = cartItem.sku || "";
 
@@ -538,8 +377,8 @@ document.addEventListener("DOMContentLoaded", function () {
             <tr>
 
               <td data-label="Imagen">
-                <img class="tableimg" 
-                     src="${image}" 
+                <img class="tableimg"
+                     src="${image}"
                      style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
               </td>
 
@@ -579,17 +418,19 @@ document.addEventListener("DOMContentLoaded", function () {
               </td>
 
               <td data-label="Cantidad" class="text-center">
-                <input type="number"
-                       min="1"
-                       value="${quantity}"
-                       data-id="${cartItem.cart_id || product.id}"
-                       class="form-control update-qty"
-                       style="width:80px;margin:auto;">
+                <input
+                  type="number"
+                  min="1"
+                  value="${quantity}"
+                  data-key="${cartItem.key}"
+                  class="form-control update-qty"
+                  style="width:80px;margin:auto;">
               </td>
 
               <td data-label="Eliminar" class="text-center">
-                <button data-id="${cartItem.cart_id || product.id}"
-                        class="btn btn-sm btn-danger remove-row">
+                <button
+                  data-key="${cartItem.key}"
+                  class="btn btn-sm btn-danger remove-row">
                   ✕
                 </button>
               </td>
@@ -619,6 +460,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       })
       .catch(error => {
+
         console.error(error);
 
         cartBody.innerHTML = `
@@ -628,6 +470,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </td>
           </tr>
         `;
+
       });
   }
 
@@ -640,7 +483,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
         cart = cart.filter(item => {
-          return (item.cart_id || item.id) != this.dataset.id;
+          return item.key !== this.dataset.key;
         });
 
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
@@ -658,11 +501,11 @@ document.addEventListener("DOMContentLoaded", function () {
         let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
         const item = cart.find(c => {
-          return (c.cart_id || c.id) == this.dataset.id;
+          return c.key === this.dataset.key;
         });
 
         if (item) {
-          item.quantity = parseInt(this.value) || 1;
+          item.quantity = Math.max(1, parseInt(this.value) || 1);
         }
 
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
@@ -681,6 +524,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -804,19 +648,19 @@ th {
     margin-bottom: 20px;
 }
 
-#cc6666>tr>th,.table>tbody>tr>th,.table>tfoot>tr>th,#cc6666>tr>td,.table>tbody>tr>td,.table>tfoot>tr>td {
+#d4af37>tr>th,.table>tbody>tr>th,.table>tfoot>tr>th,#d4af37>tr>td,.table>tbody>tr>td,.table>tfoot>tr>td {
     padding: 10px 15px;
     vertical-align: top;
     border-top: 1px solid #e5e5e5;
 	background-color: #fff;
 }
 
-#cc6666>tr>th {
+#d4af37>tr>th {
     vertical-align: bottom;
     border-bottom: 2px solid #e5e5e5;
 }
 
-.table>caption+thead>tr:first-child>th,.table>colgroup+thead>tr:first-child>th,#cc6666:first-child>tr:first-child>th,.table>caption+thead>tr:first-child>td,.table>colgroup+thead>tr:first-child>td,#cc6666:first-child>tr:first-child>td {
+.table>caption+thead>tr:first-child>th,.table>colgroup+thead>tr:first-child>th,#d4af37:first-child>tr:first-child>th,.table>caption+thead>tr:first-child>td,.table>colgroup+thead>tr:first-child>td,#d4af37:first-child>tr:first-child>td {
     border-top: 0;
 }
 
@@ -863,7 +707,7 @@ table td[class*=col-],table th[class*=col-] {
     display: table-cell;
 }
 
-#cc6666>tr>td.active,.table>tbody>tr>td.active,.table>tfoot>tr>td.active,#cc6666>tr>th.active,.table>tbody>tr>th.active,.table>tfoot>tr>th.active,#cc6666>tr.active>td,.table>tbody>tr.active>td,.table>tfoot>tr.active>td,#cc6666>tr.active>th,.table>tbody>tr.active>th,.table>tfoot>tr.active>th {
+#d4af37>tr>td.active,.table>tbody>tr>td.active,.table>tfoot>tr>td.active,#d4af37>tr>th.active,.table>tbody>tr>th.active,.table>tfoot>tr>th.active,#d4af37>tr.active>td,.table>tbody>tr.active>td,.table>tfoot>tr.active>td,#d4af37>tr.active>th,.table>tbody>tr.active>th,.table>tfoot>tr.active>th {
     background-color: #f5f5f5;
 }
 
@@ -871,7 +715,7 @@ table td[class*=col-],table th[class*=col-] {
     background-color: #e8e8e8;
 }
 
-#cc6666>tr>td.success,.table>tbody>tr>td.success,.table>tfoot>tr>td.success,#cc6666>tr>th.success,.table>tbody>tr>th.success,.table>tfoot>tr>th.success,#cc6666>tr.success>td,.table>tbody>tr.success>td,.table>tfoot>tr.success>td,#cc6666>tr.success>th,.table>tbody>tr.success>th,.table>tfoot>tr.success>th {
+#d4af37>tr>td.success,.table>tbody>tr>td.success,.table>tfoot>tr>td.success,#d4af37>tr>th.success,.table>tbody>tr>th.success,.table>tfoot>tr>th.success,#d4af37>tr.success>td,.table>tbody>tr.success>td,.table>tfoot>tr.success>td,#d4af37>tr.success>th,.table>tbody>tr.success>th,.table>tfoot>tr.success>th {
     background-color: #dff0d8;
 }
 
@@ -879,7 +723,7 @@ table td[class*=col-],table th[class*=col-] {
     background-color: #d0e9c6;
 }
 
-#cc6666>tr>td.info,.table>tbody>tr>td.info,.table>tfoot>tr>td.info,#cc6666>tr>th.info,.table>tbody>tr>th.info,.table>tfoot>tr>th.info,#cc6666>tr.info>td,.table>tbody>tr.info>td,.table>tfoot>tr.info>td,#cc6666>tr.info>th,.table>tbody>tr.info>th,.table>tfoot>tr.info>th {
+#d4af37>tr>td.info,.table>tbody>tr>td.info,.table>tfoot>tr>td.info,#d4af37>tr>th.info,.table>tbody>tr>th.info,.table>tfoot>tr>th.info,#d4af37>tr.info>td,.table>tbody>tr.info>td,.table>tfoot>tr.info>td,#d4af37>tr.info>th,.table>tbody>tr.info>th,.table>tfoot>tr.info>th {
     background-color: #d9edf7;
 }
 
@@ -887,7 +731,7 @@ table td[class*=col-],table th[class*=col-] {
     background-color: #c4e3f3;
 }
 
-#cc6666>tr>td.warning,.table>tbody>tr>td.warning,.table>tfoot>tr>td.warning,#cc6666>tr>th.warning,.table>tbody>tr>th.warning,.table>tfoot>tr>th.warning,#cc6666>tr.warning>td,.table>tbody>tr.warning>td,.table>tfoot>tr.warning>td,#cc6666>tr.warning>th,.table>tbody>tr.warning>th,.table>tfoot>tr.warning>th {
+#d4af37>tr>td.warning,.table>tbody>tr>td.warning,.table>tfoot>tr>td.warning,#d4af37>tr>th.warning,.table>tbody>tr>th.warning,.table>tfoot>tr>th.warning,#d4af37>tr.warning>td,.table>tbody>tr.warning>td,.table>tfoot>tr.warning>td,#d4af37>tr.warning>th,.table>tbody>tr.warning>th,.table>tfoot>tr.warning>th {
     background-color: #fcf8e3;
 }
 
@@ -895,7 +739,7 @@ table td[class*=col-],table th[class*=col-] {
     background-color: #faf2cc;
 }
 
-#cc6666>tr>td.danger,.table>tbody>tr>td.danger,.table>tfoot>tr>td.danger,#cc6666>tr>th.danger,.table>tbody>tr>th.danger,.table>tfoot>tr>th.danger,#cc6666>tr.danger>td,.table>tbody>tr.danger>td,.table>tfoot>tr.danger>td,#cc6666>tr.danger>th,.table>tbody>tr.danger>th,.table>tfoot>tr.danger>th {
+#d4af37>tr>td.danger,.table>tbody>tr>td.danger,.table>tfoot>tr>td.danger,#d4af37>tr>th.danger,.table>tbody>tr>th.danger,.table>tfoot>tr>th.danger,#d4af37>tr.danger>td,.table>tbody>tr.danger>td,.table>tfoot>tr.danger>td,#d4af37>tr.danger>th,.table>tbody>tr.danger>th,.table>tfoot>tr.danger>th {
     background-color: #f2dede;
 }
 
@@ -917,7 +761,7 @@ table td[class*=col-],table th[class*=col-] {
 	margin-bottom: 0;
 }
 
-.table-responsive>#cc6666>tr>th,.table-responsive>.table>tbody>tr>th,.table-responsive>.table>tfoot>tr>th,.table-responsive>#cc6666>tr>td,.table-responsive>.table>tbody>tr>td,.table-responsive>.table>tfoot>tr>td {
+.table-responsive>#d4af37>tr>th,.table-responsive>.table>tbody>tr>th,.table-responsive>.table>tfoot>tr>th,.table-responsive>#d4af37>tr>td,.table-responsive>.table>tbody>tr>td,.table-responsive>.table>tfoot>tr>td {
 	white-space: nowrap;
 }
 
@@ -935,7 +779,7 @@ table td[class*=col-],table th[class*=col-] {
 }
 
 /*//////////*/
-#cc6666>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, #cc6666>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+#d4af37>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, #d4af37>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
     border-bottom: 0px;
 }
 </style>

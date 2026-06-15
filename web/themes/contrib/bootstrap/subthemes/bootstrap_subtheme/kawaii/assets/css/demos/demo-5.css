@@ -40,7 +40,7 @@
     border-color: #fff; }
     .intro-slide .btn-primary:hover, .intro-slide .btn-primary:focus {
       background-color: #fff;
-      color: #cc6666; }
+      color: #d4af37; }
 
 .intro-content .btn {
   font-weight: 400;
@@ -70,12 +70,12 @@
 .header-search-extended .btn-primary {
   background-color: transparent; }
   .header-search-extended .btn-primary:hover, .header-search-extended .btn-primary:focus {
-    color: #cc6666; }
+    color: #d4af37; }
 .header-search-extended .btn-primary:not(:disabled):not(.disabled):active, .header-search-extended .btn-primary:not(:disabled):not(.disabled).active,
 .header-search-extended .show > .btn-primary.dropdown-toggle {
   background-color: transparent;
   border: none;
-  color: #cc6666; }
+  color: #d4af37; }
 
 .owl-theme .owl-nav [class*='owl-'] {
   width: 3.2rem;
@@ -189,12 +189,12 @@
     right: -1.8rem;
     bottom: -.2rem;
     height: .1rem;
-    background-color: #cc6666;
+    background-color: #d4af37;
     opacity: 0;
     visibility: hidden;
     transition: all .3s; }
   .banner .banner-link.btn:hover, .banner .banner-link.btn:focus {
-    color: #cc6666;
+    color: #d4af37;
     background-color: transparent; }
     .banner .banner-link.btn:hover::before, .banner .banner-link.btn:focus::before {
       opacity: 1;
@@ -227,7 +227,7 @@
   padding: 2rem 3rem 1.5rem; }
   .banner-set-content h4 {
     text-transform: uppercase;
-    color: #cc6666;
+    color: #d4af37;
     font-weight: 400;
     font-size: 1.6rem;
     margin-bottom: 1.6rem;
@@ -322,7 +322,7 @@
   color: #fff;
   border: .2rem solid #fff; }
   .banner-set-image .btn.banner-link:hover, .banner-set-image .btn.banner-link:focus, .banner-set-image .btn.banner-link:active {
-    color: #cc6666;
+    color: #d4af37;
     background-color: #fff;
     border-color: #fff; }
 
@@ -339,7 +339,7 @@
     padding-top: 0;
     padding-bottom: 0; }
   .product.product-2 .product-action-transparent {
-    background-color: #cc6666; }
+    background-color: #d4af37; }
     .product.product-2 .product-action-transparent .btn-product {
       color: #fff;
       padding-top: 1.1rem;
@@ -355,7 +355,7 @@
         transition: all .1s; }
       .product.product-2 .product-action-transparent .btn-product:hover, .product.product-2 .product-action-transparent .btn-product:focus {
         color: #fff;
-        background-color: #cc6666; }
+        background-color: #d4af37; }
         .product.product-2 .product-action-transparent .btn-product:hover span, .product.product-2 .product-action-transparent .btn-product:focus span {
           color: #fff;
           margin-left: 0;
@@ -452,8 +452,8 @@
   border-color: #e1e1e1;
   color: #333; }
   .cta .input-group .btn:hover, .cta .input-group .btn:focus {
-    background-color: #cc6666;
-    border-color: #cc6666;
+    background-color: #d4af37;
+    border-color: #d4af37;
     color: #fff; }
   .cta .input-group .btn i {
     margin: 0 !important; }
@@ -599,3 +599,7 @@
       margin-top: 0; } }
 
 /*# sourceMappingURL=demo-5.css.map */
+h1.intro-title {
+    line-height: 1em;
+    /* margin-top: -0.5em; */
+}

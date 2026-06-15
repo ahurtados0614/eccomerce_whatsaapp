@@ -92,13 +92,13 @@ function loadItemsproductTendencia() {
   }
 
   if (!container) return;
-  console.log(url);
+ 
   fetch(url)
     .then(res => res.json())
     .then(dato => {
 
       let html = "";
-      console.log(dato)
+      
       dato.forEach(element => {
         html += element.items;
       });

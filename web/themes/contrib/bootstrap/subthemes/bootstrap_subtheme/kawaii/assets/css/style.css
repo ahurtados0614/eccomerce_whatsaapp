@@ -511,7 +511,7 @@ blockquote {
   margin-bottom: 2.95rem;
   flex-shrink: 0;
   min-height: 25px; 
-  width: 105px;
+  width: 200px;
   height: auto;
 }
   .logo img {
@@ -2876,8 +2876,8 @@ p {
     padding-bottom: 1rem; }
 .header-7 .btn-primary:hover, .header-7 .btn-primary:focus, .header-7 .btn-primary.focus, .header-7 .btn-primary:not(:disabled):not(.disabled):active, .header-7 .btn-primary:not(:disabled):not(.disabled).active, .header-7 .show > .btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: #cc6666;
-  border-color: #cc6666;
+  background-color: #d4af37;
+  border-color: #d4af37;
   box-shadow: none; }
 .header-7 .top-menu:not(.top-link-menu) ul {
   min-width: 180px; }
@@ -7764,7 +7764,7 @@ a:focus {
   margin-bottom: 1.3rem; }
 
 .new-price {
-  color: #ef837b;
+  color: #d4af37;
   margin-right: .8rem; }
 
 .old-price {
