@@ -167,12 +167,24 @@ document.addEventListener("click", function (e) {
         /* =========================================
            🔥 LOAD PRODUCTS
         ========================================= */
-        function loadProducts() {
+        function loadProducts(firstLoad = false) {
+          let queryString;
 
-          const queryString =
-            buildFiltersQuery();
+            if (firstLoad) {
 
-          fetch(api + '?' + queryString)
+              queryString =
+                window.location.search.replace('?', '');
+
+            } else {
+
+              queryString =
+                buildFiltersQuery();
+
+            }
+
+            //console.log('QUERY:', queryString);
+
+            fetch(api + (queryString ? '?' + queryString : ''))
 
             .then(res => res.json())
 
@@ -329,7 +341,7 @@ document.addEventListener("click", function (e) {
         /* =========================================
            🔥 INIT
         ========================================= */
-        loadProducts();
+        loadProducts(true);
 
       });
 
