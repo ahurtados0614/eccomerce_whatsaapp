@@ -210,6 +210,18 @@
                                             {% endif %}
                                         </div><!-- End .product-cat -->
                                         
+                                        {% if node.field_tags|length %}
+                                          <div class="product-cat" style="width:100%;text-transform: uppercase;">
+                                             <span style="font-weight:bold">Etiquetas:</span>
+                                             {% for tags in node.field_tags %}
+                                                {% if tags.entity %}
+                                                  <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': tags.entity.id}) }}">
+                                                    {{ tags.entity.label }}
+                                                  </a>{% if not loop.last %}, {% endif %}
+                                                {% endif %}
+                                             {% endfor %}
+                                           </div>
+                                        {% endif %}
                                         <div class="social-icons social-icons-sm">
                                             <span class="social-label">Compartir:</span>
                                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ url('<current>') }}" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>

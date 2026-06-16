@@ -2784,7 +2784,7 @@ p {
 .header-6 .header-middle a.btn:focus {
   color: #fff; }
 .header-6 .btn-primary:hover, .header-6 .btn-primary:focus, .header-6 .btn-primary.focus, .header-6 .btn-primary:not(:disabled):not(.disabled):active, .header-6 .btn-primary:not(:disabled):not(.disabled).active, .header-6 .show > .btn-primary.dropdown-toggle {
-  color: #c15454;
+  color: #d4af37;
   background-color: transparent; }
 
 @media screen and (min-width: 992px) {
