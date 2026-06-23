@@ -147,7 +147,7 @@
                                         <label for="quantity" class="quantity_class">Cantidad:&nbsp;</label>
                                         <div class="product-details-quantity">
                                             <input type="hidden" name="product_id" value="43" />
-                                            <input type="number" id="quantity" class="form-control" value="1" min="1"  step="1" data-decimals="0">
+                                            <input type="number" {% if node.status.value == 0 %}disabled{% endif %} id="quantity" class="form-control" value="1" min="1"  step="1" data-decimals="0">
                                         </div><!-- End .product-details-quantity -->
                                     </div><!-- End .details-filter-row -->
                                   {% if node.field_color is not empty %}
@@ -159,8 +159,8 @@
                                              {% for item in node.field_color %}                                            
                                                 <a href="#"
                                                 data-color="{{ item.color_pickr }}"
-                                                class="color-option"
-                                                  style="background-color: {{ item.color_pickr }};">
+                                                class="color-option {% if loop.first %}active{% endif %}"
+                                                  style="background-color: {{ item.color_pickr }}; {% if item.color_pickr== '#FFFFFF' %} border: 1px solid #bbb8b8; {% endif %}">
                                                 </a>
                                             {% endfor %}
 
@@ -179,10 +179,25 @@
                                                 </div><!-- End .select-custom -->
                                             </div>
                                   {% endif %}
+                                  {% if node.status.value == 1 %}
                                     <div class="product-details-action">
                                         <button type="button" id="button-cart" class="btn-product btn-cart"><span>AGREGAR AL CARRITO</span></button>
                                     </div><!-- End .product-details-action -->
-
+                                  {% else %}
+                                  <div class="product-details-action">
+                                        <button type="button" id="button-cart-disabled" class="btn-product btn-cart"><span>NO DISPONIBLE</span></button>
+                                    </div>
+                                    <style>
+                                        .btn-cart:before {
+                                              content: '' !important;
+                                          }
+                                        @media screen and (max-width: 900px) {
+                                            button#button-cart-disabled {
+                                                min-width: 100% !important;
+                                            }
+                                        }
+                                    </style>
+                                  {% endif %}
                                     <div class="product-details-footer">
                                          {% if node.field_marca|length %}
                                         
