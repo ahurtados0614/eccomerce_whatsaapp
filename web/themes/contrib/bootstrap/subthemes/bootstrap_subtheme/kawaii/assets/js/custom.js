@@ -165,26 +165,35 @@ document.addEventListener("click", function (e) {
         });
 
         /* =========================================
-           🔥 LOAD PRODUCTS
+          🔥 LOAD PRODUCTS
         ========================================= */
         function loadProducts(firstLoad = false) {
+
           let queryString;
 
-            if (firstLoad) {
+          if (firstLoad) {
 
-              queryString =
-                window.location.search.replace('?', '');
+            queryString =
+              window.location.search.replace('?', '');
 
-            } else {
+          } else {
 
-              queryString =
-                buildFiltersQuery();
+            queryString =
+              buildFiltersQuery();
 
-            }
+          }
 
-            //console.log('QUERY:', queryString);
+          // Loader
+          container.innerHTML = `
+            <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status" style="margin-right: 0.5em;">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <h5> Buscando los mejores productos para ti...</h5>
+          </div>
+          `;
 
-            fetch(api + (queryString ? '?' + queryString : ''))
+          fetch(api + (queryString ? '?' + queryString : ''))
 
             .then(res => res.json())
 
@@ -198,6 +207,25 @@ document.addEventListener("click", function (e) {
 
               });
 
+              currentIndex = 0;
+
+              // No existen resultados
+              if (allProducts.length === 0) {
+
+                container.innerHTML = `
+                  <div class="alert alert-secondary" style="width: 100%; margin: 0em 1em;">
+                      <strong>Upss!</strong> No encontramos productos.<br>
+                      Intenta cambiar los filtros seleccionados.
+                    </div>
+                `;
+
+                if (btnLoadMore) {
+                  btnLoadMore.style.display = 'none';
+                }
+
+                return;
+              }
+
               renderProducts(INITIAL_LOAD);
 
               toggleButton();
@@ -207,6 +235,17 @@ document.addEventListener("click", function (e) {
             .catch(err => {
 
               console.error(err);
+
+              container.innerHTML = `
+              <div class="alert alert-alert" style="width: 100%; margin: 0em 1em;">
+                      <strong>⚠ Error al cargar productos</strong> Intenta nuevamente en unos segundos.<br>
+                      Intenta cambiar los filtros seleccionados.
+                    </div>
+              `;
+
+              if (btnLoadMore) {
+                btnLoadMore.style.display = 'none';
+              }
 
             });
 
