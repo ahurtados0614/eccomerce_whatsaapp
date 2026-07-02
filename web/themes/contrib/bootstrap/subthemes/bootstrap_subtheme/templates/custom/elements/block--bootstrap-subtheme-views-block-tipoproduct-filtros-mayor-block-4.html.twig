@@ -41,7 +41,7 @@
 	<div class="sidebar sidebar-shop">
 		<div class="widget widget-collapsible">
 			<h3 class="widget-title">
-				<a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1"
+				<a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2"
 					class="collapsed">
 					 {{ title_prefix }}
 						{% if label %}
@@ -51,10 +51,10 @@
 				</a>
 			</h3><!-- End .widget-title -->
       <!---para deplegar por default descomentar la 54 y comentar la linea 55-->
-			<!--<div class="collapse show" id="widget-1" style="">-->
-      <div class="collapse " id="widget-1" style="">
+			<!--<div class="collapse show" id="widget-2" style="">-->
+      <div class="collapse " id="widget-2" style="">
 				<div class="widget-body">
-					<div class="filter-items filter-items-count" id="filter_marca">
+					<div class="filter-items filter-items-count" id="filter_type_product">
 						<!-- filter-item marcas-->
 
 					</div><!-- End .filter-items -->
@@ -63,10 +63,11 @@
 		</div><!-- End .widget -->
 	</div><!-- End .sidebar sidebar-shop -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  loadItemsFilterMarcas();
+  loadItemsFilterTipoProductos();
 
 });
 
@@ -96,9 +97,9 @@ function renderFilterItem(element, filterName) {
   `;
 }
 
-function loadItemsFilterMarcas() {
+function loadItemsFilterTipoProductos() {
 
-  fetch('/api/filter-marca-product')
+  fetch('/api/filter-type-product-belleza')
     .then(res => res.json())
     .then(dato => {
 
@@ -108,20 +109,24 @@ function loadItemsFilterMarcas() {
 
         html += renderFilterItem(
           element,
-          'field_marca_target_id'
+          'field_tipo_de_producto_target_id'
         );
 
       });
 
-      document.getElementById("filter_marca").innerHTML = html;
+      document.getElementById("filter_type_product").innerHTML = html;
 
     });
 
 }
 </script>
 <style>
-div#widget-1 {
+div#widget-2 {
     margin-top: 2em;
+}
+h3.widget-title {
+    margin-top: 1em !important;
+    margin-bottom: -0.5em !important;
 }
 .sidebar .widget:last-child {
     border-top: .1rem solid #ebebeb;

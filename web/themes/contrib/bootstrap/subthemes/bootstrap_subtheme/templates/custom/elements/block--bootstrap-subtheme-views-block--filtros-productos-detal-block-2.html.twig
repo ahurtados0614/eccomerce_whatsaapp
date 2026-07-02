@@ -99,7 +99,7 @@ function renderFilterItem(element, filterName) {
 
 function loadItemsFilterTipoProductos() {
 
-  fetch('api/filter-type-product')
+  fetch('/api/filter-type-product')
     .then(res => res.json())
     .then(dato => {
 

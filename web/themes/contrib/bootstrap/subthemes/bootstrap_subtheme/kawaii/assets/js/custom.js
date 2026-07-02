@@ -133,7 +133,7 @@ document.addEventListener("click", function (e) {
 
         const api =
           container.dataset.api;
-
+//aqui
         const wrapper =
           container.closest('.new-arrivals');
 
@@ -193,7 +193,7 @@ document.addEventListener("click", function (e) {
           </div>
           `;
 
-          fetch(api + (queryString ? '?' + queryString : ''))
+          fetch("/" + api + (queryString ? '?' + queryString : ''))
 
             .then(res => res.json())
 

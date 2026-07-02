@@ -99,7 +99,7 @@ function renderFilterItem(element, filterName) {
 
 function loadItemsFilterTipoDepartamentos() {
 
-  fetch('api/filter-department')
+  fetch('/api/filter-department')
     .then(res => res.json())
     .then(dato => {
 
