@@ -7,6 +7,8 @@ namespace Drupal\admin_toolbar_tools\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Routing\TrustedRedirectResponse;
+
 
 /**
  * Controller for AdminToolbar Tools.
@@ -172,7 +174,8 @@ class ToolbarController extends ControllerBase {
   public function flushAll() {
     $this->messenger()->addMessage($this->t('All caches cleared.'));
     drupal_flush_all_caches();
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
+    
   }
 
   /**
@@ -195,7 +198,7 @@ class ToolbarController extends ControllerBase {
       $this->assetQueryString->reset();
     }
     $this->messenger()->addMessage($this->t('CSS and JavaScript cache cleared.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
   /**
@@ -207,7 +210,7 @@ class ToolbarController extends ControllerBase {
   public function flushPlugins() {
     $this->pluginCacheClearer->clearCachedDefinitions();
     $this->messenger()->addMessage($this->t('Plugins cache cleared.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
   /**
@@ -219,7 +222,7 @@ class ToolbarController extends ControllerBase {
   public function flushStatic() {
     drupal_static_reset();
     $this->messenger()->addMessage($this->t('Static cache cleared.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
   /**
@@ -235,7 +238,7 @@ class ToolbarController extends ControllerBase {
     $this->localTaskLinkManager->clearCachedDefinitions();
     $this->localActionLinkManager->clearCachedDefinitions();
     $this->messenger()->addMessage($this->t('Routing and links cache cleared.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
   /**
@@ -247,7 +250,7 @@ class ToolbarController extends ControllerBase {
   public function flushViews() {
     views_invalidate_cache();
     $this->messenger()->addMessage($this->t('Views cache cleared.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
   /**
@@ -259,7 +262,7 @@ class ToolbarController extends ControllerBase {
   public function flushTwig() {
     $this->twig->invalidate();
     $this->messenger()->addMessage($this->t('Twig cache cleared.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
   /**
@@ -271,7 +274,7 @@ class ToolbarController extends ControllerBase {
   public function runCron() {
     $this->cron->run();
     $this->messenger()->addMessage($this->t('Cron ran successfully.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
   /**
@@ -283,7 +286,7 @@ class ToolbarController extends ControllerBase {
   public function cacheRender() {
     $this->cacheRender->deleteAll();
     $this->messenger()->addMessage($this->t('Render cache cleared.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
   /**
@@ -295,7 +298,7 @@ class ToolbarController extends ControllerBase {
   public function themeRebuild() {
     $this->themeRegistry->reset();
     $this->messenger()->addMessage($this->t('Theme registry rebuilt.'));
-    return new RedirectResponse($this->reloadPage());
+    return new TrustedRedirectResponse($this->reloadPage());
   }
 
 }

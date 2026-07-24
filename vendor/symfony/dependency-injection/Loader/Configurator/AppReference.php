@@ -130,7 +130,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  * }
  * @psalm-type ServicesConfig = array{
  *     _defaults?: DefaultsType,
- *     _instanceof?: InstanceofType,
+ *     _instanceof?: array<class-string, InstanceofType>,
  *     ...<string, DefinitionType|AliasType|PrototypeType|StackType|ArgumentsType|null>
  * }
  * @psalm-type ExtensionType = array<string, mixed>
@@ -167,7 +167,7 @@ class AppReference
 
         foreach ($config as $key => $value) {
             if (str_starts_with($key, 'when@') && \is_array($value['services'] ?? null)) {
-                $config[$key]['services'] = array_replace_recursive($defaults, $config[$key]['services']);
+                $config[$key]['services'] = array_replace_recursive($defaults, $value['services']);
             }
         }
 
