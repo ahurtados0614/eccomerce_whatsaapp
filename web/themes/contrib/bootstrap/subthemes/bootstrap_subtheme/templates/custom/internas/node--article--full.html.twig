@@ -239,26 +239,9 @@
                                         {% endif %}
                                         <div class="social-icons social-icons-sm">
                                             <span class="social-label">Compartir:</span>
-                                           <a href="#"
-                                                   id="share-facebook"
-                                                   class="social-icon"
-                                                   title="Facebook">
-                                                    <i class="icon-facebook-f"></i>
-                                                </a>
-                                                
-                                                <a href="#"
-                                                   id="share-twitter"
-                                                   class="social-icon"
-                                                   title="X">
-                                                    <i class="icon-twitter"></i>
-                                                </a>
-                                                
-                                                <a href="#"
-                                                   id="share-instagram"
-                                                   class="social-icon"
-                                                   title="Instagram">
-                                                    <i class="icon-instagram"></i>
-                                                </a>
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ url('<current>') }}" class="social-icon" title="Facebook" ><i class="icon-facebook-f"></i></a>
+                                            <a  href="https://twitter.com/intent/tweet?url={{ url('<current>') }}&text={{ label|url_encode }}"  class="social-icon" title="Twitter" ><i class="icon-twitter"></i></a>
+                                            <a href="https://www.instagram.com/"  class="social-icon" title="Instagram" ><i class="icon-instagram"></i></a>
                                              </div>
                                     </div><!-- End .product-details-footer -->
                                 </div><!-- End .product-details -->
@@ -366,77 +349,6 @@ span.price-tax {
 </style>
 
 <script>
-    
-document.addEventListener("DOMContentLoaded", function () {
-
-    function share(platform) {
-
-        const url = window.location.href;
-        const title = document.title;
-
-        // iPhone, Android y navegadores modernos
-        if (navigator.share) {
-
-            navigator.share({
-                title: title,
-                text: title,
-                url: url
-            }).catch(() => {});
-
-            return;
-        }
-
-        // Respaldo para escritorio
-        switch(platform){
-
-            case 'facebook':
-                window.open(
-                    'https://www.facebook.com/sharer/sharer.php?u=' +
-                    encodeURIComponent(url),
-                    '_blank',
-                    'width=600,height=500'
-                );
-            break;
-
-            case 'twitter':
-                window.open(
-                    'https://twitter.com/intent/tweet?url=' +
-                    encodeURIComponent(url) +
-                    '&text=' +
-                    encodeURIComponent(title),
-                    '_blank',
-                    'width=600,height=500'
-                );
-            break;
-
-            case 'instagram':
-                window.open(
-                    'https://www.instagram.com/',
-                    '_blank'
-                );
-            break;
-
-        }
-
-    }
-
-    document.getElementById("share-facebook")?.addEventListener("click", function(e){
-        e.preventDefault();
-        share('facebook');
-    });
-
-    document.getElementById("share-twitter")?.addEventListener("click", function(e){
-        e.preventDefault();
-        share('twitter');
-    });
-
-    document.getElementById("share-instagram")?.addEventListener("click", function(e){
-        e.preventDefault();
-        share('instagram');
-    });
-
-});
-
 document.addEventListener("DOMContentLoaded", function () {
 
   const mainImage = document.getElementById("product-zoom");
