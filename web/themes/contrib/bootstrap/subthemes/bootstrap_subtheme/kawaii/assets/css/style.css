@@ -14945,7 +14945,9 @@ button:focus {
 
 /* '' */
 .icon-twitter:before {
-  content: '\f099'; }
+      content: "𝕏";
+    font-family: "Arial", sans-serif !important;
+ }
 
 /* '' */
 .icon-facebook:before {
