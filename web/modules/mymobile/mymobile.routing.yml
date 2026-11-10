@@ -51,3 +51,11 @@ mymobile.order.update_status:
   methods: [POST]
   requirements:
     _role: 'administrator+content_editor'
+mymobile.google_review_optin:
+  path: '/google-review-optin/{id}'
+  defaults:
+    _controller: '\Drupal\mymobile\Controller\PaymentController::googleReviewOptIn'
+    _title: 'Confirmación del pedido'
+  requirements:
+    _permission: 'access content'
+    id: '\d+'

@@ -1,0 +1,1044 @@
+{#
+/**
+ * @file
+ * Página de confirmación de pedido y Google Customer Reviews.
+ *
+ * Variables disponibles:
+ * - order
+ * - estimated_delivery_date
+ * - delivery_country
+ * - google_products
+ */
+#}
+
+<style>
+
+    .mymobile-review-card{
+        margin-top: 9%;
+    }
+    @media (max-width: 600px) {
+        .mymobile-review-card{
+                 margin-top: 20%;
+        }   
+    }
+  /* ==========================================================
+     CONTENEDOR PRINCIPAL
+     ========================================================== */
+
+  .mymobile-review-page {
+    min-height: 100vh;
+    background: #f5f7fa;
+    padding: 45px 20px;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif;
+
+    color: #212529;
+  }
+
+
+  .mymobile-review-container {
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+
+  /* ==========================================================
+     TARJETA
+     ========================================================== */
+
+  .mymobile-review-card {
+    background: #ffffff;
+    border-radius: 20px;
+
+    box-shadow:
+      0 10px 35px rgba(0, 0, 0, 0.08);
+
+    overflow: hidden;
+  }
+
+
+  /* ==========================================================
+     HEADER
+     ========================================================== */
+
+  .mymobile-review-header {
+    text-align: center;
+
+    padding:
+      45px 30px 35px;
+
+    background: #ffffff;
+  }
+
+
+  /* ==========================================================
+     CHECK
+     ========================================================== */
+
+  .mymobile-review-check {
+    width: 72px;
+    height: 72px;
+
+    margin:
+      0 auto 20px;
+
+    border-radius: 50%;
+
+    background: #00a65a;
+
+    color: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 38px;
+    font-weight: 700;
+
+    box-shadow:
+      0 8px 22px rgba(0, 166, 90, 0.25);
+  }
+
+
+  /* ==========================================================
+     TITULO
+     ========================================================== */
+
+  .mymobile-review-header h1 {
+    margin:
+      0 0 12px;
+
+    font-size: 32px;
+
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    color: #212529;
+  }
+
+
+  .mymobile-review-header p {
+    margin: 0;
+
+    color: #6c757d;
+
+    font-size: 17px;
+  }
+
+
+  /* ==========================================================
+     INFORMACION DEL PEDIDO
+     ========================================================== */
+
+  .mymobile-review-order {
+    margin:
+      0 30px;
+
+    padding:
+      22px 25px;
+
+    border:
+      1px solid #e9ecef;
+
+    border-radius:
+      14px;
+
+    background:
+      #f8f9fa;
+  }
+
+
+  .mymobile-review-order-label {
+    font-size: 13px;
+
+    text-transform:
+      uppercase;
+
+    letter-spacing:
+      0.6px;
+
+    color:
+      #6c757d;
+
+    margin-bottom:
+      5px;
+  }
+
+
+  .mymobile-review-order-number {
+    font-size: 24px;
+
+    font-weight: 700;
+
+    color:
+      #212529;
+  }
+
+
+  .mymobile-review-status {
+    margin-top:
+      10px;
+
+    display:
+      inline-flex;
+
+    align-items:
+      center;
+
+    gap:
+      7px;
+
+    color:
+      #198754;
+
+    font-size:
+      14px;
+
+    font-weight:
+      600;
+  }
+
+
+  .mymobile-review-status-dot {
+    width:
+      9px;
+
+    height:
+      9px;
+
+    border-radius:
+      50%;
+
+    background:
+      #198754;
+  }
+
+
+  /* ==========================================================
+     CUERPO
+     ========================================================== */
+
+  .mymobile-review-body {
+    padding:
+      35px 30px 40px;
+  }
+
+
+  /* ==========================================================
+     INTRODUCCION
+     ========================================================== */
+
+  .mymobile-review-welcome {
+    text-align:
+      center;
+
+    margin-bottom:
+      30px;
+  }
+
+
+  .mymobile-review-welcome h2 {
+    margin:
+      0 0 10px;
+
+    font-size:
+      23px;
+
+    font-weight:
+      700;
+
+    color:
+      #212529;
+  }
+
+
+  .mymobile-review-welcome p {
+    margin:
+      0 auto;
+
+    max-width:
+      620px;
+
+    color:
+      #6c757d;
+
+    font-size:
+      16px;
+
+    line-height:
+      1.6;
+  }
+
+
+  /* ==========================================================
+     CAJA GOOGLE
+     ========================================================== */
+
+  .mymobile-google-box {
+
+    border:
+      1px solid #e1e5e9;
+
+    border-radius:
+      16px;
+
+    padding:
+      30px;
+
+    background:
+      #ffffff;
+
+    text-align:
+      center;
+
+    position:
+      relative;
+  }
+
+
+  /* ==========================================================
+     ICONO GOOGLE
+     ========================================================== */
+
+  .mymobile-google-icon {
+
+    width:
+      54px;
+
+    height:
+      54px;
+
+    margin:
+      0 auto 15px;
+
+    border-radius:
+      50%;
+
+    background:
+      #f8f9fa;
+
+    border:
+      1px solid #eeeeee;
+
+    display:
+      flex;
+
+    align-items:
+      center;
+
+    justify-content:
+      center;
+
+    font-size:
+      25px;
+
+    font-weight:
+      700;
+
+    color:
+      #4285f4;
+  }
+
+
+  /* ==========================================================
+     TITULO GOOGLE
+     ========================================================== */
+
+  .mymobile-google-box h3 {
+
+    margin:
+      0 0 10px;
+
+    font-size:
+      20px;
+
+    font-weight:
+      700;
+
+    color:
+      #212529;
+  }
+
+
+  .mymobile-google-box > p {
+
+    max-width:
+      560px;
+
+    margin:
+      0 auto 20px;
+
+    color:
+      #6c757d;
+
+    font-size:
+      15px;
+
+    line-height:
+      1.6;
+  }
+
+
+  /* ==========================================================
+     CONTENEDOR DEL WIDGET GOOGLE
+     ========================================================== */
+
+  #google-review-message {
+
+    min-height:
+      10px;
+
+    margin:
+      5px auto 0;
+
+    position:
+      relative;
+  }
+
+
+  /* ==========================================================
+     NOTA
+     ========================================================== */
+
+  .mymobile-google-note {
+
+    margin-top:
+      20px;
+
+    padding-top:
+      15px;
+
+    border-top:
+      1px solid #f0f0f0;
+
+    font-size:
+      13px;
+
+    color:
+      #868e96;
+
+    line-height:
+      1.5;
+  }
+
+
+  .mymobile-google-note strong {
+
+    color:
+      #495057;
+  }
+
+
+  /* ==========================================================
+     AYUDA
+     ========================================================== */
+
+  .mymobile-review-help {
+
+    margin-top:
+      30px;
+
+    padding:
+      22px;
+
+    border-radius:
+      14px;
+
+    background:
+      #f8f9fa;
+
+    text-align:
+      center;
+  }
+
+
+  .mymobile-review-help h3 {
+
+    margin:
+      0 0 7px;
+
+    font-size:
+      17px;
+
+    font-weight:
+      700;
+
+    color:
+      #212529;
+  }
+
+
+  .mymobile-review-help p {
+
+    margin:
+      0;
+
+    color:
+      #6c757d;
+
+    font-size:
+      14px;
+
+    line-height:
+      1.5;
+  }
+
+
+  /* ==========================================================
+     ACCIONES
+     ========================================================== */
+
+  .mymobile-review-actions {
+
+    margin-top:
+      30px;
+
+    text-align:
+      center;
+  }
+
+
+  .mymobile-review-button {
+
+    display:
+      inline-block;
+
+    padding:
+      13px 28px;
+
+    border-radius:
+      10px;
+
+    background:
+      #212529;
+
+    color:
+      #ffffff !important;
+
+    text-decoration:
+      none !important;
+
+    font-size:
+      15px;
+
+    font-weight:
+      600;
+
+    transition:
+      all 0.2s ease;
+  }
+
+
+  .mymobile-review-button:hover {
+
+    background:
+      #000000;
+
+    transform:
+      translateY(-1px);
+  }
+
+
+  /* ==========================================================
+     FOOTER
+     ========================================================== */
+
+  .mymobile-review-footer {
+
+    text-align:
+      center;
+
+    padding:
+      22px 20px 10px;
+
+    color:
+      #adb5bd;
+
+    font-size:
+      12px;
+  }
+
+
+  /* ==========================================================
+     RESPONSIVE
+     ========================================================== */
+
+  @media (max-width: 600px) {
+
+    .mymobile-review-page {
+
+      padding:
+        20px 12px;
+    }
+
+
+    .mymobile-review-header {
+
+      padding:
+        35px 20px 25px;
+    }
+
+
+    .mymobile-review-header h1 {
+
+      font-size:
+        26px;
+    }
+
+
+    .mymobile-review-header p {
+
+      font-size:
+        15px;
+    }
+
+
+    .mymobile-review-check {
+
+      width:
+        62px;
+
+      height:
+        62px;
+
+      font-size:
+        32px;
+    }
+
+
+    .mymobile-review-order {
+
+      margin:
+        0 15px;
+
+      padding:
+        18px;
+    }
+
+
+    .mymobile-review-order-number {
+
+      font-size:
+        21px;
+    }
+
+
+    .mymobile-review-body {
+
+      padding:
+        28px 18px 30px;
+    }
+
+
+    .mymobile-review-welcome h2 {
+
+      font-size:
+        21px;
+    }
+
+
+    .mymobile-google-box {
+
+      padding:
+        24px 18px;
+    }
+
+  }
+
+</style>
+
+
+<div class="mymobile-review-page">
+
+  <div class="mymobile-review-container">
+
+    <div class="mymobile-review-card">
+
+
+      {# ======================================================
+         HEADER
+         ====================================================== #}
+
+      <div class="mymobile-review-header">
+
+        <div class="mymobile-review-check">
+          ✓
+        </div>
+
+        <h1>
+          ¡Gracias por tu compra!
+        </h1>
+
+        <p>
+          Tu pedido ha sido registrado correctamente.
+        </p>
+
+      </div>
+
+
+      {# ======================================================
+         INFORMACIÓN DEL PEDIDO
+         ====================================================== #}
+
+      <div class="mymobile-review-order">
+
+        <div class="mymobile-review-order-label">
+          Número de pedido
+        </div>
+
+        <div class="mymobile-review-order-number">
+
+          {{ order.order_number }}
+
+        </div>
+
+        <div class="mymobile-review-status">
+
+          <span class="mymobile-review-status-dot"></span>
+
+          Pedido recibido correctamente
+
+        </div>
+
+      </div>
+
+
+      {# ======================================================
+         CUERPO
+         ====================================================== #}
+
+      <div class="mymobile-review-body">
+
+
+        {# ====================================================
+           INTRODUCCIÓN
+           ==================================================== #}
+
+        <div class="mymobile-review-welcome">
+
+          <h2>
+            Tu opinión es importante para nosotros
+          </h2>
+
+          <p>
+
+            Gracias por confiar en nosotros.
+
+            Si lo deseas, puedes participar en las
+
+            <strong>
+              Reseñas de Clientes en Google
+            </strong>
+
+            y compartir tu experiencia.
+
+          </p>
+
+        </div>
+
+
+        {# ====================================================
+           GOOGLE CUSTOMER REVIEWS
+           ==================================================== #}
+
+        <div class="mymobile-google-box">
+
+
+          <div class="mymobile-google-icon">
+
+            G
+
+          </div>
+
+
+          <h3>
+
+            Reseñas de Clientes en Google
+
+          </h3>
+
+
+          <p>
+
+            Google puede enviarte una breve encuesta
+            por correo electrónico después de que se
+            complete tu transacción.
+
+          </p>
+
+
+          {#
+            Google Customer Reviews insertará aquí
+            su mecanismo oficial de consentimiento.
+
+            IMPORTANTE:
+            No agregamos un botón propio de "Aceptar"
+            o "No participar".
+
+            Google controla directamente la decisión
+            del usuario mediante su ventana oficial.
+          #}
+
+          <div
+            id="google-review-message"
+            aria-live="polite">
+          </div>
+
+
+          <div class="mymobile-google-note">
+
+            <strong>
+              La participación es opcional.
+            </strong>
+
+            Puedes decidir directamente en la ventana
+            de Google si deseas recibir la encuesta.
+
+          </div>
+
+
+        </div>
+
+
+        {# ====================================================
+           AYUDA
+           ==================================================== #}
+
+        <div class="mymobile-review-help">
+
+          <h3>
+
+            ¿Necesitas ayuda con tu pedido?
+
+          </h3>
+
+
+          <p>
+
+            Si tienes alguna pregunta sobre tu compra,
+            puedes comunicarte con nuestro equipo
+            de atención al cliente.
+
+          </p>
+
+        </div>
+
+
+        {# ====================================================
+           BOTÓN VOLVER
+           ==================================================== #}
+
+        <div class="mymobile-review-actions">
+
+          <a
+            href="/"
+            class="mymobile-review-button">
+
+            Volver a la tienda
+
+          </a>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+    {# ======================================================
+       FOOTER
+       ====================================================== #}
+
+    <div class="mymobile-review-footer">
+
+      Gracias por comprar con nosotros.
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+{# ============================================================
+   GOOGLE CUSTOMER REVIEWS
+   ============================================================ #}
+
+<script>
+
+(function () {
+
+
+  console.log(
+    'Google Reviews: Twig cargado'
+  );
+
+
+  /*
+   * Esta función será llamada por
+   * Google platform.js mediante:
+   *
+   * ?onload=renderOptIn
+   */
+
+  window.renderOptIn = function () {
+
+
+    console.log(
+      'Google Reviews: iniciando'
+    );
+
+
+    /*
+     * Verificar que Google API esté disponible.
+     */
+
+    if (
+      typeof window.gapi === 'undefined'
+    ) {
+
+      console.error(
+        'Google Reviews: gapi no disponible'
+      );
+
+      return;
+    }
+
+
+    /*
+     * Cargar módulo surveyoptin.
+     */
+
+    window.gapi.load(
+      'surveyoptin',
+      function () {
+
+
+        console.log(
+          'Google Reviews: surveyoptin cargado'
+        );
+
+
+        /*
+         * Verificar que Google haya
+         * cargado correctamente el componente.
+         */
+
+        if (
+
+          !window.gapi.surveyoptin ||
+
+          typeof
+          window.gapi.surveyoptin.render !==
+          'function'
+
+        ) {
+
+          console.error(
+            'Google Reviews: surveyoptin.render no disponible'
+          );
+
+          return;
+        }
+
+
+        console.log(
+          'Google Reviews: renderizando opt-in'
+        );
+
+
+        /*
+         * Renderizar Google Customer Reviews.
+         */
+
+        window.gapi.surveyoptin.render({
+
+          /*
+           * Merchant ID de Google.
+           */
+
+          "merchant_id":
+            5839034380,
+
+
+          /*
+           * Número único del pedido.
+           */
+
+          "order_id":
+            "{{ order.order_number|e('js') }}",
+
+
+          /*
+           * Correo electrónico del cliente.
+           */
+
+          "email":
+            "{{ order.email|e('js') }}",
+
+
+          /*
+           * País de entrega.
+           */
+
+          "delivery_country":
+            "{{ delivery_country|e('js') }}",
+
+
+          /*
+           * Fecha estimada de entrega.
+           */
+
+          "estimated_delivery_date":
+            "{{ estimated_delivery_date|e('js') }}",
+
+
+          /*
+           * Mostrar el consentimiento
+           * mediante diálogo centrado.
+           */
+
+          "opt_in_style":
+            "CENTER_DIALOG"
+
+
+          {% if google_products|length > 0 %}
+
+          ,
+
+          /*
+           * Productos asociados al pedido.
+           */
+
+          "products":
+            {{ google_products|json_encode|raw }}
+
+          {% endif %}
+
+        });
+
+
+        console.log(
+          'Google Reviews: opt-in renderizado'
+        );
+
+      }
+
+    );
+
+  };
+
+
+})();
+
+</script>

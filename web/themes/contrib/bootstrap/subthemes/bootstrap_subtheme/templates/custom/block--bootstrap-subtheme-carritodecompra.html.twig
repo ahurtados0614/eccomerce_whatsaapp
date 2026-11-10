@@ -9,26 +9,16 @@
  * - configuration: A list of the block's configuration values.
  *   - label: The configured label for the block.
  *   - label_display: The display settings for the label.
- *   - provider: The module or other provider that provided this block plugin.
- *   - Block plugin specific settings will also be stored here.
- * - content: The content of this block.
- * - attributes: array of HTML attributes populated by modules, intended to
- *   be added to the main container tag of this template.
- *   - id: A valid HTML ID and guaranteed unique.
- * - title_attributes: Same as attributes, except applied to the main title
- *   tag that appears in the template.
- * - content_attributes: Same as attributes, except applied to the main content
- *   tag that appears in the template.
- * - title_prefix: Additional output populated by modules, intended to be
- *   displayed in front of the main title tag that appears in the template.
- * - title_suffix: Additional output populated by modules, intended to be
- *   displayed after the main title tag that appears in the template.
+ *   - provider: The block plugin provider.
+ *   - content: The content of this block.
+ *   - attributes: array of HTML attributes.
  *
  * @see template_preprocess_block()
  *
  * @ingroup themeable
  */
 #}
+
 {%
   set classes = [
     'block',
@@ -36,20 +26,28 @@
     'block-' ~ plugin_id|clean_class,
   ]
 %}
+
 <div{{ attributes.addClass(classes) }}>
+
   {{ title_prefix }}
   {{ title_suffix }}
+
   {% block content %}
-  
+
     <div{{ content_attributes.addClass('content') }}>
-    {% if label %}
-    <h1 class="product-title">{{ label }}</h1>
-  {% endif %}
+
+      <h1 class="product-title">{{ label }}</h1>
+
+      {% if label %}
+      {% endif %}
+
       <div class="table-responsive">
-        <table class="table align-middle cart-table">    
+
+        <table class="table align-middle cart-table">
+
           <thead>
             <tr>
-            <th class="title-table">Imagen</th>
+              <th class="title-table">Imagen</th>
               <th class="title-table">Cod SKU</th>
               <th class="title-table">Artículos</th>
               <th class="title-table">Precio</th>
@@ -60,83 +58,262 @@
           </thead>
 
           <tbody id="cart-body">
-            <!-- Ejemplo de fila -->
+
             <tr>
-              <td data-label="Cod SKU">SKU123</td>
-              <td data-label="Artículos">Laptop HP</td>
-              <td data-label="Precio">$2.000.000</td>
-              <td data-label="Cantidad" class="text-center">1</td>
-              <td data-label="Eliminar" class="text-center">
-                <button class="btn btn-sm btn-danger">✕</button>
+
+              <td data-label="Cod SKU">
+                SKU123
               </td>
-              <td data-label="Total" class="text-end">$2.000.000</td>
+
+              <td data-label="Artículos">
+                Laptop HP
+              </td>
+
+              <td data-label="Precio">
+                $2.000.000
+              </td>
+
+              <td data-label="Cantidad" class="text-center">
+                1
+              </td>
+
+              <td data-label="Eliminar" class="text-center">
+
+                <button class="btn btn-sm btn-danger">
+                  ✕
+                </button>
+
+              </td>
+
+              <td data-label="Total" class="text-end">
+                $2.000.000
+              </td>
+
             </tr>
+
           </tbody>
 
         </table>
+
         <div class="text-right mt-3">
-          <button class="btn btn-success btn-whatsapp" data-bs-toggle="modal" data-bs-target="#myModalWhatsapp">
-            <i class="fab fa-whatsapp" style="font-size:24px"></i> Comprar por WhatsApp
+
+          <button
+            class="btn btn-success btn-whatsapp"
+            data-bs-toggle="modal"
+            data-bs-target="#myModalWhatsapp">
+
+            <i class="fab fa-whatsapp" style="font-size:24px"></i>
+
+            Comprar por WhatsApp
+
           </button>
+
         </div>
+
       </div>
+
     </div>
-    <!-- The Modal -->
-<div class="modal" id="myModalWhatsapp">
-  <div class="modal-dialog">
-    <div class="modal-content">
 
-      <!-- Modal Header -->
-     <div class="modal-header d-flex align-items-center">
-  <h4 class="modal-title mb-0" style="color: #fff !important">Formulario de compra</h4>
-  <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" style="    background: transparent;
-    color: #ffffff;
-    border: 0px;
-    font-weight: bold;">X</button>
-</div>
 
-      <!-- Modal body -->
-      <div class="modal-body">
-        <div class="mb-3">
-            <label>Ingresa tu nombres y apellidos<span class="required_input">*</span></label>
-            <input type="text" name="name" class="form-control" placeholder="Alvaro Hurtado Sanmartin" required="">
-        </div>
-        <div class="mb-3" style="margin-top: 1em;">
-            <label>Ingresa tu WhatsApp<span class="required_input">*</span></label>
-            <div style="display:flex">
-            <input type="text" style="display:inline-block; width: 13%;" name="prefix" id="prefix" class="form-control" placeholder="57" value="57" required="">
-            <input type="tel" style="display:inline-block;width: 85%;margin-left: 2%;" name="phone" class="form-control" placeholder="3005096309"  required="">
+    <!-- MODAL -->
+
+    <div class="modal" id="myModalWhatsapp">
+
+      <div class="modal-dialog">
+
+        <div class="modal-content">
+
+
+          <!-- MODAL HEADER -->
+
+          <div class="modal-header d-flex align-items-center">
+
+            <h4
+              class="modal-title mb-0"
+              style="color: #fff !important">
+
+              Formulario de compra
+
+            </h4>
+
+            <button
+              type="button"
+              class="btn-close ms-auto"
+              data-bs-dismiss="modal"
+              style="
+                background: transparent;
+                color: #ffffff;
+                border: 0px;
+                font-weight: bold;
+              ">
+
+              X
+
+            </button>
+
+          </div>
+
+
+          <!-- MODAL BODY -->
+
+          <div class="modal-body">
+
+
+            <!-- NOMBRE -->
+
+            <div class="mb-3">
+
+              <label>
+                Ingresa tus nombres y apellidos
+                <span class="required_input">*</span>
+              </label>
+
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                placeholder="Alvaro Hurtado Sanmartin"
+                required>
 
             </div>
-        </div>
-        <div class="mb-3 custom-checkbox">
- <div class="custom-check-wrapper">
-  
-  <input type="checkbox" id="terms" name="terms" required>
-  
-  <label for="terms">
-    <span class="checkmark"></span>
-    He leído y acepto los <a href="/terms">términos y condiciones</a>, y las <a href="/data-processing">políticas de tratamiento de la información de Kawaii</a>.
-  </label>
-</div>
-</div>
-      </div>
 
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" id="btn-whatsapp-order" class="btn btn-success">Ordenar por WhatsApp</button>
+
+            <!-- WHATSAPP -->
+
+            <div
+              class="mb-3"
+              style="margin-top: 1em;">
+
+              <label>
+
+                Ingresa tu WhatsApp
+                <span class="required_input">*</span>
+
+              </label>
+
+              <div style="display:flex">
+
+                <input
+                  type="text"
+                  style="
+                    display:inline-block;
+                    width:13%;
+                  "
+                  name="prefix"
+                  id="prefix"
+                  class="form-control"
+                  placeholder="57"
+                  value="57"
+                  required>
+
+                <input
+                  type="tel"
+                  style="
+                    display:inline-block;
+                    width:85%;
+                    margin-left:2%;
+                  "
+                  name="phone"
+                  class="form-control"
+                  placeholder="3005096309"
+                  required>
+
+              </div>
+
+            </div>
+
+
+            <!-- CORREO -->
+
+            <div
+              class="mb-3"
+              style="margin-top: 1em;">
+
+              <label>
+
+                Ingresa tu correo electrónico
+                <span class="required_input">*</span>
+
+              </label>
+
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="correo@ejemplo.com"
+                required>
+
+            </div>
+
+
+            <!-- TERMINOS -->
+
+            <div class="mb-3 custom-checkbox">
+
+              <div class="custom-check-wrapper">
+
+                <input
+                  type="checkbox"
+                  id="terms"
+                  name="terms"
+                  required>
+
+                <label for="terms">
+
+                  <span class="checkmark"></span>
+
+                  He leído y acepto los
+
+                  <a href="/terms">
+                    términos y condiciones
+                  </a>
+
+                  , y las
+
+                  <a href="/data-processing">
+                    políticas de tratamiento de la información de Kawaii
+                  </a>.
+
+                </label>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- MODAL FOOTER -->
+
+          <div class="modal-footer">
+
+            <button
+              type="button"
+              id="btn-whatsapp-order"
+              class="btn btn-success">
+
+              Ordenar por WhatsApp
+
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
 
     </div>
-  </div>
-</div>
-  {% endblock %}
-</div>
-<style>
-.custom-check-wrapper label {
-   color: #a19a9a;
-}
 
+  {% endblock %}
+
+</div>
+
+
+<style>
+
+.custom-check-wrapper label {
+  color: #a19a9a;
+}
 
 .modal-header {
   display: flex !important;
@@ -151,18 +328,20 @@
 .modal-header .btn-close {
   margin-left: auto;
 }
+
 th.title-table {
-    color: #000;
+  color: #000;
 }
 
 .product-title {
-    font-weight: 400;
-    font-size: 2.4rem;
-    letter-spacing: -.025em;
-    margin-bottom: 1.2rem;
-    margin-top: -.5rem;
-    padding-right: 1rem;
+  font-weight: 400;
+  font-size: 2.4rem;
+  letter-spacing: -.025em;
+  margin-bottom: 1.2rem;
+  margin-top: -.5rem;
+  padding-right: 1rem;
 }
+
 
 /* =========================
    TABLA CARRITO RESPONSIVE
@@ -215,6 +394,7 @@ th.title-table {
   }
 
 }
+
 .modal-backdrop.show {
   opacity: 0.5 !important;
 }
@@ -223,20 +403,23 @@ th.title-table {
   background-color: rgba(0,0,0,0.5) !important;
 }
 
-.modal-title{
-      font-weight: 600 !important;
-      color: #fff !important*/
+.modal-title {
+  font-weight: 600 !important;
+  color: #fff !important;
 }
+
 .modal-body {
-    padding: 1em;
+  padding: 1em;
 }
+
 .modal-header {
-    background: #d4af37 none repeat scroll 0 0;
+  background: #d4af37 none repeat scroll 0 0;
 }
 
 .btn-whatsapp:hover {
-    background-color: #000000;
+  background-color: #000000;
 }
+
 .btn-whatsapp {
   background-color: #25D366;
   border: none;
@@ -247,34 +430,44 @@ th.title-table {
 }
 
 @media (max-width: 768px) {
+
   body:not(.path-frontpage) .content {
     padding: 5em 2em 2em 2em;
-}
+  }
+
   .btn-whatsapp {
     width: 100%;
   }
 
-  
 }
+
 .custom-check-wrapper {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   font-size: 14px;
   color: #555;
-      margin-top: 1em;
+  margin-top: 1em;
 }
+
 .header-5 {
-    top: -10px;
-   }
+  top: -10px;
+}
+
+
 /* Ocultamos el checkbox real */
+
 .custom-check-wrapper input {
   display: none;
 }
+
 button#btn-whatsapp-order {
-    border-radius: 10px;
+  border-radius: 10px;
 }
+
+
 /* Caja personalizada */
+
 .custom-check-wrapper .checkmark {
   width: 18px;
   height: 18px;
@@ -285,15 +478,18 @@ button#btn-whatsapp-order {
   flex-shrink: 0;
   margin-top: 3px;
   margin-right: 1%;
-  margin-top: 1%;
 }
 
+
 /* Cuando está marcado */
+
 .custom-check-wrapper input:checked + label .checkmark {
   background-color: #7aa93c;
 }
 
+
 /* El ✔ blanco */
+
 .custom-check-wrapper input:checked + label .checkmark::after {
   content: "";
   position: absolute;
@@ -306,480 +502,1009 @@ button#btn-whatsapp-order {
   transform: rotate(45deg);
 }
 
+
 /* Label */
+
 .custom-check-wrapper label {
   display: inline;
   cursor: pointer;
   line-height: 1.4;
 }
 
+
 /* Links */
+
 .custom-check-wrapper a {
   color: #212529;
   text-decoration: none;
   font-weight: normal;
-}</style>
+}
 
+</style>
 
 
 <script>
+
 function capitalize(text) {
+
   return text.charAt(0).toUpperCase() + text.slice(1);
+
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
+
   const CART_KEY = "cartProducts";
+
   const cartBody = document.getElementById("cart-body");
+
 
   if (!cartBody) return;
 
+
   function renderCartTable() {
 
-    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+    let cart =
+      JSON.parse(
+        localStorage.getItem(CART_KEY)
+      ) || [];
+
 
     if (cart.length === 0) {
+
       cartBody.innerHTML = `
+
         <tr>
-          <td colspan="7" class="text-center">
+
+          <td
+            colspan="7"
+            class="text-center">
+
             Tu carrito está vacío
+
           </td>
+
         </tr>
+
       `;
+
       return;
+
     }
 
-    const ids = [...new Set(cart.map(item => item.id))].join(',');
+
+    const ids =
+      [...new Set(
+        cart.map(item => item.id)
+      )].join(',');
+
 
     fetch(`/cart/products?ids=${ids}`)
+
       .then(response => response.json())
+
       .then(products => {
 
+
         cartBody.innerHTML = "";
+
         let totalGeneral = 0;
+
 
         cart.forEach(cartItem => {
 
-          const product = products.find(
-            p => p.id == cartItem.id
-          );
+
+          const product =
+            products.find(
+              p => p.id == cartItem.id
+            );
+
 
           if (!product) return;
 
-          const quantity = parseInt(cartItem.quantity) || 1;
-          const image = cartItem.image || "";
-          const sku = cartItem.sku || "";
 
-          const total = product.price * quantity;
+          const quantity =
+            parseInt(cartItem.quantity) || 1;
+
+
+          const image =
+            cartItem.image || "";
+
+
+          const sku =
+            cartItem.sku || "";
+
+
+          const total =
+            product.price * quantity;
+
+
           totalGeneral += total;
 
+
           cartBody.innerHTML += `
+
             <tr>
 
+
               <td data-label="Imagen">
-                <img class="tableimg"
-                     src="${image}"
-                     style="width:60px;height:60px;object-fit:cover;border-radius:6px;">
+
+                <img
+                  class="tableimg"
+                  src="${image}"
+                  style="
+                    width:60px;
+                    height:60px;
+                    object-fit:cover;
+                    border-radius:6px;
+                  ">
+
               </td>
 
+
               <td data-label="Cod SKU">
+
                 ${sku || product.sku || product.id}
+
               </td>
+
 
               <td data-label="Artículos">
 
+
                 ${capitalize(product.name)}
 
+
                 ${cartItem.color ? `
+
                   <div style="margin-top:5px;">
+
                     Color:
-                    <span style="
-                      display:inline-block;
-                      width:14px;
-                      height:14px;
-                      border-radius:50%;
-                      background:${cartItem.color};
-                      border:1px solid #ccc;
-                      vertical-align:middle;
-                    "></span>
+
+                    <span
+                      style="
+                        display:inline-block;
+                        width:14px;
+                        height:14px;
+                        border-radius:50%;
+                        background:${cartItem.color};
+                        border:1px solid #ccc;
+                        vertical-align:middle;
+                      ">
+
+                    </span>
+
                   </div>
+
                 ` : ''}
+
 
                 ${cartItem.talla ? `
+
                   <div>
-                    Talla: ${cartItem.talla.toUpperCase()}
+
+                    Talla:
+                    ${cartItem.talla.toUpperCase()}
+
                   </div>
+
                 ` : ''}
 
+
               </td>
+
 
               <td data-label="Precio">
+
                 $${product.price.toLocaleString('es-CO')} COP
+
               </td>
 
-              <td data-label="Cantidad" class="text-center">
+
+              <td
+                data-label="Cantidad"
+                class="text-center">
+
                 <input
                   type="number"
                   min="1"
                   value="${quantity}"
                   data-key="${cartItem.key}"
                   class="form-control update-qty"
-                  style="width:80px;margin:auto;">
+                  style="
+                    width:80px;
+                    margin:auto;
+                  ">
+
               </td>
 
-              <td data-label="Eliminar" class="text-center">
+
+              <td
+                data-label="Eliminar"
+                class="text-center">
+
                 <button
                   data-key="${cartItem.key}"
                   class="btn btn-sm btn-danger remove-row">
+
                   ✕
+
                 </button>
+
               </td>
 
-              <td data-label="Total" class="text-end">
+
+              <td
+                data-label="Total"
+                class="text-end">
+
                 $${total.toLocaleString('es-CO')} COP
+
               </td>
+
 
             </tr>
+
           `;
+
         });
 
+
         cartBody.innerHTML += `
+
           <tr style="border-bottom:0px !important;">
-            <td colspan="6" class="text-end">
-              <strong>Total General</strong>
-            </td>
-            <td class="text-end">
+
+            <td
+              colspan="6"
+              class="text-end">
+
               <strong>
-                $${totalGeneral.toLocaleString('es-CO')} COP
+                Total General
               </strong>
+
             </td>
+
+            <td class="text-end">
+
+              <strong>
+
+                $${totalGeneral.toLocaleString('es-CO')} COP
+
+              </strong>
+
+            </td>
+
           </tr>
+
         `;
+
 
         attachEvents();
 
+
       })
+
       .catch(error => {
+
 
         console.error(error);
 
+
         cartBody.innerHTML = `
+
           <tr>
-            <td colspan="7" class="text-center">
+
+            <td
+              colspan="7"
+              class="text-center">
+
               Error cargando productos
+
             </td>
+
           </tr>
+
         `;
 
       });
+
   }
+
 
   function attachEvents() {
 
-    document.querySelectorAll(".remove-row").forEach(btn => {
 
-      btn.addEventListener("click", function () {
+    document
+      .querySelectorAll(".remove-row")
+      .forEach(btn => {
 
-        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
-        cart = cart.filter(item => {
-          return item.key !== this.dataset.key;
-        });
+        btn.addEventListener(
+          "click",
+          function () {
 
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
-        renderCartTable();
+            let cart =
+              JSON.parse(
+                localStorage.getItem(CART_KEY)
+              ) || [];
+
+
+            cart =
+              cart.filter(item => {
+
+                return item.key !==
+                  this.dataset.key;
+
+              });
+
+
+            localStorage.setItem(
+              CART_KEY,
+              JSON.stringify(cart)
+            );
+
+
+            renderCartTable();
+
+          }
+        );
 
       });
 
-    });
 
-    document.querySelectorAll(".update-qty").forEach(input => {
+    document
+      .querySelectorAll(".update-qty")
+      .forEach(input => {
 
-      input.addEventListener("change", function () {
 
-        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+        input.addEventListener(
+          "change",
+          function () {
 
-        const item = cart.find(c => {
-          return c.key === this.dataset.key;
-        });
 
-        if (item) {
-          item.quantity = Math.max(1, parseInt(this.value) || 1);
-        }
+            let cart =
+              JSON.parse(
+                localStorage.getItem(CART_KEY)
+              ) || [];
 
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
-        renderCartTable();
+            const item =
+              cart.find(c => {
+
+                return c.key ===
+                  this.dataset.key;
+
+              });
+
+
+            if (item) {
+
+              item.quantity =
+                Math.max(
+                  1,
+                  parseInt(this.value) || 1
+                );
+
+            }
+
+
+            localStorage.setItem(
+              CART_KEY,
+              JSON.stringify(cart)
+            );
+
+
+            renderCartTable();
+
+          }
+        );
 
       });
-
-    });
 
   }
 
-  window.addEventListener("storage", renderCartTable);
+
+  window.addEventListener(
+    "storage",
+    renderCartTable
+  );
+
 
   renderCartTable();
 
 });
+
 </script>
 
+
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
-  const btnOrder = document.getElementById("btn-whatsapp-order");
+
+  const btnOrder =
+    document.getElementById(
+      "btn-whatsapp-order"
+    );
+
 
   if (!btnOrder) return;
 
-  const CART_KEY = "cartProducts";
-  const API_KEY = "gwRd2UyD0K8BUZh2CoLt";
 
-  btnOrder.addEventListener("click", async function () {
+  const CART_KEY =
+    "cartProducts";
 
-    const nombre = document.querySelector('input[name="name"]').value.trim();
-    const prefix = document.querySelector('input[name="prefix"]').value.trim();
-    const phone = document.querySelector('input[name="phone"]').value.trim();
-    const terms = document.getElementById("terms").checked;
 
-    if (!nombre || !phone) {
-      alert("Debes ingresar tu nombre y teléfono");
-      return;
-    }
+  const API_KEY =
+    "gwRd2UyD0K8BUZh2CoLt";
 
-    if (!terms) {
-      alert("Debes aceptar los términos y condiciones");
-      return;
-    }
 
-    let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  btnOrder.addEventListener(
+    "click",
+    async function () {
 
-    if (cart.length === 0) {
-      alert("Tu carrito está vacío");
-      return;
-    }
 
-    try {
+      /* =========================
+         DATOS DEL FORMULARIO
+      ========================= */
 
-      const ids = [...new Set(cart.map(item => item.id))].join(',');
+      const nombre =
+        document
+          .querySelector(
+            'input[name="name"]'
+          )
+          .value
+          .trim();
 
-      const productsRes = await fetch(`/cart/products?ids=${ids}`);
-      const products = await productsRes.json();
 
-      let items = [];
+      const prefix =
+        document
+          .querySelector(
+            'input[name="prefix"]'
+          )
+          .value
+          .trim();
 
-      cart.forEach(cartItem => {
 
-        const product = products.find(
-          p => p.id == cartItem.id
+      const phone =
+        document
+          .querySelector(
+            'input[name="phone"]'
+          )
+          .value
+          .trim();
+
+
+      const email =
+        document
+          .querySelector(
+            'input[name="email"]'
+          )
+          .value
+          .trim();
+
+
+      const terms =
+        document.getElementById(
+          "terms"
+        ).checked;
+
+
+      /* =========================
+         VALIDACIONES
+      ========================= */
+
+      if (!nombre || !phone) {
+
+        alert(
+          "Debes ingresar tu nombre y teléfono"
         );
 
-        if (!product) return;
-
-        items.push({
-          id: product.id,
-          sku: cartItem.sku || product.sku || product.id,
-          name: product.name,
-          price: product.price,
-          quantity: cartItem.quantity || 1,
-          color: cartItem.color || null,
-          talla: cartItem.talla || null,
-        });
-
-      });
-
-      const payload = {
-        nombre: nombre,
-        celular: prefix + phone,
-        items: items
-      };
-
-      const response = await fetch("/api/payment/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-KEY": API_KEY
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-
-      if (data.status !== "success") {
-        alert("Error generando el pedido");
         return;
+
       }
 
-      localStorage.removeItem(CART_KEY);
 
-      window.location.href = data.whatsapp_url;
+      if (!email) {
 
-    } catch (error) {
+        alert(
+          "Debes ingresar tu correo electrónico"
+        );
 
-      console.error(error);
-      alert("Error procesando el pedido");
+        return;
+
+      }
+
+
+      if (!terms) {
+
+        alert(
+          "Debes aceptar los términos y condiciones"
+        );
+
+        return;
+
+      }
+
+
+      let cart =
+        JSON.parse(
+          localStorage.getItem(CART_KEY)
+        ) || [];
+
+
+      if (cart.length === 0) {
+
+        alert(
+          "Tu carrito está vacío"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+
+        /* =========================
+           OBTENER PRODUCTOS
+        ========================= */
+
+        const ids =
+          [...new Set(
+            cart.map(
+              item => item.id
+            )
+          )].join(',');
+
+
+        const productsRes =
+          await fetch(
+            `/cart/products?ids=${ids}`
+          );
+
+
+        const products =
+          await productsRes.json();
+
+
+        let items = [];
+
+
+        /* =========================
+           ARMAR ITEMS
+        ========================= */
+
+        cart.forEach(
+          cartItem => {
+
+
+            const product =
+              products.find(
+                p =>
+                  p.id == cartItem.id
+              );
+
+
+            if (!product) return;
+
+
+            items.push({
+
+              id:
+                product.id,
+
+              sku:
+                cartItem.sku ||
+                product.sku ||
+                product.id,
+
+              name:
+                product.name,
+
+              price:
+                product.price,
+
+              quantity:
+                cartItem.quantity || 1,
+
+              color:
+                cartItem.color || null,
+
+              talla:
+                cartItem.talla || null,
+
+            });
+
+          }
+        );
+
+
+        /* =========================
+           PAYLOAD
+        ========================= */
+
+        const payload = {
+
+          nombre:
+            nombre,
+
+          celular:
+            prefix + phone,
+
+          email:
+            email,
+
+          items:
+            items
+
+        };
+
+
+        console.log(
+          "Payload enviado:",
+          payload
+        );
+
+
+        /* =========================
+           REGISTRAR PEDIDO
+        ========================= */
+
+        const response =
+          await fetch(
+            "/api/payment/register",
+            {
+
+              method: "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json",
+
+                "X-API-KEY":
+                  API_KEY
+
+              },
+
+              body:
+                JSON.stringify(
+                  payload
+                )
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        console.log(
+          "Respuesta API:",
+          data
+        );
+
+
+        /* =========================
+           VALIDAR RESPUESTA
+        ========================= */
+
+        if (
+          data.status !==
+          "success"
+        ) {
+
+          console.error(
+            "Error API:",
+            data
+          );
+
+
+          alert(
+            data.message ||
+            "Error generando el pedido"
+          );
+
+
+          return;
+
+        }
+
+
+        /* =========================
+           LIMPIAR CARRITO
+        ========================= */
+
+        localStorage.removeItem(
+          CART_KEY
+        );
+
+
+        /* =========================
+           WHATSAPP
+        ========================= */
+
+        window.location.href =
+          data.whatsapp_url;
+
+
+      }
+      catch (error) {
+
+
+        console.error(
+          "Error procesando pedido:",
+          error
+        );
+
+
+        alert(
+          "Error procesando el pedido"
+        );
+
+      }
 
     }
-
-  });
+  );
 
 });
+
 </script>
+
+
 <style>
+
 @media (max-width: 768px) {
+
   img.tableimg {
     margin-top: 2em;
+  }
+
 }
-}
-.remove-row{
+
+.remove-row {
   min-width: auto !important;
 }
+
 table {
-    max-width: 100%;
-    background-color: transparent;
+  max-width: 100%;
+  background-color: transparent;
 }
 
 th {
-    text-align: left;
+  text-align: left;
 }
 
 .table {
-    width: 100%;
-    margin-bottom: 20px;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-#d4af37>tr>th,.table>tbody>tr>th,.table>tfoot>tr>th,#d4af37>tr>td,.table>tbody>tr>td,.table>tfoot>tr>td {
-    padding: 10px 15px;
-    vertical-align: top;
-    border-top: 1px solid #e5e5e5;
-	background-color: #fff;
+#d4af37>tr>th,
+.table>tbody>tr>th,
+.table>tfoot>tr>th,
+#d4af37>tr>td,
+.table>tbody>tr>td,
+.table>tfoot>tr>td {
+
+  padding: 10px 15px;
+  vertical-align: top;
+  border-top: 1px solid #e5e5e5;
+  background-color: #fff;
+
 }
 
 #d4af37>tr>th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #e5e5e5;
+
+  vertical-align: bottom;
+  border-bottom: 2px solid #e5e5e5;
+
 }
 
-.table>caption+thead>tr:first-child>th,.table>colgroup+thead>tr:first-child>th,#d4af37:first-child>tr:first-child>th,.table>caption+thead>tr:first-child>td,.table>colgroup+thead>tr:first-child>td,#d4af37:first-child>tr:first-child>td {
-    border-top: 0;
+.table>caption+thead>tr:first-child>th,
+.table>colgroup+thead>tr:first-child>th,
+#d4af37:first-child>tr:first-child>th,
+.table>caption+thead>tr:first-child>td,
+.table>colgroup+thead>tr:first-child>td {
+
+  border-top: 0;
+
 }
 
 .table>tbody+tbody {
-    border-top: 2px solid #e5e5e5;
+
+  border-top: 2px solid #e5e5e5;
+
 }
 
 .table .table {
-    background-color: #fff;
+
+  background-color: #fff;
+
 }
 
-.table-condensed>thead>tr>th,.table-condensed>tbody>tr>th,.table-condensed>tfoot>tr>th,.table-condensed>thead>tr>td,.table-condensed>tbody>tr>td,.table-condensed>tfoot>tr>td {
-    padding: 5px;
+.table-condensed>thead>tr>th,
+.table-condensed>tbody>tr>th,
+.table-condensed>tfoot>tr>th,
+.table-condensed>thead>tr>td,
+.table-condensed>tbody>tr>td,
+.table-condensed>tfoot>tr>td {
+
+  padding: 5px;
+
 }
 
 .table-bordered {
-    border: 1px solid #e5e5e5;
+
+  border: 1px solid #e5e5e5;
+
 }
 
-.table-bordered>thead>tr>th,.table-bordered>tbody>tr>th,.table-bordered>tfoot>tr>th,.table-bordered>thead>tr>td,.table-bordered>tbody>tr>td,.table-bordered>tfoot>tr>td {
-    border: 1px solid #e5e5e5;
-}
-.table-bordered>thead>tr>td{border-bottom:none;}
-.table-bordered>thead>tr>th,.table-bordered>thead>tr>td {
-    border-bottom-width: 2px;
+.table-bordered>thead>tr>th,
+.table-bordered>tbody>tr>th,
+.table-bordered>tfoot>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>tbody>tr>td,
+.table-bordered>tfoot>tr>td {
+
+  border: 1px solid #e5e5e5;
+
 }
 
-.table-striped>tbody>tr:nth-child(odd)>td,.table-striped>tbody>tr:nth-child(odd)>th {
-    background-color: #fff;
+.table-bordered>thead>tr>td {
+
+  border-bottom: none;
+
 }
 
-.table-hover>tbody>tr:hover>td,.table-hover>tbody>tr:hover>th {  
+.table-bordered>thead>tr>th,
+.table-bordered>thead>tr>td {
+
+  border-bottom-width: 2px;
+
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+
+  background-color: #fff;
+
+}
+
+.table-hover>tbody>tr:hover>td,
+.table-hover>tbody>tr:hover>th {
+
 }
 
 table col[class*=col-] {
-    position: static;
-    float: none;
-    display: table-column;
+
+  position: static;
+  float: none;
+  display: table-column;
+
 }
 
-table td[class*=col-],table th[class*=col-] {
-    position: static;
-    float: none;
-    display: table-cell;
+table td[class*=col-],
+table th[class*=col-] {
+
+  position: static;
+  float: none;
+  display: table-cell;
+
 }
 
-#d4af37>tr>td.active,.table>tbody>tr>td.active,.table>tfoot>tr>td.active,#d4af37>tr>th.active,.table>tbody>tr>th.active,.table>tfoot>tr>th.active,#d4af37>tr.active>td,.table>tbody>tr.active>td,.table>tfoot>tr.active>td,#d4af37>tr.active>th,.table>tbody>tr.active>th,.table>tfoot>tr.active>th {
-    background-color: #f5f5f5;
+#d4af37>tr>td.active,
+.table>tbody>tr>td.active,
+.table>tfoot>tr>td.active,
+#d4af37>tr>th.active,
+.table>tbody>tr>th.active,
+.table>tfoot>tr>th.active {
+
+  background-color: #f5f5f5;
+
 }
 
-.table-hover>tbody>tr>td.active:hover,.table-hover>tbody>tr>th.active:hover,.table-hover>tbody>tr.active:hover>td,.table-hover>tbody>tr.active:hover>th {
-    background-color: #e8e8e8;
+.table-hover>tbody>tr>td.active:hover,
+.table-hover>tbody>tr>th.active:hover,
+.table-hover>tbody>tr.active>td:hover,
+.table-hover>tbody>tr.active>th:hover {
+
+  background-color: #e8e8e8;
+
 }
 
-#d4af37>tr>td.success,.table>tbody>tr>td.success,.table>tfoot>tr>td.success,#d4af37>tr>th.success,.table>tbody>tr>th.success,.table>tfoot>tr>th.success,#d4af37>tr.success>td,.table>tbody>tr.success>td,.table>tfoot>tr.success>td,#d4af37>tr.success>th,.table>tbody>tr.success>th,.table>tfoot>tr.success>th {
-    background-color: #dff0d8;
+#d4af37>tr>td.success,
+.table>tbody>tr>td.success,
+.table>tfoot>tr>td.success,
+#d4af37>tr>th.success,
+.table>tbody>tr>th.success,
+.table>tfoot>tr>th.success {
+
+  background-color: #dff0d8;
+
 }
 
-.table-hover>tbody>tr>td.success:hover,.table-hover>tbody>tr>th.success:hover,.table-hover>tbody>tr.success:hover>td,.table-hover>tbody>tr.success:hover>th {
-    background-color: #d0e9c6;
+#d4af37>tr>td.info,
+.table>tbody>tr>td.info,
+.table>tfoot>tr>td.info,
+#d4af37>tr>th.info,
+.table>tbody>tr>th.info,
+.table>tfoot>tr>th.info {
+
+  background-color: #d9edf7;
+
 }
 
-#d4af37>tr>td.info,.table>tbody>tr>td.info,.table>tfoot>tr>td.info,#d4af37>tr>th.info,.table>tbody>tr>th.info,.table>tfoot>tr>th.info,#d4af37>tr.info>td,.table>tbody>tr.info>td,.table>tfoot>tr.info>td,#d4af37>tr.info>th,.table>tbody>tr.info>th,.table>tfoot>tr.info>th {
-    background-color: #d9edf7;
+#d4af37>tr>td.warning,
+.table>tbody>tr>td.warning,
+.table>tfoot>tr>td.warning,
+#d4af37>tr>th.warning,
+.table>tbody>tr>th.warning,
+.table>tfoot>tr>th.warning {
+
+  background-color: #fcf8e3;
+
 }
 
-.table-hover>tbody>tr>td.info:hover,.table-hover>tbody>tr>th.info:hover,.table-hover>tbody>tr.info:hover>td,.table-hover>tbody>tr.info:hover>th {
-    background-color: #c4e3f3;
-}
+#d4af37>tr>td.danger,
+.table>tbody>tr>td.danger,
+.table>tfoot>tr>td.danger,
+#d4af37>tr>th.danger,
+.table>tbody>tr>th.danger,
+.table>tfoot>tr>th.danger {
 
-#d4af37>tr>td.warning,.table>tbody>tr>td.warning,.table>tfoot>tr>td.warning,#d4af37>tr>th.warning,.table>tbody>tr>th.warning,.table>tfoot>tr>th.warning,#d4af37>tr.warning>td,.table>tbody>tr.warning>td,.table>tfoot>tr.warning>td,#d4af37>tr.warning>th,.table>tbody>tr.warning>th,.table>tfoot>tr.warning>th {
-    background-color: #fcf8e3;
-}
+  background-color: #f2dede;
 
-.table-hover>tbody>tr>td.warning:hover,.table-hover>tbody>tr>th.warning:hover,.table-hover>tbody>tr.warning:hover>td,.table-hover>tbody>tr.warning:hover>th {
-    background-color: #faf2cc;
-}
-
-#d4af37>tr>td.danger,.table>tbody>tr>td.danger,.table>tfoot>tr>td.danger,#d4af37>tr>th.danger,.table>tbody>tr>th.danger,.table>tfoot>tr>th.danger,#d4af37>tr.danger>td,.table>tbody>tr.danger>td,.table>tfoot>tr.danger>td,#d4af37>tr.danger>th,.table>tbody>tr.danger>th,.table>tfoot>tr.danger>th {
-    background-color: #f2dede;
-}
-
-.table-hover>tbody>tr>td.danger:hover,.table-hover>tbody>tr>th.danger:hover,.table-hover>tbody>tr.danger:hover>td,.table-hover>tbody>tr.danger:hover>th {
-    background-color: #ebcccc;
 }
 
 @media (max-width:767px) {
-.table-responsive {
-	float: left;
-	margin-bottom: 15px;
-	overflow: auto;
-	width: 100%;
-	-ms-overflow-style: -ms-autohiding-scrollbar;       
-	-webkit-overflow-scrolling: touch;
+
+  .table-responsive {
+
+    float: left;
+    margin-bottom: 15px;
+    overflow: auto;
+    width: 100%;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -webkit-overflow-scrolling: touch;
+
+  }
+
+  .table-responsive>.table {
+
+    margin-bottom: 0;
+
+  }
+
+  .table-responsive>.table>tbody>tr>td,
+  .table-responsive>.table>tfoot>tr>td {
+
+    white-space: nowrap;
+
+  }
+
 }
 
-.table-responsive>.table {
-	margin-bottom: 0;
+
+/* =========================
+   BORDE INFERIOR
+========================= */
+
+#d4af37>tr>th,
+.table>tbody>tr>th,
+.table>tfoot>tr>th,
+#d4af37>tr>td,
+.table>tbody>tr>td,
+.table>tfoot>tr>td {
+
+  border-bottom: 0px;
+
 }
 
-.table-responsive>#d4af37>tr>th,.table-responsive>.table>tbody>tr>th,.table-responsive>.table>tfoot>tr>th,.table-responsive>#d4af37>tr>td,.table-responsive>.table>tbody>tr>td,.table-responsive>.table>tfoot>tr>td {
-	white-space: nowrap;
-}
-
-.table-responsive>.table-bordered>thead>tr>th:first-child,.table-responsive>.table-bordered>tbody>tr>th:first-child,.table-responsive>.table-bordered>tfoot>tr>th:first-child,.table-responsive>.table-bordered>thead>tr>td:first-child,.table-responsive>.table-bordered>tbody>tr>td:first-child,.table-responsive>.table-bordered>tfoot>tr>td:first-child {
-	border-left: 0;
-}
-
-.table-responsive>.table-bordered>thead>tr>th:last-child,.table-responsive>.table-bordered>tbody>tr>th:last-child,.table-responsive>.table-bordered>tfoot>tr>th:last-child,.table-responsive>.table-bordered>thead>tr>td:last-child,.table-responsive>.table-bordered>tbody>tr>td:last-child,.table-responsive>.table-bordered>tfoot>tr>td:last-child {
-	border-right: 0;
-}
-
-.table-responsive>.table-bordered>tbody>tr:last-child>th,.table-responsive>.table-bordered>tfoot>tr:last-child>th,.table-responsive>.table-bordered>tbody>tr:last-child>td,.table-responsive>.table-bordered>tfoot>tr:last-child>td {
-	border-bottom: 0;
-}
-}
-
-/*//////////*/
-#d4af37>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, #d4af37>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
-    border-bottom: 0px;
-}
 </style>

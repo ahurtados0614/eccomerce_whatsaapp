@@ -50,7 +50,7 @@
                                     <div class="row">
                                         <div class="col-sm-6 col-md-4">
                                             <span class="widget-about-title">¿Tienes alguna pregunta? Llámanos las 24 horas del día, los 7 días de la semana.</span>
-                                            <a href="tel:123456789">+57 {{ site_telephone }}</a>
+                                            <a href="tel:+57{{ site_telephone|replace({' ': ''}) }}">+57 {{ site_telephone }}</a>
                                         </div><!-- End .col-sm-6 -->
                                         <div class="col-sm-6 col-md-8">
                                             <span class="widget-about-title">Metodo de pago</span>

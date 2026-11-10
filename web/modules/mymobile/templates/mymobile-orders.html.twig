@@ -52,14 +52,40 @@ Estado actualizado correctamente
 </td>
 
 <td>
-<a target="_blanc" href="/order-review/{{ order.id }}">Ver</a>
+<a class="badge bg-primary" target="_blanc" href="/order-review/{{ order.id }}">Ver</a>
 </td>
 
 </tr>
 {% endfor %}
 </tbody>
 </table>
-{{ pager }}
+{% if limit > 0 %}
+    {% set pages = (total / limit)|round(0, 'ceil') %}
+{% else %}
+    {% set pages = 0 %}
+{% endif %}
+
+{% if pages > 1 %}
+<ul class="pagination">
+
+    {% for i in 0..pages-1 %}
+
+       <li> <a
+            href="?page={{ i }}
+            {% if filters.nombre %}&nombre={{ filters.nombre|url_encode }}{% endif %}
+            {% if filters.celular %}&celular={{ filters.celular|url_encode }}{% endif %}
+            {% if filters.status %}&status={{ filters.status|url_encode }}{% endif %}"
+
+            class="{{ page == i ? 'active' }}">
+
+            {{ i + 1 }}
+
+        </a></li>
+
+    {% endfor %}
+
+</ul>
+{% endif %}
 </table>
 <script>
 document.querySelectorAll('.order-status').forEach(select => {
@@ -97,6 +123,39 @@ document.querySelectorAll('.order-status').forEach(select => {
 });
 </script>
 <style>
+.pagination li a.active {
+  background-color: blue;
+  color: white;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none; /* remove list bullets */
+  padding: 0px;
+}
+
+.pagination li a {
+  display: block; /* let links fill the list item */
+  padding: 8px 12px;
+  text-decoration: none;
+  border: 1px solid gray;
+  color: black;  
+  margin: 0 4px;
+  border-radius: 5px; /* add rounded borders */
+}
+a.badge.bg-primary {
+    text-decoration: none;
+    background: blue;
+    padding: .35em 1.65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 3.25rem;
+}
 .form-control {
     height: 40px;
     padding: 6px 12px;

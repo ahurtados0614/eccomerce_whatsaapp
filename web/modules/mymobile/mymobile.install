@@ -76,3 +76,44 @@ function mymobile_update_9002() {
   }
 
 }
+/**
+ * Agrega el campo email a la tabla mymobile_orders.
+ */
+ 
+function mymobile_update_9003() {
+$database = \Drupal::database();
+  $schema = $database->schema();
+
+  if (!$schema->fieldExists('mymobile_orders', 'email')) {
+    $schema->addField('mymobile_orders', 'email', [
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => FALSE,
+      'default' => NULL,
+    ]);
+  }
+}
+
+/**
+ * Agrega la fecha estimada de entrega a los pedidos.
+ */
+function mymobile_update_9004() {
+
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->fieldExists('mymobile_orders', 'estimated_delivery_date')) {
+
+    $schema->addField(
+      'mymobile_orders',
+      'estimated_delivery_date',
+      [
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => FALSE,
+        'description' => 'Fecha estimada de entrega en formato YYYY-MM-DD.',
+      ]
+    );
+
+  }
+
+}

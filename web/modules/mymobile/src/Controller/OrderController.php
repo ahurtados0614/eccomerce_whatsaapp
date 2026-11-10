@@ -26,7 +26,7 @@ class OrderController extends ControllerBase
     );
   }
 
-
+/*
   public function orders(Request $request)
   {
 
@@ -47,7 +47,39 @@ class OrderController extends ControllerBase
 ],
     ];
   }
+*/
+public function orders(Request $request)
+{
+    $filters = [
+        'status' => $request->query->get('status'),
+        'nombre' => $request->query->get('nombre'),
+        'celular' => $request->query->get('celular'),
+    ];
 
+    // Página actual (empieza en 0)
+    $page = max(0, (int) $request->query->get('page', 0));
+
+    // Registros por página
+    $limit =20;
+
+    // Total de registros según los filtros
+    $total = $this->orderService->countOrdersFilter($filters);
+
+    // Registros de la página actual
+    $orders = $this->orderService->getOrdersFilter($filters, $page, $limit);
+
+    return [
+        '#theme' => 'mymobile_orders',
+        '#orders' => $orders,
+        '#filters' => $filters,
+        '#page' => $page,
+        '#limit' => $limit,
+        '#total' => $total,
+        '#cache' => [
+            'max-age' => 0,
+        ],
+    ];
+}
   public function updateStatus(Request $request)
   {
 

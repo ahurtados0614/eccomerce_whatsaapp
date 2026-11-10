@@ -8,6 +8,9 @@ use Drupal\Core\Form\FormStateInterface;
 function mymobile_theme($existing, $type, $theme, $path) {
   return [
 
+    /**
+     * Template para revisión del pedido.
+     */
     'order_review' => [
       'variables' => [
         'order' => NULL,
@@ -16,115 +19,149 @@ function mymobile_theme($existing, $type, $theme, $path) {
       'template' => 'order-review',
     ],
 
+    /**
+     * Template para listado de pedidos.
+     */
     'mymobile_orders' => [
       'variables' => [
         'orders' => [],
         'filters' => [],
         'pager' => NULL,
+        'page' => 0,
+        'limit' => 20,
+        'total' => 0,
       ],
       'template' => 'mymobile-orders',
+    ],
+
+    /**
+     * Template para Google Customer Reviews.
+     */
+    'mymobile_google_review_optin' => [
+      'variables' => [
+        'order' => NULL,
+        'estimated_delivery_date' => NULL,
+        'delivery_country' => NULL,
+        'google_products' => [],
+      ],
+      'template' => 'mymobile-google-review-optin',
     ],
 
   ];
 }
 
+/**
+ * Alterar formulario de información del sitio.
+ */
 function mymobile_form_system_site_information_settings_alter(&$form, FormStateInterface $form_state) {
-    // Registrar un mensaje para verificar que se ejecuta este hook.
-      /**
-      * \Drupal::logger('mymobile')->notice('Alterando el formulario de Site Information.');
-      */
-      // Cargar la configuración personalizada.
-      $config = \Drupal::config('mymobile.settings');
-        $form['site_information']['site_whatsapp'] = [
-        '#type' => 'textfield',
-        '#title' => t('WhatsApp'),
-        '#default_value' => $config->get('site_whatsapp'),
-        '#description' => t('Ingrese el número de contacto WhatsApp del comercio.'),
-      ];
 
-      $config = \Drupal::config('mymobile.settings');
-        $form['site_information']['site_telephone'] = [
-        '#type' => 'textfield',
-        '#title' => t('Teléfono'),
-        '#default_value' => $config->get('site_telephone'),
-        '#description' => t('Ingrese el número de teléfono de contacto con el comercio.'),
-      ];
+  $config = \Drupal::config('mymobile.settings');
 
-      $config = \Drupal::config('mymobile.settings');
-        $form['site_information']['site_direction'] = [
-        '#type' => 'textfield',
-        '#title' => t('Dirección'),
-        '#default_value' => $config->get('site_direction'),
-        '#description' => t('Ingrese la dirección del comercio.'),
-      ];
+  $form['site_information']['site_whatsapp'] = [
+    '#type' => 'textfield',
+    '#title' => t('WhatsApp'),
+    '#default_value' => $config->get('site_whatsapp'),
+    '#description' => t('Ingrese el número de contacto WhatsApp del comercio.'),
+  ];
 
-      $config = \Drupal::config('mymobile.settings');
-        $form['site_information']['api_key'] = [
-        '#type' => 'textfield',
-        '#title' => t('Llave secreta'),
-        '#default_value' => $config->get('api_key'),
-        '#description' => t('Ingrese su llave secreta para conectar a la api.'),
-      ];
-      
-      // Agregar el submit callback a nivel global del formulario.
-      $form['#submit'][] = 'mymobile_site_information_form_submit';
+  $form['site_information']['site_telephone'] = [
+    '#type' => 'textfield',
+    '#title' => t('Teléfono'),
+    '#default_value' => $config->get('site_telephone'),
+    '#description' => t('Ingrese el número de teléfono de contacto con el comercio.'),
+  ];
+
+  $form['site_information']['site_direction'] = [
+    '#type' => 'textfield',
+    '#title' => t('Dirección'),
+    '#default_value' => $config->get('site_direction'),
+    '#description' => t('Ingrese la dirección del comercio.'),
+  ];
+
+  $form['site_information']['api_key'] = [
+    '#type' => 'textfield',
+    '#title' => t('Llave secreta'),
+    '#default_value' => $config->get('api_key'),
+    '#description' => t('Ingrese su llave secreta para conectar a la API.'),
+  ];
+
+  // Agregar el submit callback.
+  $form['#submit'][] = 'mymobile_site_information_form_submit';
 }
 
 /**
  * Callback para guardar los nuevos valores.
  */
 function mymobile_site_information_form_submit($form, FormStateInterface $form_state) {
-  // Cargar la configuración editable.
-  $config = \Drupal::configFactory()->getEditable('mymobile.settings');
 
-  // Guardar el valor del campo.
-  $config->set('site_whatsapp', $form_state->getValue('site_whatsapp'));
-  $config->set('site_telephone', $form_state->getValue('site_telephone'));
-  $config->set('site_direction', $form_state->getValue('site_direction'));
-  $config->set('api_key', $form_state->getValue('api_key'));
+  $config = \Drupal::configFactory()
+    ->getEditable('mymobile.settings');
+
+  $config->set(
+    'site_whatsapp',
+    $form_state->getValue('site_whatsapp')
+  );
+
+  $config->set(
+    'site_telephone',
+    $form_state->getValue('site_telephone')
+  );
+
+  $config->set(
+    'site_direction',
+    $form_state->getValue('site_direction')
+  );
+
+  $config->set(
+    'api_key',
+    $form_state->getValue('api_key')
+  );
+
   $config->save();
-  /**
-  * \Drupal::logger('mymobile')->notice('Se guardó WhatsApp con el valor: @value', [
-  *  '@value' => $form_state->getValue('site_whatsapp'),
-  * ]);
-  * \Drupal::logger('mymobile')->notice('Se guardó Teléfono con el valor: @value', [
-  *  '@value' => $form_state->getValue('site_telephone'),
-  * ]);
-  * \Drupal::logger('mymobile')->notice('Se guardó la Dirección con el valor: @value', [
-  *  '@value' => $form_state->getValue('site_direction'),
-  * ]);
-  *
-  * \Drupal::logger('mymobile')->notice('Se guardó la Llave secreta con el valor: @value', [
-  *  '@value' => $form_state->getValue('api_key'),
-  * ]);
-  */
-  
 }
 
 /**
- * Metodo que permite acceder desde vistas subtheme.
+ * Permite acceder desde bloques del subtheme.
  */
 function mymobile_preprocess_block(&$variables) {
 
   $config = \Drupal::config('mymobile.settings');
 
-  $variables['site_whatsapp'] = $config->get('site_whatsapp') ?? '';
-  $variables['site_telephone'] = $config->get('site_telephone') ?? '';
-  $variables['site_direction'] = $config->get('site_direction') ?? '';
-  $variables['site_mail'] = \Drupal::config('system.site')->get('mail') ?? '';
-  $variables['api_key'] = \Drupal::config('system.site')->get('api_key') ?? '';
+  $variables['site_whatsapp'] =
+    $config->get('site_whatsapp') ?? '';
 
+  $variables['site_telephone'] =
+    $config->get('site_telephone') ?? '';
+
+  $variables['site_direction'] =
+    $config->get('site_direction') ?? '';
+
+  $variables['site_mail'] =
+    \Drupal::config('system.site')->get('mail') ?? '';
+
+  $variables['api_key'] =
+    $config->get('api_key') ?? '';
 }
+
 /**
- * Metodo que permite acceder desde page subtheme.
+ * Permite acceder desde páginas del subtheme.
  */
 function mymobile_preprocess_page(&$variables) {
 
   $config = \Drupal::config('mymobile.settings');
 
-  $variables['site_whatsapp'] = $config->get('site_whatsapp') ?? '';
-  $variables['site_telephone'] = $config->get('site_telephone') ?? '';
-  $variables['site_direction'] = $config->get('site_direction') ?? '';
-  $variables['site_mail'] = \Drupal::config('system.site')->get('mail') ?? '';
-  $variables['api_key'] = \Drupal::config('system.site')->get('api_key') ?? '';
+  $variables['site_whatsapp'] =
+    $config->get('site_whatsapp') ?? '';
+
+  $variables['site_telephone'] =
+    $config->get('site_telephone') ?? '';
+
+  $variables['site_direction'] =
+    $config->get('site_direction') ?? '';
+
+  $variables['site_mail'] =
+    \Drupal::config('system.site')->get('mail') ?? '';
+
+  $variables['api_key'] =
+    $config->get('api_key') ?? '';
 }
